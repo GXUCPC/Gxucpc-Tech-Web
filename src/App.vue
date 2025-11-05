@@ -10,7 +10,7 @@ const globalLoading = useGlobalLoading()
 const obj = { p: 0 }
 gsap.timeline().to(obj, {
   p: 99,
-  duration: 5,
+  duration: 3,
   ease: 'power1.inOut',
   onUpdate: () => {
     globalLoading.progress = obj.p.toFixed()
