@@ -1,6 +1,6 @@
 {
   "name": "gxucpc-tech-web",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "type": "module",
   "engines": {
@@ -16,6 +16,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "gsap": "^3.13.0",
     "vue": "^3.5.22",
     "vue-router": "^4.6.3"
   },
