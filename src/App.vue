@@ -9,6 +9,7 @@ import PageBg from '@/components/pageBg.vue'
 
 <style>
 * {
+  box-sizing: border-box;
   padding: 0;
   margin: 0;
   color: white;

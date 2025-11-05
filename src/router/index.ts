@@ -7,6 +7,13 @@ const router = createRouter({
     {
       path: '',
       component: defineAsyncComponent(() => import('@/pages/MainLayout.vue')),
+      children: [
+        {
+          name: 'home',
+          path: '',
+          component: defineAsyncComponent(() => import('@/pages/Home.vue')),
+        },
+      ],
     },
   ],
 })
