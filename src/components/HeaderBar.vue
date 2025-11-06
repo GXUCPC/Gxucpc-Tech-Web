@@ -13,30 +13,34 @@ const handleSelect = (key: string, keyPath: string[]) => {
       <div class="headerLeft">
       </div>
     </div>
-    <el-menu
-      :default-active="activeIndex"
-      class="headerBar"
-      mode="horizontal"
-      :ellipsis="false"
-      @select="handleSelect"
-    >
-      <el-menu-item index="0">
+    <div class="headerBar">
+      <div class="headerLeft">
         <h2>广西大学icpc集训队技术组</h2>
-      </el-menu-item>
-      <el-menu-item index="1">首页</el-menu-item>
-      <el-sub-menu index="2">
-        <template #title>Workspace</template>
-        <el-menu-item index="2-1">item one</el-menu-item>
-        <el-menu-item index="2-2">item two</el-menu-item>
-        <el-menu-item index="2-3">item three</el-menu-item>
-        <el-sub-menu index="2-4">
-          <template #title>item four</template>
-          <el-menu-item index="2-4-1">item one</el-menu-item>
-          <el-menu-item index="2-4-2">item two</el-menu-item>
-          <el-menu-item index="2-4-3">item three</el-menu-item>
+      </div>
+      <el-menu
+        :default-active="activeIndex"
+        class="centerMenu"
+        mode="horizontal"
+        :ellipsis="false"
+        @select="handleSelect"
+      >
+        <el-menu-item index="0">首页</el-menu-item>
+        <el-sub-menu index="1">
+          <template #title>集训队</template>
+          <el-menu-item index="1-1">item one</el-menu-item>
+          <el-menu-item index="1-2">item two</el-menu-item>
+          <el-menu-item index="1-3">item three</el-menu-item>
         </el-sub-menu>
-      </el-sub-menu>
-    </el-menu>
+        <el-sub-menu index="2">
+          <template #title>技术组</template>
+          <el-menu-item index="2-1">item one</el-menu-item>
+          <el-menu-item index="2-2">item two</el-menu-item>
+          <el-menu-item index="2-3">item three</el-menu-item>
+        </el-sub-menu>
+        <el-menu-item index="3">定制软件需求</el-menu-item>
+      </el-menu>
+      <div class="headerRight"></div>
+    </div>
   </div>
 </template>
 
@@ -49,11 +53,19 @@ const handleSelect = (key: string, keyPath: string[]) => {
   backdrop-filter: blur(5px);
 }
 .headerBar {
-  border-bottom: 0;
   width: min(100%, 1920px);
+  height: 60px;
+  position: relative;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+.centerMenu{
+  border-bottom: 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 </style>

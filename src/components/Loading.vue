@@ -24,7 +24,7 @@ watchEffect( () => {
       {
         opacity: 1,
         duration: 0.5,
-        backgroundColor: '#424242',
+        backgroundColor: '#1e1e1e',
         onUpdate: function () {
           if (!containerEle) return;
           const progress = this.progress();
@@ -120,7 +120,7 @@ function startLoadingAni() {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #424242;
+  background-color: #1e1e1e;
 }
 
 .loadingContent {

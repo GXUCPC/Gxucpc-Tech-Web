@@ -35,8 +35,8 @@ window.addEventListener('resize', () => {
 
 window.addEventListener('mousemove', (e) => {
   mouseData.value = {
-    x: e.offsetX,
-    y: e.offsetY,
+    x: e.screenX,
+    y: e.screenY,
   }
 })
 // 主绘制函数
@@ -94,7 +94,7 @@ function renderItem(ctx: CanvasRenderingContext2D, item: Particle, offestN: numb
 function newParticle(y?: number) {
   particleList.push({
     deg: 360 * Math.random(),
-    dv: 10 + 40 * Math.random(),
+    dv: -50 + 100 * Math.random(),
     opv: 0,
     opacity: 0.1 + 0.2 * Math.random(),
     size: 10 + 70 * Math.random(),
