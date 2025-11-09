@@ -20,6 +20,7 @@ const particleList: Particle[] = []
 const data = ref({
   width: window.innerWidth,
   height: window.innerHeight,
+  scrollY: window.scrollY,
 })
 const mouseData = ref({
   x: data.value.width / 2,
@@ -30,7 +31,11 @@ window.addEventListener('resize', () => {
   data.value = {
     width: window.innerWidth,
     height: window.innerHeight,
+    scrollY: window.scrollY,
   }
+})
+window.addEventListener('scroll', () => {
+  data.value.scrollY = window.scrollY
 })
 
 window.addEventListener('mousemove', (e) => {
@@ -51,7 +56,7 @@ function draw(canvasEle: HTMLCanvasElement | null) {
   particleList.forEach((item, i) => {
     const offest = item.opacity * item.size * 10
     renderItem(ctx, item, offest)
-    if (item.y < -200) {
+    if (item.y < -200 - data.value.scrollY / 10) {
       // 删除旧粒子
       newParticle()
       return particleList.splice(i, 1)
@@ -73,7 +78,10 @@ function renderItem(ctx: CanvasRenderingContext2D, item: Particle, offestN: numb
       (mouseData.value.y < data.value.height / 2 ? -1 : 1),
   ]
 
-  ctx.translate(item.x + offest[0] * offestN, item.y + offest[1] * offestN)
+  ctx.translate(
+    item.x + offest[0] * offestN,
+    item.y + offest[1] * offestN - ((data.value.scrollY / 10) * item.size) / 50,
+  )
   ctx.rotate((item.deg * Math.PI) / 180)
   ctx.fillRect(-item.size / 2, -item.size / 2, item.size, item.size)
 
@@ -100,7 +108,7 @@ function newParticle(y?: number) {
     size: 10 + 70 * Math.random(),
     v: [0, -20 + -80 * Math.random()],
     x: data.value.width * Math.random(),
-    y: y?? data.value.height + data.value.height * Math.random(),
+    y: y ?? data.value.height + data.value.height * Math.random() + data.value.scrollY / 10,
 
     startTime: new Date().getTime(),
     lastUpdateTime: -1,
@@ -109,7 +117,7 @@ function newParticle(y?: number) {
 
 onMounted(() => {
   for (let i = 0; i < (window.innerWidth * 3) / 100; i++) {
-    newParticle(data.value.height*2 * Math.random())
+    newParticle(data.value.height * 2 * Math.random())
   }
   requestAnimationFrame(() => draw(canvas.value))
 })
