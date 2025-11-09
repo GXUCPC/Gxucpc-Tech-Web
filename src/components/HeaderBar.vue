@@ -51,8 +51,15 @@ const handleSelect = (key: string, keyPath: string[]) => {
   width: 100%;
   border-bottom: 1px solid #424242;
   backdrop-filter: blur(5px);
+  transition: .25s ease-in-out;
+  z-index: 99;
+
+  &:hover {
+    backdrop-filter: blur(25px);
+  }
 }
 .headerBar {
+  padding: 0 3em;
   width: min(100%, 1920px);
   height: 60px;
   position: relative;

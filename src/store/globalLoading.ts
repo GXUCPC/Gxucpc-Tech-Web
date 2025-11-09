@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useGlobalLoading = defineStore('globalLoading', () => {
-  const loading = ref(true)
+  const loading = ref(false)
   const progress = ref(0)
   const text = ref('内容加载中')
 
