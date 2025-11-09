@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
+import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
-import { Icon } from "@iconify/vue";
 
 const globalLoading = useGlobalLoading()
 
@@ -96,7 +96,7 @@ onMounted(() => {
   const tl = gsap.timeline()
   //初始动画
   tl.from(headTextEle.querySelector('.item1')?.children!, {
-    delay: 0,
+    delay: 3,
     duration: 0.5,
     yPercent: 100,
     autoAlpha: 0,
@@ -130,19 +130,48 @@ onMounted(() => {
 <!-- 可以用于学习实现原理，但请不要学习该文件代码样式 -->
 <template>
   <section class="headText" ref="headText">
-    <div class="item1">
-      <span class="keyword">算竞</span>
-      <span>还是</span>
-      <span class="keyword">开发</span>
+    <div
+      class="item1"
+      style="display: inline-flex; align-items: center; gap: 1em; margin-bottom: 1em"
+    >
+      <div class="keyword" style="position: relative">
+        <Icon
+          icon="material-symbols:trophy-rounded"
+          style="
+            color: rgba(227, 47, 47, 0.5);
+            position: absolute;
+            transform: scale(2) rotate(-30deg);
+            left: -30%;
+            bottom: -10%;
+            z-index: -1;
+          "
+        />
+        算竞
+      </div>
+      <div>还是</div>
+      <div class="keyword" style="position: relative">
+        开发
+        <Icon
+          icon="material-symbols:code-blocks-rounded"
+          style="
+            color: rgba(47, 174, 227, 0.5);
+            position: absolute;
+            transform: scale(1.5) rotate(35deg);
+            right: 0;
+            top: -30%;
+            z-index: -1;
+          "
+        />
+      </div>
     </div>
     <div class="item2">总有一个适合你的</div>
     <button class="learnMoreBtn item3">
       了解更多
-      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true"/>
+      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" />
     </button>
   </section>
 
-  <section class="icpc infoContainer" style="margin-left: 5em;" ref="icpcInfo">
+  <section class="icpc infoContainer" style="margin-left: 5em" ref="icpcInfo">
     <div class="line">
       <div></div>
     </div>
@@ -150,13 +179,20 @@ onMounted(() => {
       <div class="infoBrief">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">广西大学ICPC集训队</div>
+          <div class="text1">
+            <Icon
+              icon="material-symbols:trophy-rounded"
+              style="color: rgba(227, 47, 47)"
+              :inline="true"
+            />广西大学ICPC集训队
+          </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
       </div>
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
         <p>
-          广西大学ICPC集训队（ICPC Training Team of China, Guangxi University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
+          广西大学ICPC集训队（ICPC Training Team of China, Guangxi
+          University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
         </p>
         <p>集训队并非社团，仅为学生兴趣同好组织。</p>
 
@@ -168,20 +204,27 @@ onMounted(() => {
   </section>
   <section
     class="icpc-tech infoContainer"
-    style="text-align: right; margin-top: 20vh; margin-left: auto;margin-right: 5em;"
+    style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
     ref="icpcTechInfo"
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">广西大学ICPC集训队技术组</div>
+          <div class="text1">
+            <Icon
+              icon="material-symbols:code-blocks-rounded"
+              style="color: rgba(47, 174, 227)"
+              :inline="true"
+            />广西大学ICPC集训队技术组
+          </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
       </div>
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
         <p>
-          广西大学ICPC集训队（ICPC Training Team of China, Guangxi University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
+          广西大学ICPC集训队（ICPC Training Team of China, Guangxi
+          University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
         </p>
         <p>集训队并非社团，仅为学生兴趣同好组织。</p>
 
@@ -204,16 +247,16 @@ onMounted(() => {
 .learnMoreBtn {
   appearance: none;
   background-color: transparent;
-  font-size: .8em;
+  font-size: 0.8em;
   border: none;
   cursor: pointer;
   border-bottom: 1px solid white;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   display: inline-flex;
   position: relative;
   align-items: center;
   gap: 5px;
-  transition: .25s ease-in-out;
+  transition: 0.25s ease-in-out;
 
   &:hover {
     gap: 10px;
@@ -221,8 +264,8 @@ onMounted(() => {
   }
 
   &::before {
-    transition: .25s ease-in-out;
-    content: "";
+    transition: 0.25s ease-in-out;
+    content: '';
     position: absolute;
     width: 0;
     height: 5px;
@@ -272,7 +315,7 @@ onMounted(() => {
     display: flex;
     gap: 20px;
 
-    .text2 *{
+    .text2 * {
       color: gray;
     }
   }

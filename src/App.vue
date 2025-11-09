@@ -2,8 +2,9 @@
 import Loading from '@/components/Loading.vue'
 import PageBg from '@/components/pageBg.vue'
 import { useGlobalLoading } from '@/store/globalLoading.ts'
+import { iconLoaded } from '@iconify/vue'
 import { gsap } from 'gsap'
-import { onMounted } from 'vue'
+import { onMounted, watchEffect } from 'vue'
 
 const globalLoading = useGlobalLoading()
 
@@ -19,6 +20,7 @@ gsap.timeline().to(obj, {
     globalLoading.loading = false
   },
 })
+
 onMounted(() => {})
 </script>
 
@@ -40,8 +42,24 @@ onMounted(() => {})
 </style>
 
 <style>
-* {
+@font-face {
+  font-family: 'JetBrains Mono';
+  src:
+    local('JetBrains Mono'),
+    url('/font/JetBrains Mono/JetBrainsMono[wght].ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src:
+    local('JetBrains Mono'),
+    url('/font/JetBrains Mono/JetBrainsMono-Italic[wght].ttf') format('truetype');
+  font-style: italic;
+}
+
+*:not(svg *) {
   box-sizing: border-box;
+  font-family: 'JetBrains Mono', 微软雅黑, serif;
   padding: 0;
   margin: 0;
   color: white;
