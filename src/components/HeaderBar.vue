@@ -23,8 +23,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
         mode="horizontal"
         :ellipsis="false"
         @select="handleSelect"
+        router
       >
-        <el-menu-item index="0">首页</el-menu-item>
+        <el-menu-item index="/">首页</el-menu-item>
         <el-sub-menu index="1">
           <template #title>集训队</template>
           <el-menu-item index="1-1">item one</el-menu-item>
@@ -33,9 +34,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
         </el-sub-menu>
         <el-sub-menu index="2">
           <template #title>技术组</template>
-          <el-menu-item index="2-1">item one</el-menu-item>
-          <el-menu-item index="2-2">item two</el-menu-item>
-          <el-menu-item index="2-3">item three</el-menu-item>
+          <el-menu-item index="/tch_team2-1">技术组简介</el-menu-item>
+          <el-menu-item index="/tch_team2-2">技术组主要开发经历</el-menu-item>
+          <el-menu-item index="2-3">联系我们</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="3">定制软件需求</el-menu-item>
       </el-menu>
