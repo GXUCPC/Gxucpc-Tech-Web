@@ -33,22 +33,15 @@ function infoSectionAni(ele: HTMLDivElement | null) {
   )
 
   //简介文字动画
-  SplitText.create(ele.querySelector('.text1'), {
-    type: 'chars,words',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.words,
-        {
-          duration: 1,
-          autoAlpha: 0,
-          stagger: 0.05,
-        },
-        '<',
-      )
+  tl.from(
+    ele.querySelector('.text1'),
+    {
+      duration: 1,
+      autoAlpha: 0,
+      stagger: 0.05,
     },
-  })
+    '<',
+  )
   SplitText.create(ele.querySelector('.text2'), {
     type: 'chars,words',
     autoSplit: true,
@@ -167,7 +160,7 @@ onMounted(() => {
     <div class="item2">总有一个适合你的</div>
     <button class="learnMoreBtn item3">
       了解更多
-      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" />
+      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit"/>
     </button>
   </section>
 
@@ -250,7 +243,7 @@ onMounted(() => {
   font-size: 0.8em;
   border: none;
   cursor: pointer;
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid var(--el-color-primary);
   padding: 0.5em 1em;
   display: inline-flex;
   position: relative;
@@ -261,6 +254,7 @@ onMounted(() => {
   &:hover {
     gap: 10px;
     font-weight: bold;
+    color: var(--el-color-primary);
   }
 
   &::before {
@@ -269,8 +263,8 @@ onMounted(() => {
     position: absolute;
     width: 0;
     height: 5px;
-    background-color: white;
-    bottom: 0;
+    background-color: var(--el-color-primary);
+    bottom: -1px;
     right: 0;
   }
 
@@ -309,7 +303,7 @@ onMounted(() => {
   .line > div {
     width: 5px;
     border-radius: 2.5px;
-    background-color: white;
+    background-color: var(--el-color-primary);
   }
   .infoBrief {
     display: flex;

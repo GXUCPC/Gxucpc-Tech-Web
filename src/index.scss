@@ -1,0 +1,13 @@
+/* just override what you need */
+@forward 'element-plus/theme-chalk/src/dark/var.scss' with (
+  $colors: (
+    'primary': (
+      'base': #e4d313,
+    ),
+  )
+);
+
+// If you just import on demand, you can ignore the following content.
+// 如果你想导入所有样式:
+@use "element-plus/theme-chalk/src/dark/css-vars" as *;
+@use "element-plus/theme-chalk/src/index" as *;
