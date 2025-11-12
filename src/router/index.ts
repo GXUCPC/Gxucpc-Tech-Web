@@ -16,12 +16,17 @@ const router = createRouter({
         {
           name: 'tch_team2-1' ,
           path: 'tch_team2-1' ,
-          component: defineAsyncComponent(() => import('@/pages/Tch_team1-1.vue')),
+          component: defineAsyncComponent(() => import('@/pages/Tch_team/Introduction.vue')),
         },
         {
           name: 'tch_team2-2' ,
           path: 'tch_team2-2' ,
-          component: defineAsyncComponent(() => import('@/pages/Tch_team1-2.vue')),
+          component: defineAsyncComponent(() => import('@/pages/Tch_team/Tiem_exprience.vue')),
+        },
+        {
+          name: 'tch_team2-3' ,
+          path: 'tch_team2-3' ,
+          component: defineAsyncComponent(() => import('@/pages/Tch_team/Contuct_us.vue')),
         },
       ],
     },
