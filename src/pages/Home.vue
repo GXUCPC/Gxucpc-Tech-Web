@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
+import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
@@ -19,7 +20,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
     {
       height: '100%',
       ease: 'sine.out',
-      duration: 2,
+      duration: 2.5,
     },
   )
   tl.from(
@@ -125,17 +126,52 @@ onMounted(() => {
   })
 })
 </script>
-
+<!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
+<!-- 可以用于学习实现原理，但请不要学习该文件代码样式 -->
 <template>
   <section class="headText" ref="headText">
-    <div class="item1">
-      <span class="keyword">算竞</span> <span>还是</span> <span class="keyword">开发</span>
+    <div
+      class="item1"
+      style="display: inline-flex; align-items: center; gap: 1em; margin-bottom: 1em"
+    >
+      <div class="keyword" style="position: relative">
+        <Icon
+          icon="material-symbols:trophy-rounded"
+          style="
+            color: rgba(227, 47, 47, 0.5);
+            position: absolute;
+            transform: scale(2) rotate(-30deg);
+            left: -30%;
+            bottom: -10%;
+            z-index: -1;
+          "
+        />
+        算竞
+      </div>
+      <div>还是</div>
+      <div class="keyword" style="position: relative">
+        开发
+        <Icon
+          icon="material-symbols:code-blocks-rounded"
+          style="
+            color: rgba(47, 174, 227, 0.5);
+            position: absolute;
+            transform: scale(1.5) rotate(35deg);
+            right: 0;
+            top: -30%;
+            z-index: -1;
+          "
+        />
+      </div>
     </div>
     <div class="item2">总有一个适合你的</div>
-    <el-button class="item3" type="primary">了解更多</el-button>
+    <button class="learnMoreBtn item3">
+      了解更多
+      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" />
+    </button>
   </section>
 
-  <section class="icpc infoContainer" ref="icpcInfo">
+  <section class="icpc infoContainer" style="margin-left: 5em" ref="icpcInfo">
     <div class="line">
       <div></div>
     </div>
@@ -143,7 +179,13 @@ onMounted(() => {
       <div class="infoBrief">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">广西大学ICPC集训队</div>
+          <div class="text1">
+            <Icon
+              icon="material-symbols:trophy-rounded"
+              style="color: rgba(227, 47, 47)"
+              :inline="true"
+            />广西大学ICPC集训队
+          </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
       </div>
@@ -162,14 +204,20 @@ onMounted(() => {
   </section>
   <section
     class="icpc-tech infoContainer"
-    style="text-align: right; margin-top: 20vh; margin-left: auto"
+    style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
     ref="icpcTechInfo"
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">广西大学ICPC集训队技术组</div>
+          <div class="text1">
+            <Icon
+              icon="material-symbols:code-blocks-rounded"
+              style="color: rgba(47, 174, 227)"
+              :inline="true"
+            />广西大学ICPC集训队技术组
+          </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
       </div>
@@ -195,6 +243,43 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+// 了解更多按钮
+.learnMoreBtn {
+  appearance: none;
+  background-color: transparent;
+  font-size: 0.8em;
+  border: none;
+  cursor: pointer;
+  border-bottom: 1px solid white;
+  padding: 0.5em 1em;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  gap: 5px;
+  transition: 0.25s ease-in-out;
+
+  &:hover {
+    gap: 10px;
+    font-weight: bold;
+  }
+
+  &::before {
+    transition: 0.25s ease-in-out;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 5px;
+    background-color: white;
+    bottom: 0;
+    right: 0;
+  }
+
+  &:hover::before {
+    left: 0;
+    width: 100%;
+  }
+}
+
 .headText {
   min-height: 50vh;
   font-size: 2em;
@@ -229,6 +314,10 @@ onMounted(() => {
   .infoBrief {
     display: flex;
     gap: 20px;
+
+    .text2 * {
+      color: gray;
+    }
   }
 }
 </style>
