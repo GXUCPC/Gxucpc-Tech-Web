@@ -117,6 +117,21 @@ onMounted(() => {
     trigger: icpcTechInfoRef.value,
     animation: infoSectionAni(icpcTechInfoRef.value),
   })
+  document.querySelectorAll('.title').forEach((ele) => {
+    const tl = gsap.timeline()
+    tl.from(
+      ele,
+      {
+        autoAlpha: 0,
+        duration: 1,
+      },
+    )
+    ScrollTrigger.create({
+      trigger: ele,
+      animation: tl,
+      onEnter: (self) => ele.classList.add('show'),
+    })
+  })
 })
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
@@ -160,7 +175,7 @@ onMounted(() => {
     <div class="item2">总有一个适合你的</div>
     <button class="learnMoreBtn item3">
       了解更多
-      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit"/>
+      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
     </button>
   </section>
 
@@ -195,6 +210,7 @@ onMounted(() => {
       </div>
     </div>
   </section>
+  <h1 class="title">集训队概要</h1>
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
@@ -230,9 +246,7 @@ onMounted(() => {
       <div></div>
     </div>
   </section>
-  <section>
-    <h1>集训队历年成果展示</h1>
-  </section>
+  <h1 class="title">技术组概要</h1>
 </template>
 
 <style scoped lang="scss">
@@ -258,13 +272,14 @@ onMounted(() => {
   }
 
   &::before {
+    border-radius: 5px;
     transition: 0.25s ease-in-out;
     content: '';
     position: absolute;
     width: 0;
     height: 5px;
     background-color: var(--el-color-primary);
-    bottom: -1px;
+    bottom: -2.5px;
     right: 0;
   }
 
@@ -312,6 +327,40 @@ onMounted(() => {
     .text2 * {
       color: gray;
     }
+  }
+}
+
+// 标题样式
+.title {
+  margin: 3em auto;
+  padding: 0.5em 1em;
+  font-size: 2.5em;
+  width: fit-content;
+  position: relative;
+
+  &::before,
+  &::after {
+    content: '';
+    height: 5px;
+    width: 0%;
+    background-color: var(--el-color-primary);
+    position: absolute;
+    border-radius: 5px;
+    transition: 1s ease-in-out;
+  }
+  &.show::before,
+  &.show::after {
+    width: 100%;
+  }
+
+  &::before {
+    top: 0;
+    left: 0;
+  }
+
+  &::after {
+    bottom: 0;
+    right: 0;
   }
 }
 </style>

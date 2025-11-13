@@ -28,6 +28,28 @@ const router = createRouter({
           path: 'tch_team2-3' ,
           component: defineAsyncComponent(() => import('@/pages/Tch_team/Contuct_us.vue')),
         },
+        {
+          name: 'xcpc',
+          path: 'xcpc',
+          children: [
+            {
+              name: 'xcpcHome',
+              path: '',
+              component: defineAsyncComponent(() => import('@/pages/xcpc/XCPCIndex.vue')),
+            },
+          ],
+        },
+        {
+          name: 'tech',
+          path: 'tech',
+          children: [
+            {
+              name: 'techHome',
+              path: '',
+              component: defineAsyncComponent(() => import('@/pages/tech/TechIndex.vue')),
+            },
+          ],
+        },
       ],
     },
   ],

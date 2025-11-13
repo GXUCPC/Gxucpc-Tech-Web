@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/no-parsing-error -->
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { gsap } from 'gsap'
@@ -163,7 +162,6 @@ onMounted(() => {
     </div>
   </section>
 
-
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto"
@@ -186,9 +184,6 @@ onMounted(() => {
       <div></div>
     </div>
   </section>
-
-
-
 
 </template>
 
