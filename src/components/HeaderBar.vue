@@ -53,9 +53,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
         </el-sub-menu>
         <el-sub-menu index="/tech">
           <template #title>技术组</template>
-          <el-menu-item index="/tch_team2-1">技术组简介</el-menu-item>
-          <el-menu-item index="/tch_team2-2">技术组主要开发经历</el-menu-item>
-          <el-menu-item index="/tch_team2-3">联系我们</el-menu-item>
+          <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
+          <el-menu-item index="/tech/tiemExprience">技术组主要开发经历</el-menu-item>
+          <el-menu-item index="/tech/contuctUs">联系我们</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="3">定制软件需求</el-menu-item>
       </el-menu>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
+import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
@@ -127,10 +128,38 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="headText" ref="headText" style="text-align: left;  min-height: 30vh;">
-    <div class="item2" style="width: 1000px; height: 5px; font-size: 50px;">广西大学ICPC集训队技术组</div>
+
+  <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
+
+      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+         <Icon
+          icon="pajamas:api"
+          style="
+            color: rgba(227, 47, 47, 0.5);
+            position: absolute;
+            transform: scale(4);
+            left: 0%;
+            bottom: 60%;
+            z-index: -1;
+          "
+        />
+         <Icon
+          icon="material-symbols:code-blocks-rounded"
+          style="
+            color: rgba(47, 174, 227, 0.5);
+            position: absolute;
+            transform: scale(3) rotate(35deg);
+            left: 55%;
+            top: 50%;
+            z-index: -1;
+          "
+        />
+        <p style="margin-bottom: 1px; ">广西大学ICPC集训队技术组</p>
+      </div>
 
   </section>
+
+
 
   <section class="icpc infoContainer" ref="icpcInfo">
     <div class="line">
@@ -140,7 +169,8 @@ onMounted(() => {
       <div class="infoBrief">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1" style="font-size: 35px;">广西大学ICPC集训队技术组简介</div>
+
+          <div class="text1" style="font-size: 35px;">广西大学ICPC集训队技术组</div>
         </div>
 
       </div>
@@ -148,6 +178,7 @@ onMounted(() => {
         <p>
           广西大学ICPC集训队技术组（ICPC technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
         </p>
+        <p>技术组并非社团性质的娱乐团体，而是一个</p>
         <p style="margin-bottom: 10px;">技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,只要你 :</p>
         <li style="margin-left: 30px;">一颗热爱技术、乐于动手的心。</li>
         <li style="margin-left: 30px;">.广西大学在校学生，专业不限。</li>
@@ -171,10 +202,10 @@ onMounted(() => {
       <div class="infoBrief" style="flex-direction: row-reverse">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1" style="font-size: 35px;">广西大学ICPC集训队技术组主要人员</div>
+          <div class="text1" style="font-size: 35px;">招新相关</div>
 
         <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
-          <p>11111111111111111111111111111111111111111111111111111111111111111111</p>
+          
         </div>
         </div>
       </div>

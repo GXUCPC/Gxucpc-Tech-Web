@@ -16,17 +16,17 @@ const router = createRouter({
         {
           name: 'tch_team2-1' ,
           path: 'tch_team2-1' ,
-          component: defineAsyncComponent(() => import('@/pages/Tch_team/Introduction.vue')),
+          component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
         },
         {
           name: 'tch_team2-2' ,
           path: 'tch_team2-2' ,
-          component: defineAsyncComponent(() => import('@/pages/Tch_team/Tiem_exprience.vue')),
+          component: defineAsyncComponent(() => import('@/pages/tech/TiemExprience.vue')),
         },
         {
           name: 'tch_team2-3' ,
           path: 'tch_team2-3' ,
-          component: defineAsyncComponent(() => import('@/pages/Tch_team/Contuct_us.vue')),
+          component: defineAsyncComponent(() => import('@/pages/tech/ContuctUs.vue')),
         },
         {
           name: 'xcpc',
@@ -47,6 +47,21 @@ const router = createRouter({
               name: 'techHome',
               path: '',
               component: defineAsyncComponent(() => import('@/pages/tech/TechIndex.vue')),
+            },
+            {
+              name: 'techTeamIntroduction' ,
+              path: 'introduction' ,
+              component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
+            },
+            {
+              name: 'techTeamTiemExprience' ,
+              path: 'tiemExprience' ,
+              component: defineAsyncComponent(() => import('@/pages/tech/TiemExprience.vue')),
+            },
+            {
+              name: 'techTeamContuctUs' ,
+              path: 'contuctUs' ,
+              component: defineAsyncComponent(() => import('@/pages/tech/ContuctUs.vue')),
             },
           ],
         },

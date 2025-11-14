@@ -1,6 +1,7 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
+import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
@@ -128,8 +129,33 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="headText" ref="headText" style="text-align: left;  min-height: 30vh;">
-    <div class="item2" style="width: 1000px; height: 5px; font-size: 50px;">广西大学ICPC集训队技术组</div>
+  <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
+
+      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+         <Icon
+          icon="pajamas:api"
+          style="
+            color: rgba(227, 47, 47, 0.5);
+            position: absolute;
+            transform: scale(4);
+            left: 0%;
+            bottom: 60%;
+            z-index: -1;
+          "
+        />
+         <Icon
+          icon="material-symbols:code-blocks-rounded"
+          style="
+            color: rgba(47, 174, 227, 0.5);
+            position: absolute;
+            transform: scale(3) rotate(35deg);
+            left: 55%;
+            top: 50%;
+            z-index: -1;
+          "
+        />
+        <p style="margin-bottom: 1px; ">广西大学ICPC集训队技术组</p>
+      </div>
 
   </section>
 
