@@ -159,7 +159,7 @@ onMounted(() => {
 
   </section>
 
-  <section class="icpc infoContainer" ref="icpcInfo">
+  <section class="icpc infoContainer" ref="icpcInfo" style="margin-bottom: 10%;">
     <div class="line">
       <div></div>
     </div>
@@ -167,7 +167,9 @@ onMounted(() => {
       <div class="infoBrief">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1" style="font-size: 35px;">广西大学ICPC集训队技术组简介</div>
+
+          <div class="text1">广西大学ICPC集训队技术组</div>
+          <div class="text2"> ICPC Technology Team of China, Guangxi University</div>
         </div>
 
       </div>
@@ -219,6 +221,10 @@ onMounted(() => {
   .infoBrief {
     display: flex;
     gap: 20px;
+
+    .text2 * {
+      color: gray;
+    }
   }
 }
 </style>

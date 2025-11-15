@@ -124,7 +124,26 @@ onMounted(() => {
     trigger: icpcTechInfoRef.value,
     animation: infoSectionAni(icpcTechInfoRef.value),
   })
+  document.querySelectorAll('.title').forEach((ele) => {
+    const tl = gsap.timeline()
+    tl.from(
+      ele,
+      {
+        autoAlpha: 0,
+        duration: 1,
+      },
+    )
+    ScrollTrigger.create({
+      trigger: ele,
+      animation: tl,
+      onEnter: (self) => ele.classList.add('show'),
+    })
+  })
+
+
+
 })
+
 </script>
 
 <template>
@@ -161,7 +180,7 @@ onMounted(() => {
 
 
 
-  <section class="icpc infoContainer" ref="icpcInfo">
+  <section class="icpc infoContainer" ref="icpcInfo" style="margin-left: 5%;">
     <div class="line">
       <div></div>
     </div>
@@ -170,15 +189,17 @@ onMounted(() => {
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
 
-          <div class="text1" style="font-size: 35px;">广西大学ICPC集训队技术组</div>
+          <div class="text1">广西大学ICPC集训队技术组</div>
+          <div class="text2"> ICPC Technology Team of China, Guangxi University</div>
         </div>
 
       </div>
-      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
+      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em;">
         <p>
-          广西大学ICPC集训队技术组（ICPC technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
+          广西大学ICPC集训队技术组（ICPC Technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
         </p>
-        <p>技术组并非社团性质的娱乐团体，而是一个</p>
+        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来
+进入互联网大厂打下坚实根基。</p>
         <p style="margin-bottom: 10px;">技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,只要你 :</p>
         <li style="margin-left: 30px;">一颗热爱技术、乐于动手的心。</li>
         <li style="margin-left: 30px;">.广西大学在校学生，专业不限。</li>
@@ -192,24 +213,30 @@ onMounted(() => {
       </div>
     </div>
   </section>
-
+  <h1 class="title">招新相关</h1>
   <section
     class="icpc-tech infoContainer"
-    style="text-align: right; margin-top: 20vh; margin-left: auto"
+    style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
     ref="icpcTechInfo"
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
         <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1" style="font-size: 35px;">招新相关</div>
-
-        <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
-          
-        </div>
+          <div class="text1">
+            常见问题
+          </div>
+          <div class="text2">Normal Question</div>
         </div>
       </div>
-
+      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em; text-align: left; width: fit-content;">
+        <li>Q: 技术组主要是干什么的，有什么用？</li>
+        <p>技术组主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。对于想要学习技术，积累开发经验的同学来说，技术组是一个很好的平台。</p>
+        <li>Q: 大概需要多强的算法/项目基础才能加入技术组？</li>
+        <p>技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,无论你的专业背景是什么，只要你愿意学习，技术组都欢迎你。</p>
+        <li>Q: 时间投入大概要多少？</li>
+        <p></p>
+      </div>
     </div>
     <div class="line">
       <div></div>
@@ -234,6 +261,7 @@ onMounted(() => {
     height: 2em;
   }
 
+
   .keyword {
     font-size: 3em;
   }
@@ -253,6 +281,8 @@ onMounted(() => {
   .infoBrief {
     display: flex;
     gap: 20px;
+
+
   }
 }
 </style>
