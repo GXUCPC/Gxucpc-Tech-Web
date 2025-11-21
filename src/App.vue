@@ -2,9 +2,7 @@
 import Loading from '@/components/Loading.vue'
 import PageBg from '@/components/pageBg.vue'
 import { useGlobalLoading } from '@/store/globalLoading.ts'
-import { iconLoaded } from '@iconify/vue'
 import { gsap } from 'gsap'
-import { onMounted, watchEffect } from 'vue'
 
 const globalLoading = useGlobalLoading()
 
@@ -14,14 +12,13 @@ gsap.timeline().to(obj, {
   duration: 3,
   ease: 'power1.inOut',
   onUpdate: () => {
-    globalLoading.progress = obj.p.toFixed()
+    globalLoading.progress = +obj.p.toFixed()
   },
   onComplete: () => {
     globalLoading.loading = false
   },
 })
 
-onMounted(() => {})
 </script>
 
 <template>
