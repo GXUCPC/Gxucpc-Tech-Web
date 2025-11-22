@@ -200,16 +200,8 @@ onMounted(() => {
         </p>
         <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来
 进入互联网大厂打下坚实根基。</p>
-        <p style="margin-bottom: 10px;">技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,只要你 :</p>
-        <li style="margin-left: 30px;">一颗热爱技术、乐于动手的心。</li>
-        <li style="margin-left: 30px;">.广西大学在校学生，专业不限。</li>
-        <li style="margin-left: 30px;">有（或愿意马上学习）以下技术基础：</li>
-        <p style="font-size: 30px; margin-top: 20px; margin-left: 40px;">基础必备技能 :</p>
-        <li style="margin-left: 70px; list-style: square;">Git & GitHub: 掌握代码的版本管理和协作开发。这是现代软件工程的基石。</li>
-        <li style="margin-left: 70px; list-style: square;">一门主力编程语言：这里强烈推荐C/C++，与ACM集训队主线任务无缝衔接，同时也是大一C语言课程的完美预习/复习，学习性价比极高。当然，如果你对自己有其他的规划，java、python也是很好的选择</li>
-        <li style="margin-left: 70px; list-style: square;">一款现代编辑器/IDE：全能轻量之选：VS Code，通过插件几乎能应对所有语言。</li>
-        <li style="margin-left: 70px; list-style: square;">基础的网络概念：不需要很深，但最好能理解HTTP 请求（GET/POST）、API 接口是什么。</li>
-        <li style="margin-left: 70px; list-style: square;">问题解决能力：这不是一个具体技术，而是一种习惯。可以鼓励新生在文档中提及，遇到报错时如何利用搜索引擎（Google/Bing）、技术社区（Stack Overflow, CSDN）、官方文档和AI工具来独立解决问题的思路。这正是工程师的核心能力之一。</li>
+       
+
       </div>
     </div>
   </section>

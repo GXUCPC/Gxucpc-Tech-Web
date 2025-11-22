@@ -46,7 +46,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
       >
         <el-menu-item index="/">首页</el-menu-item>
         <el-sub-menu index="/xcpc">
-          <template #title>集训队</template>
+          <template #title>集训队</template>=
           <el-menu-item index="/xcpc">集训队主页</el-menu-item>
           <el-menu-item index="1-2">item two</el-menu-item>
           <el-menu-item index="1-3">item three</el-menu-item>
@@ -55,7 +55,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
           <template #title>技术组</template>
           <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
           <el-menu-item index="/tech/tiemExprience">技术组主要开发经历</el-menu-item>
-          <el-menu-item index="/tech/contuctUs">联系我们</el-menu-item>
+          <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="3">定制软件需求</el-menu-item>
       </el-menu>

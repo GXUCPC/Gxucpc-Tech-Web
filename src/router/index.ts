@@ -26,7 +26,7 @@ const router = createRouter({
         {
           name: 'tch_team2-3' ,
           path: 'tch_team2-3' ,
-          component: defineAsyncComponent(() => import('@/pages/tech/ContuctUs.vue')),
+          component: defineAsyncComponent(() => import('@/pages/tech/JoinUs.vue')),
         },
         {
           name: 'xcpc',
@@ -61,7 +61,7 @@ const router = createRouter({
             {
               name: 'techTeamContuctUs' ,
               path: 'contuctUs' ,
-              component: defineAsyncComponent(() => import('@/pages/tech/ContuctUs.vue')),
+              component: defineAsyncComponent(() => import('@/pages/tech/JoinUs.vue')),
             },
           ],
         },
