@@ -3,10 +3,16 @@ import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { gsap } from 'gsap'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useDialog } from '@/store/globalLoading.ts'
+const { dialogVisible } = useDialog()
 
 const globalLoading = useGlobalLoading()
 const router = useRouter()
 const activeIndex = ref('/')
+const expression = () => {
+    // 点击按钮时，显示对话框
+    dialogVisible.value = true;
+}
 const handleSelect = (key: string, keyPath: string[]) => {
   router.push(key)
   if (key === '/') {
@@ -46,7 +52,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
       >
         <el-menu-item index="/">首页</el-menu-item>
         <el-sub-menu index="/xcpc">
-          <template #title>集训队</template>=
+          <template #title>集训队</template>
           <el-menu-item index="/xcpc">集训队主页</el-menu-item>
           <el-menu-item index="1-2">item two</el-menu-item>
           <el-menu-item index="1-3">item three</el-menu-item>
@@ -58,11 +64,17 @@ const handleSelect = (key: string, keyPath: string[]) => {
           <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="3">定制软件需求</el-menu-item>
+
       </el-menu>
-      <div class="headerRight"></div>
+      <div class="headerRight">
+        <el-button size="large" @click.prevent="expression" text>登录</el-button>
+      </div>
     </div>
   </div>
 </template>
+
+
+
 
 <style scoped>
 .headerBarContainer {

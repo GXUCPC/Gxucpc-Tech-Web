@@ -55,6 +55,8 @@
         <li class="content-text">基础的命令行操作：了解基本的命令行操作，有助于更高效地使用开发工具和环境。</li>
         <li class="content-text">自学能力：自学能力是技术人员最大的核心素养</li>
         <li class="content-text">团队协作能力：良好的沟通和协作能力，能够与团队成员高效合作，共同完成项目目标。</li>
+        <li class="content-text">一门主力编程语言：强烈推荐C/C++，与ACM集训队主线任务无缝衔接，同时也是大一C语言课程的完美预习/复习，学习性价比极高。</li>
+        <p class="content-text">另外，有项目开发经验、在ICPC、CCPC等算法竞赛中有过获奖经历者优先。</p>
     </section>
 
     <section class="section">
