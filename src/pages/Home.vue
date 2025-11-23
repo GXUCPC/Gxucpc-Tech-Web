@@ -2,6 +2,7 @@
 import AniEle from '@/components/AniEle.vue'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
+import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { h, onMounted, useTemplateRef, type VNode } from 'vue'
@@ -87,7 +88,7 @@ const headTextRef = useTemplateRef('headText')
 const icpcInfoRef = useTemplateRef('icpcInfo')
 const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
 onMounted(() => {
-  gsap.registerPlugin(SplitText, ScrollTrigger)
+  gsap.registerPlugin(SplitText, ScrollTrigger, ScrollSmoother)
   const headTextEle = headTextRef.value
   if (!headTextEle) return
   const tl = gsap.timeline()
@@ -199,8 +200,7 @@ const mainTeamList: {
   <section class="headText" ref="headText">
     <div
       class="item1"
-      style="display: inline-flex; align-items: center; gap: 1em; margin-bottom: 1em"
-    >
+      style="display: inline-flex; align-items: center; gap: 1em; margin-bottom: 1em">
       <div class="keyword" style="position: relative">
         <Icon
           icon="material-symbols:trophy-rounded"
@@ -211,8 +211,7 @@ const mainTeamList: {
             left: -30%;
             bottom: -10%;
             z-index: -1;
-          "
-        />
+          " />
         算竞
       </div>
       <div>还是</div>
@@ -227,12 +226,22 @@ const mainTeamList: {
             right: 0;
             top: -30%;
             z-index: -1;
-          "
-        />
+          " />
       </div>
     </div>
     <div class="item2">总有一个适合你的</div>
-    <button class="learnMoreBtn item3">
+    <button
+      class="learnMoreBtn item3"
+      @click="
+        () => {
+          const smoother = ScrollSmoother.create({ effects: false, smooth: false })
+          gsap.to(smoother, {
+            scrollTop: smoother.offset('#learnMoreTarget', 'top 100px'),
+            ease: 'power2.out',
+            duration: 1,
+          })
+        }
+      ">
       了解更多
       <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
     </button>
@@ -250,8 +259,7 @@ const mainTeamList: {
             <Icon
               icon="material-symbols:trophy-rounded"
               style="color: rgba(227, 47, 47)"
-              :inline="true"
-            />广西大学ICPC集训队
+              :inline="true" />广西大学ICPC集训队
           </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
@@ -269,7 +277,7 @@ const mainTeamList: {
       </div>
     </div>
   </section>
-  <h1 class="title">集训队概要</h1>
+  <h1 class="title" id="learnMoreTarget">集训队概要</h1>
   <ani-ele
     :scroll-in-ani="
       (ele) => {
@@ -311,19 +319,24 @@ const mainTeamList: {
         return tl
       }
     "
-    class="textCenter"
-  >
-    过去三年中，集训队在ICPC/CCPC各个赛站至少获得了
+    class="textCenter">
+    过去三年中，集训队在<b style="font-size: 1.2em">ICPC/CCPC各个赛站</b>至少获得了
     <span style="font-size: 1.5em; font-weight: bold; color: silver">0</span>
     个银奖和
     <span style="font-size: 1.5em; font-weight: bold; color: chocolate">0</span>
     个铜奖<br />
-    与此同时，集训队还在团体程序设计天梯赛、蓝桥杯全国软件和信息技术专业人才大赛、
+    与此同时，集训队还在
     <br />
-    ICPC西部大学生程序设计竞赛等赛事获得
-    <span style="font-size: 1.2em; font-weight: bold; color: var(--el-color-primary)">若干</span>
+    <b style="font-size: 1.2em">
+      团体程序设计天梯赛、蓝桥杯全国软件、信息技术专业人才大赛、A类赛事、B类赛事
+    </b>
+    <br />等赛事中获得
+    <span style="font-size: 1.2em; font-weight: bold; color: var(--el-color-primary)">
+      若干一等奖
+    </span>
     奖项
   </ani-ele>
+  <h2 class="subtitle">加入集训队会获得什么？</h2>
   <h2 class="subtitle">代表队伍</h2>
   <ani-ele
     class="teamCardContainer"
@@ -341,13 +354,13 @@ const mainTeamList: {
             },
             index * 0.5,
           ).from(
-            SplitText.create(cardEle.childNodes, {type: 'lines'}).lines,
+            SplitText.create(cardEle.childNodes, { type: 'lines', mask: 'lines' }).lines,
             {
               y: 24,
               autoAlpha: 0,
               duration: 0.5,
               ease: 'sine.out',
-              delay: .4,
+              delay: 0.4,
               stagger: 0.1,
             },
             index * 0.5,
@@ -355,8 +368,7 @@ const mainTeamList: {
         })
         return tl
       }
-    "
-  >
+    ">
     <div class="teamCard" v-for="(team, i) in mainTeamList" :key="i">
       <div class="gradeText">{{ team.grade }}</div>
       <div style="font-weight: bold; font-size: 2em; line-height: 2em">{{ team.teamName }}</div>
@@ -370,12 +382,15 @@ const mainTeamList: {
         <component :is="medal" />
       </div>
     </div>
+    <div>
+      <Icon icon="mdi:ellipsis-horizontal" />
+      <Icon icon="mdi:ellipsis-horizontal" />
+    </div>
   </ani-ele>
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
-    ref="icpcTechInfo"
-  >
+    ref="icpcTechInfo">
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
         <el-image class="item1" style="width: 60px; height: 60px" />
@@ -384,8 +399,7 @@ const mainTeamList: {
             <Icon
               icon="material-symbols:code-blocks-rounded"
               style="color: rgba(47, 174, 227)"
-              :inline="true"
-            />广西大学ICPC集训队技术组
+              :inline="true" />广西大学ICPC集训队技术组
           </div>
           <div class="text2">ICPC Training Team of China, Guangxi University</div>
         </div>
