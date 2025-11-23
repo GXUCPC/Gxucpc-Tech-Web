@@ -4,7 +4,7 @@ import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
-import { onMounted, useTemplateRef } from 'vue'
+import { h, onMounted, useTemplateRef, type VNode } from 'vue'
 
 function getEleNth(child: HTMLElement) {
   let i = 0
@@ -148,13 +148,49 @@ onMounted(() => {
 })
 
 const mainTeamList: {
-  teammates: string[],
-  grade: number,
-  mainMedal: string[]
+  teammates: string[]
+  teamName: string
+  grade: string
+  mainMedal: (string | VNode)[]
 }[] = [
   {
-    grade: 0, mainMedal: [], teammates: []
-  }
+    grade: '22级',
+    teamName: '流星一条',
+    mainMedal: [
+      h('span', { style: 'color: silver' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
+        '第48届ICPC国际大学生程序设计竞赛亚洲区域赛（西安）银奖',
+      ]),
+      h('span', { style: 'color: chocolate' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
+        '第九届中国⼤学⽣程序设计竞赛（深圳）铜奖',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:prize' }),
+        'ICPC西部大学生程序设计竞赛三等奖',
+      ]),
+      h('span', { style: 'font-style: italic; opacity: .5' }, ['写不下力……']),
+    ],
+    teammates: ['付家锐', '石新阳', '韦祖豪'],
+  },
+  {
+    grade: '23级',
+    teamName: '远航者的幻想乡',
+    mainMedal: [h('span', { style: 'font-style: italic; opacity: .5' }, ['No Data'])],
+    teammates: ['张健明', '陶康', '孙怿翔'],
+  },
+  {
+    grade: '24级',
+    teamName: '队名WA2了',
+    mainMedal: [
+      h('span', { style: 'color: silver' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
+        '第 50 届 ICPC 国际大学生程序设计竞赛区域赛（沈阳）银奖',
+      ]),
+      h('span', { style: 'font-style: italic; opacity: .5' }, ['在蒸了，在蒸了……']),
+    ],
+    teammates: ['郑毅', '陈君屹', '杜永坤'],
+  },
 ]
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
@@ -246,7 +282,6 @@ const mainTeamList: {
           stagger: charStagger,
         })
         const spans = ele.querySelectorAll('span')
-        console.log(spans)
         if (spans[1])
           tl.to(
             spans[1],
@@ -290,9 +325,50 @@ const mainTeamList: {
     奖项
   </ani-ele>
   <h2 class="subtitle">代表队伍</h2>
-  <ani-ele style="display: flex; justify-content: center;align-items: center;gap: 1em">
-    <div class="teamCard">
-      <div></div>
+  <ani-ele
+    class="teamCardContainer"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        ele.childNodes.forEach((cardEle, index) => {
+          tl.from(
+            cardEle,
+            {
+              scale: 0,
+              autoAlpha: 0,
+              duration: 1,
+              stagger: 0.3,
+            },
+            index * 0.5,
+          ).from(
+            SplitText.create(cardEle.childNodes, {type: 'lines'}).lines,
+            {
+              y: 24,
+              autoAlpha: 0,
+              duration: 0.5,
+              ease: 'sine.out',
+              delay: .4,
+              stagger: 0.1,
+            },
+            index * 0.5,
+          )
+        })
+        return tl
+      }
+    "
+  >
+    <div class="teamCard" v-for="(team, i) in mainTeamList" :key="i">
+      <div class="gradeText">{{ team.grade }}</div>
+      <div style="font-weight: bold; font-size: 2em; line-height: 2em">{{ team.teamName }}</div>
+      <div>
+        <b><Icon icon="mdi:account" :inline="true" />队员：</b>{{ team.teammates.join('、') }}
+      </div>
+      <div>
+        <b><Icon icon="mdi:achievement" :inline="true" />主要奖项：</b>
+      </div>
+      <div v-for="(medal, i) in team.mainMedal" :key="i" style="text-indent: 2em">
+        <component :is="medal" />
+      </div>
     </div>
   </ani-ele>
   <section
@@ -335,7 +411,6 @@ const mainTeamList: {
 </template>
 
 <style scoped lang="scss">
-@use "element-plus/theme-chalk/src/var" as *;
 // 了解更多按钮
 .learnMoreBtn {
   appearance: none;
@@ -343,6 +418,7 @@ const mainTeamList: {
   font-size: 0.8em;
   border: none;
   cursor: pointer;
+  color: #ffffff;
   border-bottom: 1px solid var(--el-color-primary);
   padding: 0.5em 1em;
   display: inline-flex;
@@ -454,7 +530,7 @@ const mainTeamList: {
 .subtitle {
   margin: 3em auto;
   padding: 0.5em 1em;
-  font-size: 2.0em;
+  font-size: 2em;
   width: fit-content;
   position: relative;
 
@@ -462,7 +538,7 @@ const mainTeamList: {
     content: '';
     height: 20px;
     width: 0;
-    opacity: .3;
+    opacity: 0.3;
     background-color: var(--el-color-primary);
     position: absolute;
     border-radius: 5px;
@@ -486,20 +562,43 @@ const mainTeamList: {
   margin: 1em 0;
 }
 
+.teamCardContainer {
+  display: grid;
+  justify-content: center;
+  grid-auto-flow: column;
+  column-gap: 2em;
+  grid-template-columns: repeat(3, max-content);
+  grid-row: 1;
+}
+
 // 小队卡片
 .teamCard {
-  background-color: #e4d313;
+  background-color: rgba(255, 255, 255, 0.1);
+  transform-origin: left top;
   padding: 1em 1.5em;
   position: relative;
   border-radius: 5px;
 
-  &::before, &::after {
+  .gradeText {
+    position: absolute;
+    right: 0.2em;
+    top: -0.7em;
+    font-style: italic;
+    font-size: 5em;
+    font-weight: 900;
+    color: var(--el-color-primary);
+    opacity: 0.3;
+  }
+
+  &::before,
+  &::after {
+    transform: scale(1);
     $size: 25px;
     position: absolute;
-    content: "";
+    content: '';
     width: $size;
     height: $size;
-    border: $color-primary solid;
+    border: var(--el-color-primary) solid;
   }
 
   $offset: -5px;
