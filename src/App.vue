@@ -30,6 +30,7 @@ gsap.timeline().to(obj, {
 <style scoped>
 #globalLoading {
   position: fixed;
+  color: #fff;
   left: 0;
   top: 0;
   width: 100vw;
@@ -59,7 +60,6 @@ gsap.timeline().to(obj, {
   font-family: 'JetBrains Mono', 微软雅黑, serif;
   padding: 0;
   margin: 0;
-  color: white;
   color-scheme: light;
 }
 </style>
