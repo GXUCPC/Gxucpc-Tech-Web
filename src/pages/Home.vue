@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
+import AniEle from '@/components/AniEle.vue'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
 
-const globalLoading = useGlobalLoading()
+function getEleNth(child: HTMLElement) {
+  let i = 0
+  while ((child = child.previousSibling) != null) i++
+  return i
+}
 
 function infoSectionAni(ele: HTMLDivElement | null) {
   const tl = gsap.timeline()
@@ -119,13 +123,22 @@ onMounted(() => {
   })
   document.querySelectorAll('.title').forEach((ele) => {
     const tl = gsap.timeline()
-    tl.from(
-      ele,
-      {
-        autoAlpha: 0,
-        duration: 1,
-      },
-    )
+    tl.from(ele, {
+      autoAlpha: 0,
+      duration: 1,
+    })
+    ScrollTrigger.create({
+      trigger: ele,
+      animation: tl,
+      onEnter: (self) => ele.classList.add('show'),
+    })
+  })
+  document.querySelectorAll('.subtitle').forEach((ele) => {
+    const tl = gsap.timeline()
+    tl.from(ele, {
+      autoAlpha: 0,
+      duration: 1,
+    })
     ScrollTrigger.create({
       trigger: ele,
       animation: tl,
@@ -133,6 +146,16 @@ onMounted(() => {
     })
   })
 })
+
+const mainTeamList: {
+  teammates: string[],
+  grade: number,
+  mainMedal: string[]
+}[] = [
+  {
+    grade: 0, mainMedal: [], teammates: []
+  }
+]
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
 <!-- 可以用于学习实现原理，但请不要学习该文件代码样式 -->
@@ -211,6 +234,67 @@ onMounted(() => {
     </div>
   </section>
   <h1 class="title">集训队概要</h1>
+  <ani-ele
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        const charStagger = 0.025
+        tl.from(SplitText.create(ele, { type: 'chars' }).chars, {
+          autoAlpha: 0,
+          y: 20,
+          duration: 0.25,
+          stagger: charStagger,
+        })
+        const spans = ele.querySelectorAll('span')
+        console.log(spans)
+        if (spans[1])
+          tl.to(
+            spans[1],
+            {
+              duration: 1,
+              ease: 'power3.out',
+              onUpdate: function () {
+                spans[1]!.innerText = Math.round(this.progress() * 6) + ''
+              },
+            },
+            `${getEleNth(spans[1]) * charStagger}`,
+          )
+        if (spans[3])
+          tl.to(
+            spans[3],
+            {
+              duration: 1,
+              ease: 'power3.out',
+              onUpdate: function () {
+                spans[3]!.innerText = Math.round(this.progress() * 50) + ''
+              },
+              onComplete: () => (spans[3]!.innerText = 'N'),
+            },
+            `${getEleNth(spans[3]) * charStagger}`,
+          )
+
+        return tl
+      }
+    "
+    class="textCenter"
+  >
+    过去三年中，集训队在ICPC/CCPC各个赛站至少获得了
+    <span style="font-size: 1.5em; font-weight: bold; color: silver">0</span>
+    个银奖和
+    <span style="font-size: 1.5em; font-weight: bold; color: chocolate">0</span>
+    个铜奖<br />
+    与此同时，集训队还在团体程序设计天梯赛、蓝桥杯全国软件和信息技术专业人才大赛、
+    <br />
+    ICPC西部大学生程序设计竞赛等赛事获得
+    <span style="font-size: 1.2em; font-weight: bold; color: var(--el-color-primary)">若干</span>
+    奖项
+  </ani-ele>
+  <h2 class="subtitle">代表队伍</h2>
+  <ani-ele style="display: flex; justify-content: center;align-items: center;gap: 1em">
+    <div class="teamCard">
+      <div></div>
+    </div>
+  </ani-ele>
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
@@ -246,10 +330,12 @@ onMounted(() => {
       <div></div>
     </div>
   </section>
+
   <h1 class="title">技术组概要</h1>
 </template>
 
 <style scoped lang="scss">
+@use "element-plus/theme-chalk/src/var" as *;
 // 了解更多按钮
 .learnMoreBtn {
   appearance: none;
@@ -361,6 +447,71 @@ onMounted(() => {
   &::after {
     bottom: 0;
     right: 0;
+  }
+}
+
+// 副标题样式
+.subtitle {
+  margin: 3em auto;
+  padding: 0.5em 1em;
+  font-size: 2.0em;
+  width: fit-content;
+  position: relative;
+
+  &::after {
+    content: '';
+    height: 20px;
+    width: 0;
+    opacity: .3;
+    background-color: var(--el-color-primary);
+    position: absolute;
+    border-radius: 5px;
+    z-index: -1;
+    transition: 1s ease-in-out;
+  }
+  &.show::after {
+    width: 100%;
+  }
+
+  &::after {
+    bottom: 20%;
+    left: 0;
+  }
+}
+
+.textCenter {
+  text-align: center;
+  font-size: 2em;
+  line-height: 1.5em;
+  margin: 1em 0;
+}
+
+// 小队卡片
+.teamCard {
+  background-color: #e4d313;
+  padding: 1em 1.5em;
+  position: relative;
+  border-radius: 5px;
+
+  &::before, &::after {
+    $size: 25px;
+    position: absolute;
+    content: "";
+    width: $size;
+    height: $size;
+    border: $color-primary solid;
+  }
+
+  $offset: -5px;
+  &::before {
+    top: $offset;
+    left: $offset;
+    border-width: 1px 0 0 1px;
+  }
+  &::after {
+    bottom: $offset;
+    right: $offset;
+    border-width: 0 1px 1px 0;
   }
 }
 </style>
