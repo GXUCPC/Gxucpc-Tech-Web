@@ -177,7 +177,21 @@ const mainTeamList: {
   {
     grade: '23级',
     teamName: '远航者的幻想乡',
-    mainMedal: [h('span', { style: 'font-style: italic; opacity: .5' }, ['No Data'])],
+    mainMedal: [
+      h('span', { style: 'color: gold' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'gold' }),
+        '第 50 届 ICPC 国际大学生程序设计竞赛邀请赛（西安）金奖',
+      ]),
+      h('span', { style: 'color: chocolate' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
+        '第 50 届 ICPC 国际大学生程序设计竞赛（西安）铜奖',
+      ]),
+      h('span', { style: 'color: chocolate' }, [
+        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
+        '第 11 届 CCPC 中国大学生程序设计竞赛（郑州）铜奖',
+      ]),
+      h('span', { style: 'font-style: italic; opacity: .5' }, ['真的只打最后一把……']),
+    ],
     teammates: ['张健明', '陶康', '孙怿翔'],
   },
   {
@@ -358,8 +372,13 @@ const mainTeamList: {
     <div>已经保上<b style="font-size: 1.3em">双一流院校</b>啦！</div>
     <div>本科就业更不用说，<b style="font-size: 1.3em">大厂岗位</b>任你投！</div>
     <div>集训队退役老登人均月入<b style="font-size: 1.3em">20k+</b>噢！</div>
-    <div>大一大二有温柔和蔼的学长学姐亲切<b style="font-size: 1.3em">答疑解惑</b>，算法竞赛以外的问题也可以自由询问噢！</div>
-    <div>大三退役更是有技术组进行<b style="font-size: 1.3em">实习就职培训</b>，再也不怕没有工作啦！</div>
+    <div>
+      大一大二有温柔和蔼的学长学姐亲切<b style="font-size: 1.3em">答疑解惑</b
+      >，算法竞赛以外的问题也可以自由询问噢！
+    </div>
+    <div>
+      大三退役更是有技术组进行<b style="font-size: 1.3em">实习就职培训</b>，再也不怕没有工作啦！
+    </div>
   </ani-ele>
   <h2 class="subtitle">代表队伍</h2>
   <ani-ele
@@ -407,6 +426,28 @@ const mainTeamList: {
       </div>
     </div>
   </ani-ele>
+  <h2 class="subtitle">优秀成员</h2>
+  <ani-ele
+    class="textCenter"
+    :scroll-in-ani="
+      (ele) =>
+        gsap.from(
+          SplitText.create(ele, {
+            type: 'chars',
+            mask: 'chars',
+          }).chars,
+          {
+            duration: 0.05,
+            stagger: 0.05,
+            width: 0,
+          },
+        )
+    ">
+    不论出身如何，经过三年历练后，集训队大部分成员都取得了相当不错的成果
+  </ani-ele>
+  <h2 class="subtitle">保研方向</h2>
+  <h2 class="subtitle">就业方向</h2>
+
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
@@ -440,7 +481,6 @@ const mainTeamList: {
       <div></div>
     </div>
   </section>
-
   <h1 class="title">技术组概要</h1>
 </template>
 
@@ -650,7 +690,7 @@ const mainTeamList: {
   justify-content: center;
   grid-auto-flow: column;
   column-gap: 2em;
-  grid-template-columns: repeat(3, 30em);
+  grid-template-columns: repeat(3, 35em);
   grid-row: 1;
 }
 
