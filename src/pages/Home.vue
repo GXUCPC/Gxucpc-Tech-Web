@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AniEle from '@/components/AniEle.vue'
+import PeopleList, { type PeopleData } from '@/components/home/PeopleList.vue'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
@@ -206,6 +207,33 @@ const mainTeamList: {
     ],
     teammates: ['郑毅', '陈君屹', '杜永坤'],
   },
+]
+
+// 命名抛弃大脑
+const studentList: PeopleData[] = [
+  {
+    avatar: '/public/img/avatar/lzx.jpg',
+    comment: '大爱详哥',
+    info: '保研天津大学',
+    name: '李周详',
+  },
+  { avatar: '/public/img/avatar/sxy.jpg', info: '保研东南大学', name: '石新阳' },
+  { info: '考研浙江大学', name: '陈松盛' },
+  { info: '前往中国工程物理研究院', name: '武成志' },
+  { info: '保研至中国科学院大学', name: '李韵锋' },
+  { info: '保研电子科技大学', name: '龙泽宇' },
+]
+const workerList: PeopleData[] = [
+  {
+    avatar: '/public/img/avatar/jmr.jpg',
+    comment: 'B推搜熟人',
+    info: '哔哩哔哩Offer',
+    name: '金珉瑞',
+  },
+  { avatar: '/public/img/avatar/sct.jpg', info: '小马智行Offer', name: '孙城涛' },
+  { avatar: '/public/img/avatar/wzh.jpg', info: '腾讯实习优秀个人、腾讯质量效应部门Offer', comment: '韦老师', name: '韦祖豪' },
+  { avatar: '/public/img/avatar/wlm.jpg', info: '字节运维Offer', comment: '「电话告警」', name: '王利明' },
+  { avatar: '/public/img/avatar/cjl.jpg', info: 'Offer', name: '陈佳林' },
 ]
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
@@ -445,8 +473,10 @@ const mainTeamList: {
     ">
     不论出身如何，经过三年历练后，集训队大部分成员都取得了相当不错的成果
   </ani-ele>
-  <h2 class="subtitle">保研方向</h2>
-  <h2 class="subtitle">就业方向</h2>
+  <h2 class="subtitle">研究生方向代表</h2>
+  <people-list :list="studentList" />
+  <h2 class="subtitle">就业方向代表</h2>
+  <people-list :list="workerList" />
 
   <section
     class="icpc-tech infoContainer"
@@ -645,7 +675,7 @@ const mainTeamList: {
 
   & > div {
     margin-bottom: 1.5em;
-    padding: 0.5em 0.7em;
+    padding: 0.4em 1em 0.7em 1em;
     border-radius: 4px;
     max-width: 90%;
     width: fit-content;
