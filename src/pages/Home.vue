@@ -337,6 +337,30 @@ const mainTeamList: {
     奖项
   </ani-ele>
   <h2 class="subtitle">加入集训队会获得什么？</h2>
+  <ani-ele
+    class="chatPanel"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.children, {
+          duration: 1,
+          ease: 'power2.out',
+          y: 500,
+          autoAlpha: 0,
+          stagger: 0.4,
+        })
+        return tl
+      }
+    ">
+    <div><b style="font-size: 1.3em">各类奖项</b>拿到手软，柜子已经被牌子塞满啦！</div>
+    <div><b style="font-size: 1.3em">学分综测</b>评定都不知道选哪个奖项啦！</div>
+    <div><b style="font-size: 1.3em">保研</b>狠狠加分，让你的简历更加耀眼！</div>
+    <div>已经保上<b style="font-size: 1.3em">双一流院校</b>啦！</div>
+    <div>本科就业更不用说，<b style="font-size: 1.3em">大厂岗位</b>任你投！</div>
+    <div>集训队退役老登人均月入<b style="font-size: 1.3em">20k+</b>噢！</div>
+    <div>大一大二有温柔和蔼的学长学姐亲切<b style="font-size: 1.3em">答疑解惑</b>，算法竞赛以外的问题也可以自由询问噢！</div>
+    <div>大三退役更是有技术组进行<b style="font-size: 1.3em">实习就职培训</b>，再也不怕没有工作啦！</div>
+  </ani-ele>
   <h2 class="subtitle">代表队伍</h2>
   <ani-ele
     class="teamCardContainer"
@@ -381,10 +405,6 @@ const mainTeamList: {
       <div v-for="(medal, i) in team.mainMedal" :key="i" style="text-indent: 2em">
         <component :is="medal" />
       </div>
-    </div>
-    <div>
-      <Icon icon="mdi:ellipsis-horizontal" />
-      <Icon icon="mdi:ellipsis-horizontal" />
     </div>
   </ani-ele>
   <section
@@ -576,12 +596,61 @@ const mainTeamList: {
   margin: 1em 0;
 }
 
+// 模拟聊天窗
+.chatPanel {
+  width: 45em;
+  font-size: 1.3em;
+  margin: 0 auto;
+  overflow: hidden;
+
+  & > div {
+    margin-bottom: 1.5em;
+    padding: 0.5em 0.7em;
+    border-radius: 4px;
+    max-width: 90%;
+    width: fit-content;
+    position: relative;
+
+    // 角标
+    &::after {
+      $size: 4px;
+      content: '';
+      position: absolute;
+      bottom: -$size * 2;
+      border: solid $size;
+      border-radius: 0 0 8px 8px;
+    }
+
+    // 左右交替
+    &:nth-child(odd) {
+      $color: rgba(120, 120, 120, 0.7);
+      background-color: $color;
+      border-bottom-left-radius: 0;
+      &::after {
+        border-color: $color transparent transparent $color;
+        left: 0;
+      }
+    }
+
+    &:nth-child(even) {
+      $color: rgba(62, 181, 117, 0.7);
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+      background-color: $color;
+      &::after {
+        border-color: $color $color transparent transparent;
+        right: 0;
+      }
+    }
+  }
+}
+
 .teamCardContainer {
   display: grid;
   justify-content: center;
   grid-auto-flow: column;
   column-gap: 2em;
-  grid-template-columns: repeat(3, max-content);
+  grid-template-columns: repeat(3, 30em);
   grid-row: 1;
 }
 
