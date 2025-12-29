@@ -10,6 +10,7 @@
 // Define a type for the expected request body for type safety.
 interface RequestBody {
     comment: string;
+    title?: string; // The title for the discussion. Optional.
 }
 
 // Define a generic type for the request and response objects,
@@ -32,7 +33,7 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         return;
     }
 
-    const { comment } = req.body;
+    const { comment, title: customTitle } = req.body;
 
     if (!comment || typeof comment !== 'string' || comment.trim() === '') {
         res.status(400).json({ message: 'Comment cannot be empty.' });
@@ -52,8 +53,10 @@ export default async function handler(req: ApiRequest, res: ApiResponse) {
         return;
     }
 
-    // The title for the new discussion. You can customize this.
-    const title = `New feedback received on ${new Date().toISOString()}`;
+    // Use the custom title if provided, otherwise default to a title with the current date.
+    const title = (customTitle && customTitle.trim() !== '')
+        ? customTitle
+        : `New feedback received on ${new Date().toISOString()}`;
 
     // The GraphQL mutation for creating a discussion.
     const graphqlMutation = {

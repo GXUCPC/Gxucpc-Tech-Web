@@ -34,19 +34,35 @@ vercel dev
 
 **API 端点**: `/api/submit-comment`
 
+**请求体 (JSON Body)**:
+
+*   `comment` (string, **必需**): 评论或反馈的主要内容。
+*   `title` (string, *可选*): 您希望创建的 GitHub Discussion 的标题。如果留空，API 将自动生成一个包含当前时间的默认标题。
+
 ### 调用示例
 
 下面是一个在 Vue 或任何 JavaScript/TypeScript 项目中如何调用此 API 的示例代码：
 
 ```javascript
 /**
- * @param {string} commentText - 用户在输入框中填写的评论内容
+ * @param {string} commentText - 用户在输入框中填写的评论内容。
+ * @param {string} [title] - (可选) 希望设定的标题。
  */
-async function submitFeedback(commentText) {
+async function submitFeedback(commentText, title) {
   // 检查评论内容是否为空
   if (!commentText || commentText.trim() === '') {
     alert('评论内容不能为空！');
     return;
+  }
+
+  // 构建请求体
+  const requestBody = {
+    comment: commentText,
+  };
+
+  // 如果提供了标题，就加入到请求体中
+  if (title && title.trim() !== '') {
+    requestBody.title = title;
   }
 
   try {
@@ -55,8 +71,8 @@ async function submitFeedback(commentText) {
       headers: {
         'Content-Type': 'application/json',
       },
-      // 将评论内容放入请求体中
-      body: JSON.stringify({ comment: commentText }),
+      // 将评论内容和可选的标题放入请求体中
+      body: JSON.stringify(requestBody),
     });
 
     const result = await response.json();
@@ -76,9 +92,13 @@ async function submitFeedback(commentText) {
   }
 }
 
-// 示例用法：
+// 示例用法 1：带标题
 // const userInput = "这是我的第一条测试反馈。";
-// submitFeedback(userInput);
+// const userTitle = "关于首页的建议";
+// submitFeedback(userInput, userTitle);
+
+// 示例用法 2：不带标题
+// submitFeedback("这条反馈没有自定义标题。");
 ```
 
 您只需要将 `submitFeedback` 函数集成到您的前端组件（例如 `contact.vue`）中，在用户点击“提交”按钮时调用它即可。
