@@ -3,6 +3,7 @@ import FooterContent from '@/components/FotterBar.vue'
 import HeaderNav from '@/components/HeaderBar.vue'
 import { ref } from 'vue'
 import { useDialog } from '@/store/globalLoading.ts'
+import  { CommentAPI }  from '@/api/submit-comment.js'
 const { dialogVisible} = useDialog()
 const feedbackData = ref({
   username: '',
@@ -22,7 +23,7 @@ async function submitFeedback(commentText, title) {
 
   // 构建请求体
   const requestBody = {
-    comment: commentText,
+    content: commentText,
     title: '用户反馈', // 默认标题
   };
 
@@ -32,24 +33,14 @@ async function submitFeedback(commentText, title) {
   }
 
   try {
-    const response = await fetch('/api/submit-comment', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      // 将评论内容和可选的标题放入请求体中
-      body: JSON.stringify(requestBody),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      // 成功创建 (状态码 201)
+    const response = await CommentAPI.submitComment(requestBody);
+    if (response.code === 200) {
+      // 成功创建 (状态码 200 表示成功)
       alert('反馈提交成功！');
       // 可以在这里清空输入框或给出其他成功提示
     } else {
       // API返回错误
-      alert(`提交失败: ${result.message}`);
+      alert(`提交失败`);
     }
   } catch (error) {
     // 网络或其他意外错误
@@ -57,15 +48,6 @@ async function submitFeedback(commentText, title) {
     alert('发生意外错误，请稍后再试。');
   }
 }
-
-// 示例用法 1：带标题
-// const userInput = "这是我的第一条测试反馈。";
-// const userTitle = "关于首页的建议";
-// submitFeedback(userInput, userTitle);
-
-// 示例用法 2：不带标题
-// submitFeedback("这条反馈没有自定义标题。");
-
 
 
 </script>
