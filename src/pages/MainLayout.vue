@@ -1,12 +1,33 @@
 <script setup lang="ts">
 import FooterContent from '@/components/FotterBar.vue'
 import HeaderNav from '@/components/HeaderBar.vue'
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useDialog } from '@/store/globalLoading.ts'
-import  { CommentAPI }  from '@/api/submit-comment.js'
+import  { VisitAPI }  from '@/api/visit.js'
 import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
 
 const { dialogVisible} = useDialog()
+
+onMounted(() => {
+  // 页面加载完成后，发送埋点请求
+  recordVisit()
+})
+
+function recordVisit() {
+  const visitData = {
+    time: new Date().toISOString(),
+  }
+  VisitAPI.submitVisit(visitData)
+    .then((response) => {
+      console.log('埋点成功:', response)
+    })
+    .catch((error) => {
+      console.error('埋点失败:', error)
+    })
+}
+
+
+
 
 </script>
 
