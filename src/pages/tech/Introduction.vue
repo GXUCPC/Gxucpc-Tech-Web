@@ -96,7 +96,7 @@ onMounted(() => {
   const tl = gsap.timeline()
   //初始动画
   tl.from(headTextEle.querySelector('.item1')?.children!, {
-    delay: 3,
+    delay: 0.3,
     duration: 0.5,
     yPercent: 100,
     autoAlpha: 0,
@@ -198,9 +198,8 @@ onMounted(() => {
         <p>
           广西大学ICPC集训队技术组（ICPC Technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
         </p>
-        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来
-进入互联网大厂打下坚实根基。</p>
-       
+        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来进入互联网大厂打下坚实根基。</p>
+
 
       </div>
     </div>
@@ -218,7 +217,7 @@ onMounted(() => {
           <div class="text1">
             常见问题
           </div>
-          <div class="text2">Normal Question</div>
+          <div class="text2">FAQ</div>
         </div>
       </div>
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em; text-align: left; width: fit-content;">
@@ -227,7 +226,7 @@ onMounted(() => {
         <li>Q: 大概需要多强的算法/项目基础才能加入技术组？</li>
         <p>技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,无论你的专业背景是什么，只要你愿意学习，技术组都欢迎你。</p>
         <li>Q: 时间投入大概要多少？</li>
-        <p></p>
+        <p>技术组的成员需要投入一定的时间来参与项目开发和学习。具体时间安排会根据项目需求和个人情况而定。</p>
       </div>
     </div>
     <div class="line">

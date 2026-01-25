@@ -118,3 +118,21 @@
   bottom: 0;
   right: 0;
 }
+
+.feedback-modal {
+  /* 半透明背景色 */
+  background: rgba(20, 20, 20, 0.75);
+
+  /* 背景模糊滤镜 */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px); /* 兼容 Safari 浏览器 */
+
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #333; /* 字体变深 */
+}
