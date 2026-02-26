@@ -14,6 +14,11 @@ const router = createRouter({
           component: defineAsyncComponent(() => import('@/pages/Home.vue')),
         },
         {
+          name: 'testPost',
+          path: 'test-post',
+          component: defineAsyncComponent(() => import('@/components/TestPost.vue')),
+        },
+        {
           name: 'tch_team2-1' ,
           path: 'tch_team2-1' ,
           component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
@@ -67,6 +72,17 @@ const router = createRouter({
         },
       ],
     },
+    {
+        path: '/admin',
+      component: () => import('@/pages/admin/AdminLayout.vue'),
+      children: [
+        {
+          name: 'adminHome',
+          path: 'interview',
+          component: () => import('@/pages/admin/AdminHome.vue'),
+        }
+      ],
+      }
   ],
 })
 

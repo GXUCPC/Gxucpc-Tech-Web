@@ -4,14 +4,25 @@ import { gsap } from 'gsap'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useDialog } from '@/store/globalLoading.ts'
+import { useUserStore } from '@/store/user'
+
 const { dialogVisible } = useDialog()
 
 const globalLoading = useGlobalLoading()
 const router = useRouter()
 const activeIndex = ref('/')
+const userStore = useUserStore()
+
 const expression = () => {
     // 点击按钮时，显示对话框
     dialogVisible.value = true;
+}
+const handleLogout = () => {
+    if (confirm('确定要退出登录吗？')) {
+        userStore.clearUser(); // 清空 Pinia 状态
+        // 因为 Token 在 HttpOnly Cookie 中，刷新页面是清除前端会话最彻底的方式
+        location.reload();
+    }
 }
 const handleSelect = (key: string, keyPath: string[]) => {
   router.push(key)
@@ -67,7 +78,27 @@ const handleSelect = (key: string, keyPath: string[]) => {
 
       </el-menu>
       <div class="headerRight">
-        <el-button size="large" @click.prevent="expression" text>登录</el-button>
+        <el-button
+          v-if="!userStore.isLoggedIn"
+          size="large"
+          @click.prevent="expression"
+          text
+        >
+          登录
+        </el-button>
+
+        <div v-else class="userInfo">
+          <span class="userName">欢迎，{{ userStore.userInfo?.nickname || userStore.userInfo?.username }}</span>
+          <el-tag
+            v-if="userStore.userInfo?.is_admin"
+            size="small"
+            type="danger"
+            effect="light"
+          >
+            管理员
+          </el-tag>
+          <el-button size="small" type="info" @click="handleLogout" text>退出</el-button>
+        </div>
       </div>
     </div>
   </div>
