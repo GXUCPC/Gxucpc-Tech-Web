@@ -12,13 +12,18 @@ const globalLoading = useGlobalLoading()
 const router = useRouter()
 const activeIndex = ref('/')
 const userStore = useUserStore()
+const baseUrl = 'http://localhost:9090'
 
 const expression = () => {
     // 点击按钮时，显示对话框
     dialogVisible.value = true;
 }
-const handleLogout = () => {
+const handleLogout = async () => {
     if (confirm('确定要退出登录吗？')) {
+        await fetch(`${baseUrl}/user/logout`, {
+            method: 'POST',
+            credentials: 'include'
+        });
         userStore.logout(); // 清空 Pinia 状态
         // 因为 Token 在 HttpOnly Cookie 中，刷新页面是清除前端会话最彻底的方式
         location.reload();
