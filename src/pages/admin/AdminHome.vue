@@ -2,13 +2,19 @@
 import { ref, onMounted } from 'vue'
 
 // 定义面试记录的数据接口
+enum InterviewStatus {
+  Pending = 'pending',
+  Passed = 'passed',
+  Rejected = 'rejected',
+}
+
 interface Interview {
   id?: number;
   username: string;
   email: string;
   github_username: string;
   github_url: string;
-  status: string;
+  status: InterviewStatus;
   admin_remark: string;
 }
 
@@ -19,6 +25,14 @@ const stats = ref([
   { title: '已通过面试', value: 0, color: '#10b981' },
   { title: '已拒绝简历', value: 0, color: '#ef4444' }
 ])
+
+const StatusMap: Record<InterviewStatus, number> = {
+  [InterviewStatus.Pending]: 0,
+  [InterviewStatus.Passed]: 1,
+  [InterviewStatus.Rejected]: 1
+}
+
+const originalStatus = ref<InterviewStatus>(InterviewStatus.Pending)
 
 // 列表相关状态
 const interviews = ref<Interview[]>([])
@@ -85,8 +99,9 @@ const handleFilterChange = () => {
 // 开启编辑模式
 const startEdit = async (interview: Interview) => {
   editingUser.value = interview.username
+  originalStatus.value = interview.status || InterviewStatus.Pending
   editForm.value = {
-    status: interview.status || 'pending',
+    status: interview.status || InterviewStatus.Pending,
     admin_remark: interview.admin_remark || ''
   }
 }
@@ -150,7 +165,7 @@ onMounted(() => {
   <div class="admin-home">
     <div class="welcome-section">
       <h1>控制台首页</h1>
-      <p>欢迎来到管理后台，您可以在此直接处理真实的面试记录数据。</p>
+      <p>欢迎来到管理后台，您可以在此直接处理面试记录数据。</p>
     </div>
 
     <div class="stats-grid">
@@ -210,7 +225,9 @@ onMounted(() => {
               </td>
               <td v-else>
                 <select v-model="editForm.status" class="edit-select">
-                  <option value="pending">pending</option>
+                  <option value="pending" :disabled="(StatusMap[originalStatus] || 0) > 0">
+                    pending {{ (StatusMap[originalStatus] || 0) > 0 ? '' : '' }}
+                  </option>
                   <option value="passed">passed</option>
                   <option value="rejected">rejected</option>
                 </select>

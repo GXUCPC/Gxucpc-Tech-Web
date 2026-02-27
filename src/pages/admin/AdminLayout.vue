@@ -1,18 +1,55 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
+import { onMounted, watchEffect } from 'vue'
 const userStore = useUserStore()
 
 const router = useRouter()
+const base_url = 'http://localhost:9090'
+// 权限检查逻辑
+const checkPermission = () => {
+  // 如果没登录，或者登录了但不是管理员
+  if (!userStore.userInfo?.is_admin) {
+    alert('无权访问管理后台')
+    router.replace('/') // 强制踢回首页
+  }
+}
+
+onMounted(async () => {
+  try{
+    const response=await fetch(`${base_url}/user/info`,{
+      method:'GET',
+      credentials:'include',
+    });
+
+    const res=await response.json();
+    if (res.code===200&&res.data){
+      userStore.setUser(res.data);
+    }
+  }
+  catch (error){
+    console.error('身份验证请求失败', error);
+  }
+  checkPermission()
+})
+
+watchEffect(() => {
+  if (userStore.userInfo&&!userStore.isLoggedIn) {
+    router.replace('/')
+  }
+})
 
 const logout = () => {
-  localStorage.removeItem('token')
+  fetch(`${base_url}/user/info`,{
+     method: 'POST', credentials: 'include'
+  });
+  userStore.logout()
   router.push('/')
 }
 </script>
 
 <template>
-  <div class="admin-layout">
+  <div class="admin-layout" v-if="userStore.userInfo?.is_admin">
     <aside class="sidebar">
       <div class="logo">管理后台系统</div>
       <nav class="nav-menu">
@@ -29,7 +66,7 @@ const logout = () => {
         </div>
         <div class="header-right">
           <span class="user-info">{{ userStore.userInfo?.username || '管理员' }}</span>
-          <button @click="logout" class="logout-btn">退出登录</button>
+          <button @click="logout" class="logout-btn">退出</button>
         </div>
       </header>
 
