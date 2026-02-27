@@ -50,16 +50,13 @@ const fetchInterviews = async () => {
     }
 
     const response = await fetch(url, {
-      // 1. 删除 Authorization 这一行，因为后端不读它
+
       headers: {
-        // 'Authorization': `Bearer ${getToken()}` // 去掉这行
       },
-      // 2. 关键：允许发送 Cookie
       credentials: 'include'
     })
     const res = await response.json()
 
-    // 兼容全局拦截器 {code, data:{list, total}} 或者直接返回 {list, total} 的情况
     const dataObj = res.data ? res.data : res;
 
     if (dataObj && dataObj.list) {
@@ -106,12 +103,10 @@ const saveEdit = async (username: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        // 注意：这里删除了 Authorization，因为后端只认 Cookie
       },
-      // 关键：加上这行，带上 Cookie
       credentials: 'include',
       body: JSON.stringify({
-        username, // 这里就可以正常使用 username 了
+        username,
         status: editForm.value.status,
         admin_remark: editForm.value.admin_remark
       })
@@ -119,10 +114,9 @@ const saveEdit = async (username: string) => {
 
     const res = await response.json()
 
-    // 判断逻辑保持不变
     if (res.code === 200 || res.success || res.username) {
       editingUser.value = null
-      await fetchInterviews() // 刷新列表
+      await fetchInterviews()
     } else {
       alert(res.message || '更新失败')
     }

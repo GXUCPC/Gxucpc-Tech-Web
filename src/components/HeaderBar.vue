@@ -15,7 +15,6 @@ const userStore = useUserStore()
 const baseUrl = 'http://localhost:9090'
 
 const expression = () => {
-    // 点击按钮时，显示对话框
     dialogVisible.value = true;
 }
 const handleLogout = async () => {
@@ -24,8 +23,7 @@ const handleLogout = async () => {
             method: 'POST',
             credentials: 'include'
         });
-        userStore.logout(); // 清空 Pinia 状态
-        // 因为 Token 在 HttpOnly Cookie 中，刷新页面是清除前端会话最彻底的方式
+        userStore.logout();
         location.reload();
     }
 }

@@ -6,7 +6,6 @@ const userStore = useUserStore()
 const router = useRouter()
 
 const logout = () => {
-  // 简单的退出逻辑，可根据实际情况修改
   localStorage.removeItem('token')
   router.push('/')
 }

@@ -10,7 +10,7 @@ import { onMounted } from 'vue'
 const { dialogVisible } = useDialog()
 const router = useRouter()
 const userStore = useUserStore()
-// 控制注册弹窗的显示
+
 const registerVisible = ref(false)
 
 const loginData = ref({
@@ -18,12 +18,11 @@ const loginData = ref({
   password: '',
 });
 
-// 注册数据 - 对应后端 register 接口要求的字段
 const registerData = ref({
   username: '',
   password: '',
   email: '',
-  captchaCode: '' // 后端校验需要验证码
+  captchaCode: ''
 });
 
 const baseUrl = 'http://localhost:9090'
@@ -31,7 +30,7 @@ const checkLogin = async () => {
   try {
     const response = await fetch(`${baseUrl}/user/info`, {
       method: 'GET',
-      credentials: 'include' // 必须带上，否则浏览器不会发送 HttpOnly Cookie
+      credentials: 'include'
     })
     const res = await response.json()
     if (res.code === 200) {
@@ -45,7 +44,7 @@ const checkLogin = async () => {
 onMounted(() => {
   checkLogin()
 })
-// 登录逻辑
+
 const login = async () => {
   if (!loginData.value.username || !loginData.value.password) {
     alert('请输入账号和密码！')
@@ -72,7 +71,7 @@ const login = async () => {
   }
 }
 
-// 注册逻辑
+
 const handleRegister = async () => {
   try {
     const response = await fetch(`${baseUrl}/user/register`, {
@@ -84,7 +83,7 @@ const handleRegister = async () => {
     if (res.code === 200) {
       alert('注册成功，请登录！')
       registerVisible.value = false
-      dialogVisible.value = true // 注册成功后切回登录界面
+      dialogVisible.value = true
     } else {
       alert('注册失败：' + res.message)
     }
@@ -93,7 +92,6 @@ const handleRegister = async () => {
   }
 }
 
-// 发送验证码逻辑
 const sendCode = async () => {
   if (!registerData.value.email) {
     alert('请先输入邮箱')
@@ -112,7 +110,6 @@ const sendCode = async () => {
   }
 }
 
-// 切换弹窗
 const switchToRegister = () => {
   dialogVisible.value = false
   registerVisible.value = true
