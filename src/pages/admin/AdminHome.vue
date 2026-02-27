@@ -86,7 +86,7 @@ const handleFilterChange = () => {
 }
 
 // 开启编辑模式
-const startEdit = (interview: Interview) => {
+const startEdit = async (interview: Interview) => {
   editingUser.value = interview.username
   editForm.value = {
     status: interview.status || 'pending',
@@ -106,20 +106,23 @@ const saveEdit = async (username: string) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${getToken()}`
+        // 注意：这里删除了 Authorization，因为后端只认 Cookie
       },
+      // 关键：加上这行，带上 Cookie
+      credentials: 'include',
       body: JSON.stringify({
-        username,
+        username, // 这里就可以正常使用 username 了
         status: editForm.value.status,
         admin_remark: editForm.value.admin_remark
       })
     })
+
     const res = await response.json()
 
-    // 兼容不同的成功状态码判定
+    // 判断逻辑保持不变
     if (res.code === 200 || res.success || res.username) {
       editingUser.value = null
-      await fetchInterviews()
+      await fetchInterviews() // 刷新列表
     } else {
       alert(res.message || '更新失败')
     }
@@ -387,6 +390,7 @@ onMounted(() => {
 .data-table th, .data-table td {
   padding: 12px 16px;
   border-bottom: 1px solid #e5e7eb;
+  color: #1f2937;
 }
 
 .data-table th {

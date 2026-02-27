@@ -19,7 +19,7 @@ const expression = () => {
 }
 const handleLogout = () => {
     if (confirm('确定要退出登录吗？')) {
-        userStore.clearUser(); // 清空 Pinia 状态
+        userStore.logout(); // 清空 Pinia 状态
         // 因为 Token 在 HttpOnly Cookie 中，刷新页面是清除前端会话最彻底的方式
         location.reload();
     }
