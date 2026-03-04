@@ -14,11 +14,6 @@ const router = createRouter({
           component: defineAsyncComponent(() => import('@/pages/Home.vue')),
         },
         {
-          name: 'testPost',
-          path: 'test-post',
-          component: defineAsyncComponent(() => import('@/components/TestPost.vue')),
-        },
-        {
           name: 'tch_team2-1' ,
           path: 'tch_team2-1' ,
           component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
@@ -48,6 +43,11 @@ const router = createRouter({
           name: 'tech',
           path: 'tech',
           children: [
+            {
+              name: 'techTeamInterview',
+              path: 'interview',
+              component: defineAsyncComponent(() => import('@/pages/tech/Interview.vue')),
+            },
             {
               name: 'techHome',
               path: '',

@@ -76,6 +76,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
           <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
           <el-menu-item index="/tech/tiemExprience">技术组主要开发经历</el-menu-item>
           <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
+          <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="3">定制软件需求</el-menu-item>
 
