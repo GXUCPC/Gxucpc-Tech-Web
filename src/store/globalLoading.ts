@@ -10,11 +10,13 @@ export const useGlobalLoading = defineStore('globalLoading', () => {
 })
 
 // ⚠️ 关键：在模块作用域中定义 ref，使其成为单例
-const dialogVisible = ref(false)
+const dialogVisibleLogin = ref(false)
+const dialogVisibleFeedback = ref(false)
 
 export function useDialog() {
     // 返回 ref 和操作方法
     return {
-        dialogVisible,
+        dialogVisibleLogin,
+        dialogVisibleFeedback
     }
 }

@@ -1,4 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import Giscus from '@giscus/vue';
+
+</script>
 
 <template>
   <div class="footerContentContainer">
@@ -6,6 +9,24 @@
       <el-text>This is Footer</el-text>
     </div>
   </div>
+  <div class="comment-container">
+      <h3 class="comment-title"> 留言区</h3>
+
+      <Giscus
+        id="comments"
+        repo="susitata/Gxu-Tch-Web-discussion"
+        repoId="R_kgDOQuwzKA"
+        category="General"
+        categoryId="DIC_kwDOQuwzKM4C0O3T"
+        mapping="pathname"
+        strict="0"
+        reactionsEnabled="1"
+        emitMetadata="0"
+        inputPosition="top"
+        theme="transparent_dark" lang="zh-CN"
+        loading="lazy"
+      />
+    </div>
 </template>
 
 <style scoped>

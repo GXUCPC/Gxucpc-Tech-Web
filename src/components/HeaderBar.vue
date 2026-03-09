@@ -6,7 +6,8 @@ import { useRouter } from 'vue-router'
 import { useDialog } from '@/store/globalLoading.ts'
 import { useUserStore } from '@/store/user'
 
-const { dialogVisible } = useDialog()
+const { dialogVisibleLogin } = useDialog()
+const { dialogVisibleFeedback } = useDialog()
 
 const globalLoading = useGlobalLoading()
 const router = useRouter()
@@ -15,7 +16,10 @@ const userStore = useUserStore()
 const baseUrl = 'http://localhost:9090'
 
 const expression = () => {
-    dialogVisible.value = true;
+    dialogVisibleLogin.value = true;
+}
+const expressionFeedback = () => {
+    dialogVisibleFeedback.value = true;
 }
 const handleLogout = async () => {
     if (confirm('确定要退出登录吗？')) {
@@ -78,10 +82,9 @@ const handleSelect = (key: string, keyPath: string[]) => {
           <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
           <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
         </el-sub-menu>
-        <el-menu-item index="3">定制软件需求</el-menu-item>
-
       </el-menu>
       <div class="headerRight">
+        <el-button size="large" @click.prevent="expressionFeedback" text>意见反馈</el-button>
         <el-button
           v-if="!userStore.isLoggedIn"
           size="large"
@@ -140,5 +143,10 @@ const handleSelect = (key: string, keyPath: string[]) => {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+}
+.headerRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 </style>

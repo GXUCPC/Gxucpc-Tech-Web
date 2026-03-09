@@ -6,8 +6,9 @@ import { useDialog } from '@/store/globalLoading.ts'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { onMounted } from 'vue'
+import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
 
-const { dialogVisible } = useDialog()
+const { dialogVisibleLogin } = useDialog()
 const router = useRouter()
 const userStore = useUserStore()
 
@@ -60,7 +61,7 @@ const login = async () => {
     const res = await response.json()
     if (res.code === 200) {
       userStore.setUser(res.data)
-      dialogVisible.value = false
+      dialogVisibleLogin.value = false
       alert('登录成功！')
       router.push('/')
     } else {
@@ -83,7 +84,7 @@ const handleRegister = async () => {
     if (res.code === 200) {
       alert('注册成功，请登录！')
       registerVisible.value = false
-      dialogVisible.value = true
+      dialogVisibleLogin.value = true
     } else {
       alert('注册失败：' + res.message)
     }
@@ -111,14 +112,15 @@ const sendCode = async () => {
 }
 
 const switchToRegister = () => {
-  dialogVisible.value = false
+  dialogVisibleLogin.value = false
   registerVisible.value = true
 }
 </script>
 
 <template>
+  <FeedbackModal />
 
-  <el-dialog v-model="dialogVisible" width="40%" style="text-align: center;">
+  <el-dialog v-model="dialogVisibleLogin" width="40%" style="text-align: center;">
     <template #header>
       <div style="font-size: 30px; text-align: left; margin-top: 20px; margin-left: 30px;">用户登录</div>
     </template>
