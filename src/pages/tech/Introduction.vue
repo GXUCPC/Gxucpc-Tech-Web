@@ -96,7 +96,7 @@ onMounted(() => {
   const tl = gsap.timeline()
   //初始动画
   tl.from(headTextEle.querySelector('.item1')?.children!, {
-    delay: 3,
+    delay: 0.8,
     duration: 0.5,
     yPercent: 100,
     autoAlpha: 0,
@@ -200,7 +200,7 @@ onMounted(() => {
         </p>
         <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来
 进入互联网大厂打下坚实根基。</p>
-       
+
 
       </div>
     </div>

@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { gsap } from 'gsap'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watch } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useDialog } from '@/store/globalLoading.ts'
 import { useUserStore } from '@/store/user'
 
@@ -11,7 +11,19 @@ const { dialogVisibleFeedback } = useDialog()
 
 const globalLoading = useGlobalLoading()
 const router = useRouter()
-const activeIndex = ref('/')
+
+const route = useRoute() // 拿到当前路由信息对象
+
+// 1. 初始化时，直接读取当前的 URL 路径
+const activeIndex = ref(route.path)
+
+// 2. 监听路由变化（解决浏览器前进/后退按钮导致高亮不对的问题）
+watch(
+  () => route.path,
+  (newPath) => {
+    activeIndex.value = newPath
+  }
+)
 const userStore = useUserStore()
 const baseUrl = 'http://localhost:9090'
 

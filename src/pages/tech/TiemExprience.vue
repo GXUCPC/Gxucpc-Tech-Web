@@ -97,7 +97,7 @@ onMounted(() => {
   const tl = gsap.timeline()
   //初始动画
   tl.from(headTextEle.querySelector('.item1')?.children!, {
-    delay: 3,
+    delay: 0.8,
     duration: 0.5,
     yPercent: 100,
     autoAlpha: 0,

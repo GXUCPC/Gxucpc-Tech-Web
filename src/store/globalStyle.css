@@ -118,3 +118,18 @@
   bottom: 0;
   right: 0;
 }
+
+.text3 {
+    text-align: justify;       // 两端对齐，消除右侧“狗牙”
+    text-justify: inter-ideograph;
+    line-height: 1.5;          // 增加行间距，提升阅读舒适度
+    color: rgba(255, 255, 255, 0.85); // 稍微降低白色的刺眼感
+    word-break: break-word;    // 防止长英文单词撑破布局
+}
+
+li {
+      list-style: none;
+      font-weight: bold;
+      color: #8ab4dd;          // 问答环节的 Q 设为蓝色，增加层次
+      margin-top: 1em;
+}

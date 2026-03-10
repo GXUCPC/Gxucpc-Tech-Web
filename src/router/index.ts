@@ -84,6 +84,18 @@ const router = createRouter({
       ],
       }
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // 如果是通过浏览器的“前进/后退”按钮触发的，保持原来的滚动位置
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      // 如果是点击链接跳转的新页面，直接回到顶部
+      return {
+        top: 0,
+        behavior: 'smooth',
+      }
+    }
+  }
 })
 
 export default router
