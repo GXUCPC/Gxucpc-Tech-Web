@@ -10,6 +10,9 @@
         <div class="content-text" style="text-align: center; font-size: 22px;">
           你已提交过面试申请，请勿重复提交！
         </div>
+        <div style="text-align: center; margin-top: 20px;">
+          <button class="submit-btn" @click="clearSubmitStatus">重新提交申请</button>
+        </div>
       </div>
     </div>
 
@@ -75,7 +78,6 @@
               class="form-input"
               placeholder="请输入你的常用邮箱"
               :class="{ 'input-error': errors.email }"
-              @blur="checkApplyStatusByEmail"
               maxlength="100"
             />
             <span class="error-tip" v-if="errors.email">{{ errors.email }}</span>
@@ -106,7 +108,7 @@
           申请已提交，请留意邮件通知，我们会尽快与你联系！
         </div>
         <div style="text-align: center; margin-top: 20px;">
-          <button class="submit-btn" @click="resetForm">确认</button>
+          <button class="submit-btn" @click="closeSuccessModal">确认</button>
         </div>
       </div>
     </div>
@@ -114,29 +116,48 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 import axios from 'axios'
 
-// 配置axios
-axios.defaults.baseURL = 'http://localhost:3000'
+// 配置axios（适配后端9090端口）
+axios.defaults.baseURL = 'http://localhost:9090'
 axios.defaults.withCredentials = true
 axios.defaults.timeout = 10000
 
-// 请求拦截器
+// 请求拦截器：添加token
 axios.interceptors.request.use(
   config => {
-    // 优先从cookie取token（和后端auth.guard逻辑对齐）
-    // 如果需要从localStorage取也可以保留原有逻辑
+    const token = localStorage.getItem('token')
+    if (token) {
+      config.headers = config.headers || {}
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   error => Promise.reject(error)
 )
 
-// 响应拦截器统一处理错误
+// 响应拦截器：适配后端返回格式
 axios.interceptors.response.use(
-  response => response,
+  response => {
+    const res = response.data
+    // 兼容后端200/201状态码
+    if (res.code !== 200 && response.status !== 201) {
+      return Promise.reject(new Error(res.msg || '提交失败'))
+    }
+    return res
+  },
   error => {
-    const errMsg = error.response?.data?.msg || '网络异常，请稍后重试'
+    let errMsg = '网络异常，请稍后重试'
+    if (error.message.includes('请先登录')) {
+      errMsg = '请先登录后再提交申请'
+    } else if (error.response?.data?.msg) {
+      errMsg = error.response.data.msg
+    } else if (error.code === 'ECONNABORTED') {
+      errMsg = '请求超时，请检查网络'
+    } else if (error.response?.status === 500) {
+      errMsg = '提交失败：用户名/GitHub地址可能已重复，或登录状态失效，请重新登录后重试'
+    }
     return Promise.reject(new Error(errMsg))
   }
 )
@@ -162,31 +183,25 @@ const hasSubmitted = ref(false)
 const isSubmitting = ref(false)
 const showSuccessModal = ref(false)
 
-// URL格式校验（强化GitHub URL校验）
+// 邮箱正则（和后端对齐）
+const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z]{2,6}$/
+
+// URL格式校验
 const isValidUrl = (url) => {
   if (!url) return false
   try {
     const urlObj = new URL(url)
-    // 严格校验GitHub域名
     return urlObj.hostname === 'github.com' && urlObj.pathname.length > 1
   } catch {
     return false
   }
 }
 
-// Email格式校验
-const isValidEmail = (email) => {
-  const reg = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  return reg.test(email)
-}
-
 // 表单校验
 const validateForm = () => {
   let isValid = true
-  // 清空所有错误提示
   Object.keys(errors).forEach(key => errors[key] = '')
 
-  // 用户名校验
   if (!form.username.trim()) {
     errors.username = '用户名不能为空'
     isValid = false
@@ -195,7 +210,6 @@ const validateForm = () => {
     isValid = false
   }
 
-  // GitHub昵称校验
   if (!form.githubName.trim()) {
     errors.githubName = 'GitHub昵称不能为空'
     isValid = false
@@ -204,7 +218,6 @@ const validateForm = () => {
     isValid = false
   }
 
-  // GitHub URL校验
   if (!form.githubUrl.trim()) {
     errors.githubUrl = 'GitHub主页URL不能为空'
     isValid = false
@@ -213,62 +226,19 @@ const validateForm = () => {
     isValid = false
   }
 
-  // 邮箱校验
   if (!form.email.trim()) {
     errors.email = '电子邮箱不能为空'
     isValid = false
-  } else if (!isValidEmail(form.email)) {
-    errors.email = '请输入合法的电子邮箱格式'
+  } else if (!emailReg.test(form.email)) {
+    errors.email = '请输入合法的电子邮箱格式（例：xxx@xxx.com）'
     isValid = false
   }
 
   return isValid
 }
 
-// 检查当前用户是否已提交申请
-const checkSubmitStatus = async () => {
-  try {
-    // 先从本地缓存读取，提升体验
-    const submittedStatus = localStorage.getItem('interview_submitted')
-    if (submittedStatus === 'true') {
-      hasSubmitted.value = true
-      return
-    }
-
-    // 调用后端接口校验（需要后端新增/interview/check接口）
-    const res = await axios.get('/interview/my')
-    if (res.data.code === 200 && res.data.data) {
-      hasSubmitted.value = true
-      localStorage.setItem('interview_submitted', 'true')
-    }
-  } catch (error) {
-    // 非登录状态/接口不存在时不报错，仅控制台提示
-    console.warn('检查提交状态失败:', error.message)
-  }
-}
-
-// 检查邮箱是否已提交
-const checkApplyStatusByEmail = async () => {
-  if (!form.email || !isValidEmail(form.email)) return
-  
-  try {
-    // 这里需要后端配合实现邮箱查重接口，示例逻辑
-    const res = await axios.get('/interview/check', {
-      params: { email: form.email.trim() }
-    })
-    if (res.data.submitted) {
-      hasSubmitted.value = true
-      localStorage.setItem('interview_submitted', 'true')
-      alert('该邮箱已提交过申请，请勿重复提交')
-    }
-  } catch (error) {
-    console.warn('检查邮箱提交状态失败:', error.message)
-  }
-}
-
-// 提交表单
+// 提交表单（适配后端参数）
 const handleSubmit = async () => {
-  // 前置校验
   if (!validateForm()) return
   if (hasSubmitted.value) {
     alert('你已提交过申请，请勿重复提交')
@@ -279,15 +249,17 @@ const handleSubmit = async () => {
   try {
     isSubmitting.value = true
     
-    // 提交数据到后端
+    // ✅ 适配后端参数：包含 userid（默认1，可根据实际登录状态修改）、nickname
     await axios.post('/interview/create', {
+      userid: 1, // 实际项目中替换为登录用户的id
       username: form.username.trim(),
       github_username: form.githubName.trim(),
       github_url: form.githubUrl.trim(),
-      email: form.email.trim()
+      email: form.email.trim(),
+      nickname: form.username.trim() // 传给后端的 nickname
     })
 
-    // 提交成功处理
+    // 提交成功：标记状态
     localStorage.setItem('interview_submitted', 'true')
     hasSubmitted.value = true
     showSuccessModal.value = true
@@ -298,25 +270,53 @@ const handleSubmit = async () => {
   }
 }
 
+// 关闭成功弹窗
+const closeSuccessModal = () => {
+  showSuccessModal.value = false
+}
+
 // 重置表单
 const resetForm = () => {
   form.username = ''
   form.githubName = ''
   form.githubUrl = ''
   form.email = ''
-  showSuccessModal.value = false
 }
 
-// 页面挂载时检查提交状态
+// 清除提交状态
+const clearSubmitStatus = () => {
+  localStorage.removeItem('interview_submitted')
+  hasSubmitted.value = false
+  resetForm()
+}
+
+// 检查提交状态
+const checkSubmitStatus = () => {
+  const token = localStorage.getItem('token')
+  if (!token) {
+    localStorage.removeItem('interview_submitted')
+    hasSubmitted.value = false
+    return
+  }
+  const submittedStatus = localStorage.getItem('interview_submitted')
+  hasSubmitted.value = submittedStatus === 'true'
+}
+
+// 监听登录状态变化
+watch(
+  () => localStorage.getItem('token'),
+  (newToken) => {
+    if (!newToken) {
+      localStorage.removeItem('interview_submitted')
+      hasSubmitted.value = false
+    }
+  },
+  { immediate: true }
+)
+
+// 页面挂载时检查状态
 onMounted(() => {
   checkSubmitStatus()
-})
-
-// 页面卸载时清理状态
-onUnmounted(() => {
-  hasSubmitted.value = false
-  isSubmitting.value = false
-  showSuccessModal.value = false
 })
 </script>
 
@@ -331,7 +331,6 @@ onUnmounted(() => {
   --error-color: #ff6b6b;
 }
 
-/* 页面容器 */
 .interview-page-container {
   min-height: 100vh;
   display: flex;
@@ -342,7 +341,6 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* 卡片容器 */
 .recruitment-overview-container {
   max-width: 900px;
   width: 100%;
@@ -367,7 +365,6 @@ onUnmounted(() => {
   max-width: 700px;
 }
 
-/* 头部样式 */
 .header {
   border-bottom: 3px solid var(--primary-color);
   padding-bottom: 15px;
@@ -387,7 +384,6 @@ onUnmounted(() => {
   margin-top: 5px;
 }
 
-/* 章节样式 */
 .section {
   margin-bottom: 30px;
 }
@@ -408,7 +404,6 @@ onUnmounted(() => {
   margin-bottom: 15px;
 }
 
-/* 表单样式 */
 .apply-form {
   display: flex;
   flex-direction: column;
@@ -430,7 +425,6 @@ onUnmounted(() => {
   color: var(--primary-color);
 }
 
-/* 输入框样式 */
 .form-input {
   height: 45px;
   padding: 0 15px;
@@ -459,7 +453,6 @@ onUnmounted(() => {
   line-height: 1.4;
 }
 
-/* 提交按钮 */
 .submit-item {
   margin-top: 10px;
   text-align: center;
@@ -487,7 +480,6 @@ onUnmounted(() => {
   background-color: #4fc3f7;
 }
 
-/* 弹窗样式 */
 .modal {
   position: fixed;
   top: 0;
@@ -513,7 +505,6 @@ onUnmounted(() => {
   box-sizing: border-box;
 }
 
-/* 响应式适配 */
 @media (max-width: 768px) {
   .recruitment-overview-container {
     padding: 20px;
