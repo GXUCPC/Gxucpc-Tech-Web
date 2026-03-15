@@ -25,35 +25,9 @@
 
       <div class="section">
         <h2 class="section-title">基础信息填写</h2>
-        
-        <form class="apply-form" @submit.prevent="handleSubmit">
-          <!-- 用户名输入框 -->
-          <div class="form-item">
-            <label class="form-label">用户名 <span class="required">*</span></label>
-            <input
-              v-model="form.username"
-              type="text"
-              class="form-input"
-              placeholder="请输入用户名（至少4位）"
-              :class="{ 'input-error': errors.username }"
-              maxlength="50"
-            />
-            <span class="error-tip" v-if="errors.username">{{ errors.username }}</span>
-          </div>
 
-          <!-- GitHub 昵称 -->
-          <div class="form-item">
-            <label class="form-label">GitHub 昵称 <span class="required">*</span></label>
-            <input
-              v-model="form.githubName"
-              type="text"
-              class="form-input"
-              placeholder="请输入你的GitHub昵称"
-              :class="{ 'input-error': errors.githubName }"
-              maxlength="50"
-            />
-            <span class="error-tip" v-if="errors.githubName">{{ errors.githubName }}</span>
-          </div>
+        <form class="apply-form" @submit.prevent="handleSubmit">
+
 
           <!-- GitHub 主页 URL -->
           <div class="form-item">
@@ -164,16 +138,12 @@ axios.interceptors.response.use(
 
 // 表单数据
 const form = reactive({
-  username: '',
-  githubName: '',
   githubUrl: '',
   email: ''
 })
 
 // 错误提示
 const errors = reactive({
-  username: '',
-  githubName: '',
   githubUrl: '',
   email: ''
 })
@@ -201,22 +171,6 @@ const isValidUrl = (url) => {
 const validateForm = () => {
   let isValid = true
   Object.keys(errors).forEach(key => errors[key] = '')
-
-  if (!form.username.trim()) {
-    errors.username = '用户名不能为空'
-    isValid = false
-  } else if (form.username.length < 4 || form.username.length > 50) {
-    errors.username = '用户名长度需在4-50个字符之间'
-    isValid = false
-  }
-
-  if (!form.githubName.trim()) {
-    errors.githubName = 'GitHub昵称不能为空'
-    isValid = false
-  } else if (form.githubName.length < 2 || form.githubName.length > 50) {
-    errors.githubName = '昵称长度需在2-50个字符之间'
-    isValid = false
-  }
 
   if (!form.githubUrl.trim()) {
     errors.githubUrl = 'GitHub主页URL不能为空'
@@ -248,15 +202,10 @@ const handleSubmit = async () => {
 
   try {
     isSubmitting.value = true
-    
-    // ✅ 适配后端参数：包含 userid（默认1，可根据实际登录状态修改）、nickname
+
     await axios.post('/interview/create', {
-      userid: 1, // 实际项目中替换为登录用户的id
-      username: form.username.trim(),
-      github_username: form.githubName.trim(),
       github_url: form.githubUrl.trim(),
       email: form.email.trim(),
-      nickname: form.username.trim() // 传给后端的 nickname
     })
 
     // 提交成功：标记状态
@@ -277,8 +226,6 @@ const closeSuccessModal = () => {
 
 // 重置表单
 const resetForm = () => {
-  form.username = ''
-  form.githubName = ''
   form.githubUrl = ''
   form.email = ''
 }
@@ -509,19 +456,19 @@ onMounted(() => {
   .recruitment-overview-container {
     padding: 20px;
   }
-  
+
   .title {
     font-size: 24px;
   }
-  
+
   .section-title {
     font-size: 24px;
   }
-  
+
   .form-input {
     height: 40px;
   }
-  
+
   .submit-btn {
     padding: 10px 24px;
     font-size: 16px;
