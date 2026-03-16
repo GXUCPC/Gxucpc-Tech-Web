@@ -89,6 +89,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
 const headTextRef = useTemplateRef('headText')
 const icpcInfoRef = useTemplateRef('icpcInfo')
 const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
+const icpcTiemInfoRef = useTemplateRef('icpcTiemInfo') // 👈 补上这句
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
@@ -123,6 +124,11 @@ onMounted(() => {
   ScrollTrigger.create({
     trigger: icpcTechInfoRef.value,
     animation: infoSectionAni(icpcTechInfoRef.value),
+  })
+
+  ScrollTrigger.create({
+    trigger: icpcTiemInfoRef.value,
+    animation: infoSectionAni(icpcTiemInfoRef.value),
   })
   document.querySelectorAll('.title').forEach((ele) => {
     const tl = gsap.timeline()
@@ -198,17 +204,18 @@ onMounted(() => {
         <p>
           广西大学ICPC集训队技术组（ICPC Technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
         </p>
-        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来
-进入互联网大厂打下坚实根基。</p>
-
-
+        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来进入互联网大厂打下坚实根基。</p>
       </div>
     </div>
   </section>
+
+
+
+
   <h1 class="title">招新相关</h1>
   <section
     class="icpc-tech infoContainer"
-    style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
+    style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em; margin-bottom: 20vh;"
     ref="icpcTechInfo"
   >
     <div class="info">
@@ -227,7 +234,9 @@ onMounted(() => {
         <li>Q: 大概需要多强的算法/项目基础才能加入技术组？</li>
         <p>技术组欢迎所有对技术充满好奇心、具备自主学习能力、并渴望动手创造的同学，无论你是大一新生还是其他年级的同学,无论你的专业背景是什么，只要你愿意学习，技术组都欢迎你。</p>
         <li>Q: 时间投入大概要多少？</li>
-        <p></p>
+        <p>每周至少 20h 以上的时间用于学习，开发。在AI时代，直接上手真实的项目，在开发中学习是非常高效的方式。</p>
+        <li>Q: 新人加入技术组后要做什么？</li>
+        <p>新人刚加入技术组后一般先选择一个技术方向，如前/后端，运维，算法等等（当然后面看个人意愿可以自主更改）。组内每个实习生均由指定的组员指导,帮助实习生快速上手。</p>
       </div>
     </div>
     <div class="line">
@@ -235,6 +244,31 @@ onMounted(() => {
     </div>
   </section>
 
+
+  <section class="icpc-techTiem infoContainer" ref="icpcTiemInfo" style="margin-left: 5%;">
+    <div class="line">
+      <div></div>
+    </div>
+    <div class="info">
+      <div class="infoBrief">
+        <el-image class="item1" style="width: 60px; height: 60px" />
+        <div style="display: flex; flex-direction: column; gap: 5px">
+
+          <div class="text1">广西大学ICPC集训队技术组</div>
+          <div class="text2"> ICPC Technology Team of China, Guangxi University</div>
+        </div>
+
+      </div>
+      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
+        <p style="margin-bottom: 20px;">项目组致力于用技术解决实际问题，基于真实的需求，我们开发了：</p>
+        <li style="margin-left: 30px;">QQ机器人：自动统计ICPC集训队内刷题情况，激发训练热情。</li>
+        <li style="margin-left: 30px;">浏览器插件 & 教务工具箱：简化繁琐的教务流程。</li>
+        <li style="margin-left: 30px;">候补抢课工具：（你懂的）为同学们的选课之路保驾护航，广受好评。</li>
+        <li style="margin-left: 30px;">QQ机器人：自动统计集训队内刷题情况，激发训练热情。</li>
+        <p style="margin-top: 20px;">目前，组内还有gxu课群bot，青鸾管理系统，谛听bot等项目正在同步开发。欢迎所有想要积累项目开发经验，学习技术的同学加入我们。</p>
+      </div>
+    </div>
+  </section>
 </template>
 
 <style scoped lang="scss">

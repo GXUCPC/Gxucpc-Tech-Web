@@ -37,6 +37,11 @@ const router = createRouter({
               path: '',
               component: defineAsyncComponent(() => import('@/pages/xcpc/XCPCIndex.vue')),
             },
+            {
+              name: 'xcpcIntrodution',
+              path: 'introdution',
+              component: defineAsyncComponent(() => import('@/pages/xcpc/XCPCIntroduction.vue')),
+            },
           ],
         },
         {

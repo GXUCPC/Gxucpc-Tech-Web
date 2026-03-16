@@ -119,7 +119,7 @@
   right: 0;
 }
 
-.text3 {
+ {
     text-align: justify;       // 两端对齐，消除右侧“狗牙”
     text-justify: inter-ideograph;
     line-height: 1.5;          // 增加行间距，提升阅读舒适度
@@ -132,4 +132,14 @@ li {
       font-weight: bold;
       color: #8ab4dd;          // 问答环节的 Q 设为蓝色，增加层次
       margin-top: 1em;
+}
+
+.text3 {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #d1d5db;
+  margin-bottom: 16px;
+
+  /* 关键：初始完全透明并隐藏 */
+
 }
