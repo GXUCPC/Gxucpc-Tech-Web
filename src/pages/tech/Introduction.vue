@@ -5,6 +5,15 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// 定义跳转函数
+const goToNextPage = () => {
+  // 把 '/about' 换成你实际配置的路由路径，比如 '/join' 或者 '/detail'
+  router.push('/tech/contuctUs')
+}
 
 const globalLoading = useGlobalLoading()
 
@@ -266,9 +275,20 @@ onMounted(() => {
         <li style="margin-left: 30px;">候补抢课工具：（你懂的）为同学们的选课之路保驾护航，广受好评。</li>
         <li style="margin-left: 30px;">QQ机器人：自动统计集训队内刷题情况，激发训练热情。</li>
         <p style="margin-top: 20px;">目前，组内还有gxu课群bot，青鸾管理系统，谛听bot等项目正在同步开发。欢迎所有想要积累项目开发经验，学习技术的同学加入我们。</p>
+
+            <button
+  class="learnMoreBtn"
+  @click="goToNextPage"
+  style="color: inherit; font-size: 1.2em;"
+>
+  加入我们
+  <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit; font-size: 1.2em;" />
+</button>
+
+
       </div>
     </div>
-  </section>
+    </section>
 </template>
 
 <style scoped lang="scss">
@@ -309,6 +329,31 @@ onMounted(() => {
     gap: 20px;
 
 
+  }
+}
+// 加入我们按钮
+.learnMoreBtn {
+  /* 1. 字体调大 */
+  font-size: 20px;         /* 调大字号 */
+  letter-spacing: 2px;     /* 字间距稍微拉开一点 */
+
+  /* 2. 靠右对齐与内部排版 */
+  display: flex;
+  align-items: center;     /* 保证“了解更多”和“箭头”在同一水平线上 */
+  margin-left: 10%;       /* 核心魔法：把它用力推到父容器的最右侧 */
+  margin-right: auto;        /* 右侧留一点空隙，不要死死贴着屏幕边缘 */
+  margin-top: 5vh;
+  margin-bottom: 5vh;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* 4. 悬浮动画：鼠标放上去时背景变亮，且向右微微移动 */
+  &:hover {
+    background-color: rgba(45, 68, 97, 0.1); /* 浅蓝色半透明背景 */
+    //color: #93c5fd;
+    //border-color: #93c5fd;
+    transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
 }
 </style>

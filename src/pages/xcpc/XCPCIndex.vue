@@ -3,8 +3,18 @@ import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+// 定义跳转函数
+const goToNextPage = () => {
+  // 把 '/about' 换成你实际配置的路由路径，比如 '/join' 或者 '/detail'
+  router.push('xcpc/introdution')
+}
 
 const globalLoading = useGlobalLoading()
 
@@ -222,7 +232,7 @@ onMounted(() => {
           <div class="text2">Normal Question</div>
         </div>
       </div>
-      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em; text-align: left; width: fit-content;">
+      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em; text-align: left; width: fit-content; margin-bottom: 20vh;">
         <li>Q: 我的数学一般，也没有信息学竞赛（OI）基础，能进队吗？</li>
         <p>
             英雄不问出处。只要你热爱解题、抗压能力强，在大一这一年愿意投入时间，我们会为你提供专业的训练环境。西大集训队有很多零基础起步最终拿到亚洲区域赛奖牌的励志标杆。
@@ -238,6 +248,16 @@ onMounted(() => {
         <p>
             老实说 acm 竞赛的强度是很高的。我们需要刷透 CF、洛谷等数千道题目，还有周末 5 小时的模拟赛和寒暑假高强度集训。但请记住：“凡是不能杀死你的，最终都会让你更强大。” 这种脑力极限边缘的快感，只有真正热爱的人才会懂。
         </p>
+
+<button
+  class="learnMoreBtn"
+  @click="goToNextPage"
+  style="color: inherit; font-size: 1.2em;"
+>
+  关于 XCPC
+  <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit; font-size: 1.2em;" />
+</button>
+
       </div>
     </div>
     <div class="line">
@@ -286,6 +306,30 @@ onMounted(() => {
     gap: 20px;
 
 
+  }
+}
+// 了解更多按钮
+.learnMoreBtn {
+  /* 1. 字体调大 */
+  font-size: 20px;         /* 调大字号 */
+  letter-spacing: 2px;     /* 字间距稍微拉开一点 */
+
+  /* 2. 靠右对齐与内部排版 */
+  display: flex;
+  align-items: center;     /* 保证“了解更多”和“箭头”在同一水平线上 */
+  margin-left: auto;       /* 核心魔法：把它用力推到父容器的最右侧 */
+  margin-right: 10%;        /* 右侧留一点空隙，不要死死贴着屏幕边缘 */
+  margin-top: 5vh;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  /* 4. 悬浮动画：鼠标放上去时背景变亮，且向右微微移动 */
+  &:hover {
+    background-color: rgba(45, 68, 97, 0.1); /* 浅蓝色半透明背景 */
+    //color: #93c5fd;
+    //border-color: #93c5fd;
+    transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
 }
 </style>

@@ -81,13 +81,6 @@ const scrollToSection = (id: string) => {
         序设计竞赛统称，是全球高校最具含金量、最具影响力的算法竞技舞台。在这里，来自全国乃
         至全球的高校精英同台竞技，在 5 个小时的极限高压下，挑战 10 到 13 道极具深度的复杂算法难题。
       </p>
-      <p class="paragraph">
-        先给我们的 b 站账号打个广告，关注
-        <a href="https://space.bilibili.com/你的B站UID" target="_blank" class="text-link"
-          >GXU-ACM</a
-        >
-        谢谢喵。
-      </p>
 
       <div class="divider" v-slide-show></div>
 
@@ -142,13 +135,8 @@ const scrollToSection = (id: string) => {
 
       <h2 id="about" class="section-title">关于参赛</h2>
       <p class="paragraph">
-        通常每年会有 7 个赛站，每个赛站每学校最多 4 个名额，西大大部分情况每个赛站都能拿到 3
-        个名额（有 WF 奖励名额，未来可能会减少）。
+        这里的信息我找不到，来个懂哥写吧
       </p>
-      <p class="paragraph">
-        前几年来因为有 WF 奖励名额每年学校能拿到 20 个名额左右，同时每个队伍最多参加两个赛站。
-      </p>
-      <p class="paragraph">即使有限制能拿到参赛名额的队伍也不算多，内部竞争还是相当激烈的。</p>
 
       <div class="animated-divider" v-slide-show></div>
 

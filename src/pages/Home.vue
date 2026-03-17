@@ -6,7 +6,7 @@ import { gsap } from 'gsap'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
-import { h, onMounted, useTemplateRef, type VNode } from 'vue'
+import { h, onMounted, useTemplateRef, ref, type VNode } from 'vue'
 
 function getEleNth(child: HTMLElement) {
   let i = 0
@@ -235,6 +235,104 @@ const workerList: PeopleData[] = [
   { avatar: '/public/img/avatar/wlm.jpg', info: '字节运维Offer', comment: '「电话告警」', name: '王利明' },
   { avatar: '/public/img/avatar/cjl.jpg', info: 'Offer', name: '陈佳林' },
 ]
+
+
+
+// 技术组代表项目列表
+const techProjectList = [
+  {
+    grade: 'Active',
+    teamName: '青鸾管理系统',
+    mainMedal: [
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:web' }),
+        '集训队核心教务与人员管理中枢',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:server' }),
+        '前后端分离架构，承载高频访问',
+      ]),
+    ],
+    teammates: ['Vue 3', 'Spring Boot', 'TypeScript'], // 借用 teammates 字段展示技术栈
+  },
+  {
+    grade: 'Core',
+    teamName: 'GXU-OJ 评测平台',
+    mainMedal: [
+      h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
+        h(Icon, { inline: true, icon: 'mdi:code-braces', color: '#b388ff' }),
+        '毫秒级沙箱隔离评测，保障代码安全执行',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:chart-bar' }),
+        '支持高并发提交，保障同学们的学习体验',
+      ]),
+    ],
+    teammates: ['Go', 'Docker', 'Vue 3', 'Redis'], // OJ 常见的核心技术栈
+  },
+  {
+    grade: 'v2.0',
+    teamName: '谛听 Bot',
+    mainMedal: [
+      h('span', { style: 'color: #67c23a' }, [
+        h(Icon, { inline: true, icon: 'mdi:robot', color: '#67c23a' }),
+        '全天候统计集训队刷题与训练进度',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:flash' }),
+        '课群智能答疑与学习热情激发',
+      ]),
+    ],
+    teammates: ['Python', 'NoneBot', 'LLM API'],
+  },
+  {
+    grade: 'Hot',
+    teamName: '西大教务工具箱 & 插件',
+    mainMedal: [
+      h('span', { style: 'color: #e6a23c' }, [
+        h(Icon, { inline: true, icon: 'mdi:tools', color: '#e6a23c' }),
+        '极大简化繁琐的校园教务流程',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:fire' }),
+        '候补抢课神器，广受同学们好评',
+      ]),
+    ],
+    teammates: ['JavaScript', 'Browser Extension'],
+  },
+]
+
+// 用于跟踪当前悬停的手风琴项目索引
+const activeIndex = ref<number>(3) // 这里是默认初始悬停在第四个项目的，如果添加项目请对应调整
+
+// 基础露出边缘宽度 (需与 CSS 中的 .collapsed-cover 样式和 getAccordionItemStyle 脚本对齐)
+const collapsedWidth = 60
+// 容器总宽 (需与 CSS 中的 .tech-accordion-container 对齐)
+const containerWidth = 800
+
+// 计算每个手风琴项目的动态样式
+const getAccordionItemStyle = (index: number) => {
+  const totalItems = techProjectList.length;
+  let leftValue = 0; // 声明一个变量记录偏移量
+
+  if (activeIndex.value === null) {
+    leftValue = index * collapsedWidth;
+  } else {
+    if (index <= activeIndex.value) {
+      leftValue = index * collapsedWidth;
+    } else {
+      leftValue = containerWidth - (totalItems - index) * collapsedWidth;
+    }
+  }
+
+  return {
+    left: `${leftValue}px`,
+    width: `100%`,
+    // 把算好的偏移量作为 CSS 变量传给样式
+    '--offset-left': `${leftValue}px`
+  };
+};
+
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
 <!-- 可以用于学习实现原理，但请不要学习该文件代码样式 -->
@@ -308,8 +406,7 @@ const workerList: PeopleData[] = [
       </div>
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
         <p>
-          广西大学ICPC集训队（ICPC Training Team of China, Guangxi
-          University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
+          广西大学ICPC集训队（ICPC Training Team of China, Guangxi University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
         </p>
         <p>集训队并非社团，仅为学生兴趣同好组织。</p>
 
@@ -478,6 +575,8 @@ const workerList: PeopleData[] = [
   <h2 class="subtitle">就业方向代表</h2>
   <people-list :list="workerList" />
 
+
+
   <section
     class="icpc-tech infoContainer"
     style="text-align: right; margin-top: 20vh; margin-left: auto; margin-right: 5em"
@@ -492,26 +591,164 @@ const workerList: PeopleData[] = [
               style="color: rgba(47, 174, 227)"
               :inline="true" />广西大学ICPC集训队技术组
           </div>
-          <div class="text2">ICPC Training Team of China, Guangxi University</div>
+          <div class="text2">ICPC Technology Team of China, Guangxi University</div>
         </div>
       </div>
-      <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
+            <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em;
+            margin-left: auto; margin-right: 0; text-align: left">
         <p>
-          广西大学ICPC集训队（ICPC Training Team of China, Guangxi
-          University）于2016年建立，2018-2019年开始逐渐正式运转，是一个为了代表广西大学参加以国际大学生程序设计竞赛（ICPC）、中国大学生程序设计竞赛（CCPC）等高水平赛事、希望与国内绝大部分院校接轨从而进行严格集中训练的队伍。集训队并非社团，仅为学生兴趣同好组织。集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。集训队分为正式队伍和技术组：正式队员参加各地举行的算法竞赛，技术组为竞赛队员提供后勤服务，保障竞赛队员的训练正常开展，同时学习项目开发的前沿知识，参与队内开发活动。
+          广西大学ICPC集训队技术组（ICPC Technology Team of China, Guangxi University）于2024年建立，脱胎于西大顶尖的算法殿堂——ACM-ICPC集训队。主要负责为广西大学ICPC集训队和学院、学校的教务工作提供技术支持,同时承接横向项目为组内同学提供真实的项目开发经历，积累经验。
         </p>
-        <p>集训队并非社团，仅为学生兴趣同好组织。</p>
-
-        <p>
-          集训队目前名义上属于计算机与电子信息学院计算机协会。集训队由计算机与电子信息学院以学院的名义提供经费和场地支持，而集训队为学院以及学校提供程序设计竞赛（算法竞赛）和相关课程的支持、管理与维护。
-        </p>
+        <p>技术组并非社团性质的团体，其为西大的一个高水平同好组织，有着较为严格的入队选拔。在这里，你将把算法思想融入工程项目，获得在象牙塔里极为珍贵的工业级开发经验，为你未来进入互联网大厂打下坚实根基。</p>
       </div>
     </div>
     <div class="line">
       <div></div>
     </div>
+
   </section>
-  <h1 class="title">技术组概要</h1>
+
+<h1 class="title">技术组概要</h1>
+
+  <ani-ele
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        const charStagger = 0.025
+        tl.from(SplitText.create(ele, { type: 'chars' }).chars, {
+          autoAlpha: 0,
+          y: 20,
+          duration: 0.25,
+          stagger: charStagger,
+        })
+        const spans = ele.querySelectorAll('span')
+        // 修改了目标数字，模拟技术组的成就
+        if (spans[1])
+          tl.to(
+            spans[1],
+            {
+              duration: 1,
+              ease: 'power3.out',
+              onUpdate: function () {
+                spans[1]!.innerText = Math.round(this.progress() * 10) + '+'
+              },
+            },
+            `${getEleNth(spans[1]) * charStagger}`,
+          )
+        if (spans[3])
+          tl.to(
+            spans[3],
+            {
+              duration: 1,
+              ease: 'power3.out',
+              onUpdate: function () {
+                spans[3]!.innerText = Math.round(this.progress() * 1000) + '+'
+              },
+            },
+            `${getEleNth(spans[3]) * charStagger}`,
+          )
+
+        return tl
+      }
+    "
+    class="textCenter">
+    目前为止，技术组已自主研发并维护了
+    <span style="font-size: 1.5em; font-weight: bold; color: var(--el-color-primary)">0</span>
+    个实用级核心项目<br />
+    日常服务覆盖了全校
+    <br />
+    <b style="font-size: 1.2em">
+      选课、教务、OJ评测、算法训练统计
+    </b>
+    <br />等多个应用场景，累计服务人次超
+    <span style="font-size: 1.5em; font-weight: bold; color: chocolate">0</span>
+  </ani-ele>
+
+  <h2 class="subtitle">加入技术组会获得什么？</h2>
+  <ani-ele
+    class="chatPanel"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.children, {
+          duration: 1,
+          ease: 'power2.out',
+          y: 500,
+          autoAlpha: 0,
+          stagger: 0.4,
+        })
+        return tl
+      }
+    ">
+    <div>告别玩具代码，直接上手<b style="font-size: 1.3em">真实的工程项目</b>！</div>
+    <div>熟练掌握当下最火的<b style="font-size: 1.3em">前后端开发栈</b>和运维技术！</div>
+    <div>严格的团队协作与代码规范，带你提前体验<b style="font-size: 1.3em">工业级开发流程</b>！</div>
+    <div>算法+工程双修，简历含金量暴增，互联网大厂的 HR 看了直呼内行！</div>
+    <div>组内有字节、B站等大厂offer在手的学长亲自进行<b style="font-size: 1.3em">技术与面试指导</b>！</div>
+  </ani-ele>
+
+<h2 class="subtitle">代表项目展示</h2>
+<ani-ele
+  class="tech-accordion-container"
+  style="margin-bottom: 15vh;"
+  :scroll-in-ani="
+    (ele) => {
+      const tl = gsap.timeline()
+      tl.from(ele.children, {
+        x: 50,
+        autoAlpha: 0,
+        duration: 0.8,
+        stagger: 0.15,
+        ease: 'power3.out'
+      })
+      return tl
+    }
+  ">
+  <div
+    class="accordion-item"
+    v-for="(project, i) in techProjectList"
+    :key="i"
+    :class="{ collapsed: activeIndex !== i }"
+    :style="getAccordionItemStyle(i)"
+    @mouseover="activeIndex = i"
+    @mouseleave="activeIndex = i"
+  >
+    <div class="ambient-glow"></div>
+
+    <div class="collapsed-cover">
+      <span>{{ project.grade }}</span>
+    </div>
+
+    <div class="expanded-content">
+      <div class="watermark">{{ project.grade }}</div>
+
+      <div class="project-name">{{ project.teamName }}</div>
+
+      <div class="detail-section">
+        <div class="detail-title">
+          <Icon icon="mdi:code-tags" :inline="true" /> 技术栈
+        </div>
+        <div class="tech-tags-container">
+          <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="tech-tag">
+            {{ tech }}
+          </span>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-title">
+          <Icon icon="mdi:check-decagram" :inline="true" /> 核心亮点
+        </div>
+        <div class="medal-list">
+          <div v-for="(medal, index) in project.mainMedal" :key="index" class="medal-item">
+            <component :is="medal" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ani-ele>
 </template>
 
 <style scoped lang="scss">
@@ -764,6 +1001,207 @@ const workerList: PeopleData[] = [
     bottom: $offset;
     right: $offset;
     border-width: 0 1px 1px 0;
+  }
+}
+/* ====================================
+   技术组：高级极客风交互式手风琴
+   ==================================== */
+.tech-accordion-container {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  height: 420px; /* 稍微加高一点点，给标签留出呼吸空间 */
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 16px;
+  /* 整体容器加一点底光影，更有脱离背景的立体感 */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.accordion-item {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  /* 基础状态：深邃的渐变底色，极细的边框 */
+  //background: linear-gradient(145deg, rgba(25, 30, 38, 0.8) 0%, rgba(15, 18, 24, 0.95) 100%);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.5); /* 右侧加深，增强堆叠的阴影感 */
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: left 0.6s cubic-bezier(0.25, 1, 0.5, 1), background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+
+  /* 悬停激活状态：亮起顶部边缘和背景微光 */
+  &:not(.collapsed) {
+    background: linear-gradient(145deg, rgba(38, 40, 43, 0.9) 0%, rgba(18, 22, 30, 0.95) 100%);
+    border-color: rgba(255, 255, 255, 0.15);
+    //border-top: 1px solid var(--el-color-primary, #409eff); /* 顶部霓虹主色线条 */
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5); /* 激活的卡片向左投射阴影，压住后面的卡片 */
+
+    .ambient-glow {
+      opacity: 1;
+    }
+  }
+}
+
+/* 顶部氛围发光晕影 (纯粹的细节怪)
+.ambient-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 80px;
+  background: radial-gradient(ellipse at top, rgba(64, 158, 255, 0.25) 0%, transparent 60%);
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  z-index: 0;
+} */
+
+/* 封面（竖向文字）样式 */
+.collapsed-cover {
+  position: absolute;
+  transition: all 0.4s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 100%;
+  left: 0;
+  /* 未激活时，给左侧加一点极暗的底色区分层级 */
+  background: rgba(0, 0, 0, 0.2);
+
+  span {
+    display: block;
+    transform: rotate(-90deg);
+    font-size: 1.6em;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.3);
+    letter-spacing: 6px;
+    white-space: nowrap;
+    text-transform: uppercase;
+  }
+
+  .accordion-item:not(.collapsed) & {
+    opacity: 0;
+    transform: scale(0.8) translateX(20px);
+  }
+}
+
+/* 展开后的详细内容区样式 */
+.expanded-content {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  padding: 40px;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: all 0.4s ease;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+
+  .accordion-item:not(.collapsed) & {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: 0.2s;
+    pointer-events: auto;
+  }
+
+  /* 🔑 全新高级镂空描边水印 */
+  .watermark {
+    position: absolute;
+    top: 0px;
+    right: calc(15px + var(--offset-left, 0px)); /* 保留了防遮挡动态计算 */
+    font-size: 7em;
+    font-weight: 900;
+    font-style: italic;
+    /* 核心秘诀：文字透明，只留描边 */
+    color: transparent;
+    -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.06);
+    user-select: none;
+    z-index: -1;
+  }
+
+  .project-name {
+    font-size: 2.5em;
+    font-weight: 800;
+    color: #ffffff;
+    /* 增加微弱的文字阴影，让标题更醒目 */
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    margin-bottom: 30px;
+    white-space: nowrap;
+  }
+
+  .detail-section {
+    margin-bottom: 25px;
+  }
+
+  .detail-title {
+    font-size: 1em;
+    font-family: 'Courier New', Courier, monospace;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* 🔑 新增：标签化技术栈容器 */
+  .tech-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-left: 24px;
+  }
+
+  /* 🔑 新增：技术标签样式 */
+  .tech-tag {
+    font-size: 0.9em;
+    font-family: monospace;
+    color: var(--el-color-primary, #60a5fa);
+    background: rgba(96, 165, 250, 0.1);
+    border: 1px solid rgba(96, 165, 250, 0.2);
+    padding: 4px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: background 0.2s ease;
+
+    &:hover {
+      background: rgba(96, 165, 250, 0.2);
+    }
+  }
+
+  .medal-list {
+    padding-left: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .medal-item {
+    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.85);
+    white-space: nowrap;
+
+    :deep(span) {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
   }
 }
 </style>
