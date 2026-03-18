@@ -229,7 +229,7 @@ onMounted(() => {
           <div class="text1">
             常见问题
           </div>
-          <div class="text2">Normal Question</div>
+          <div class="text2">FAQ</div>
         </div>
       </div>
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em; text-align: left; width: fit-content; margin-bottom: 20vh;">
@@ -332,4 +332,9 @@ onMounted(() => {
     transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
 }
+
+@import '@/store/mixins.scss';
+
+/* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
+@include inject-mobile-styles;
 </style>

@@ -1204,4 +1204,155 @@ const getAccordionItemStyle = (index: number) => {
     }
   }
 }
+
+/* ====================================
+   全站移动端（手机直屏）终极适配方案
+   ==================================== */
+@media (max-width: 768px) {
+  /* 1. 全局基础排版缩放 */
+  body, html {
+    overflow-x: hidden; /* 🔑 绝对禁止横向滚动条出现 */
+  }
+
+  .title {
+    font-size: 1.8em; /* 缩小主标题 */
+    margin: 1.5em auto;
+    text-align: center;
+  }
+
+  .subtitle {
+    font-size: 1.5em; /* 缩小副标题 */
+    margin: 1.5em auto;
+    padding: 0.5em;
+  }
+
+  .textCenter {
+    font-size: 1.1em; /* 缩小中间的统计数据文字 */
+    padding: 0 15px;
+    line-height: 1.8em;
+  }
+
+  /* 2. 顶部首屏 (Hero Section) 抢救 */
+  .headText {
+    text-align: center; /* 手机端居中更好看 */
+    padding: 15% 5%;
+    font-size: 1.5em;
+    min-height: auto;
+
+    .item1 {
+      justify-content: center; /* 词组居中 */
+      flex-wrap: wrap; /* 允许折行 */
+      height: auto;
+    }
+    .keyword {
+      font-size: 2em; /* 缩小关键词 */
+      // 调整背景图标的位置，防止飞出屏幕
+      :deep(svg) { transform: scale(1.2) !important; left: -10% !important; right: auto !important; }
+    }
+    .item3 { margin: 0 auto; } /* 按钮居中 */
+  }
+
+  /* 3. 简介区域 (ICPC & 技术组 Info) 抢救 */
+  .infoContainer {
+    flex-direction: column; /* 🔑 横排改竖排 */
+    max-width: 100%;
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+    font-size: 1.1em;
+
+    // 技术组原本是右对齐，手机端强制全部左对齐
+    &.icpc-tech { text-align: left !important; }
+    &.icpc-tech .infoBrief { flex-direction: row !important; }
+
+    .text3 {
+      font-size: 0.9em;
+      margin-left: 0 !important;
+      text-align: justify !important; /* 两端对齐，阅读更舒适 */
+    }
+  }
+
+  /* 4. 模拟聊天框 (加入集训队获得什么) 抢救 */
+  .chatPanel {
+    width: 100%; /* 🔑 撤销 45em 的定宽 */
+    padding: 0 15px;
+    box-sizing: border-box;
+
+    & > div {
+      font-size: 1em; /* 缩小气泡文字 */
+      max-width: 90%; /* 防止气泡顶着屏幕边缘 */
+      margin-bottom: 1em;
+    }
+  }
+
+  /* 5. 队伍卡片 (代表队伍) 抢救 */
+  .teamCardContainer {
+    grid-auto-flow: row; /* 🔑 从横向排布改为纵向瀑布流 */
+    grid-template-columns: 1fr; /* 🔑 强行变成单列 */
+    padding: 0 15px;
+    row-gap: 2em; /* 卡片上下间距 */
+  }
+
+  .teamCard {
+    width: 100%; /* 卡片占满手机屏幕宽度 */
+    box-sizing: border-box;
+    padding: 1.5em;
+
+    .gradeText {
+      font-size: 3.5em; /* 缩小背后的年级水印 */
+      top: -0.2em;
+    }
+  }
+
+  /* 6. 技术组手风琴 (交互卡片) 抢救 */
+  .tech-accordion-container {
+    height: auto !important;
+    max-width: 92%;
+    display: flex;
+    flex-direction: column; /* 🔑 横排改竖排堆叠 */
+    gap: 15px;
+    box-shadow: none;
+    margin-bottom: 5vh !important;
+  }
+
+  .accordion-item {
+    position: relative !important;
+    left: auto !important; /* 废弃 JS 算的横向位置 */
+    width: 100% !important;
+    min-height: 70px; /* 折叠时变成一个小标题条 */
+    border-radius: 12px;
+    transition: min-height 0.4s ease;
+
+    &.collapsed { background-color: rgba(255, 255, 255, 0.05); }
+    &:not(.collapsed) {
+      min-height: auto;
+      padding-bottom: 20px;
+    }
+  }
+
+  .collapsed-cover { display: none !important; } /* 隐藏竖向 Active 字样 */
+
+  .expanded-content {
+    position: relative;
+    opacity: 1 !important;
+    transform: none !important;
+    padding: 20px;
+
+    .accordion-item.collapsed & {
+      pointer-events: none;
+      padding-top: 20px;
+      .project-name { font-size: 1.4em; color: rgba(255, 255, 255, 0.6); margin-bottom: 0; }
+      .watermark, .detail-section { display: none; } /* 折叠时隐藏细节 */
+    }
+
+    .accordion-item:not(.collapsed) & {
+      pointer-events: auto;
+      .project-name { font-size: 1.8em; color: #ffffff; margin-bottom: 20px; }
+      .watermark, .detail-section { display: block; }
+    }
+
+    .watermark { font-size: 3.5em; right: 10px !important; top: 10px; }
+    .tech-tags-container, .medal-list { padding-left: 10px; }
+    .medal-item { font-size: 0.9em; white-space: normal; } /* 允许文字换行 */
+  }
+}
 </style>

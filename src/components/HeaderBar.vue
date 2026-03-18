@@ -70,7 +70,7 @@ const handleSelect = (key: string, keyPath: string[]) => {
       <div class="headerLeft"></div>
     </div>
     <div class="headerBar">
-      <div class="headerLeft">
+      <div class="show-on-desktop">
         <h2>广西大学icpc集训队技术组</h2>
       </div>
       <el-menu
@@ -96,12 +96,15 @@ const handleSelect = (key: string, keyPath: string[]) => {
         </el-sub-menu>
       </el-menu>
       <div class="headerRight">
-        <el-button size="large" @click.prevent="expressionFeedback" text>意见反馈</el-button>
+          <el-button size="large" @click.prevent="expressionFeedback" text class="show-on-desktop">
+            意见反馈
+          </el-button>
         <el-button
           v-if="!userStore.isLoggedIn"
           size="large"
           @click.prevent="expression"
           text
+          class="show-on-desktop"
         >
           登录
         </el-button>
@@ -160,5 +163,10 @@ const handleSelect = (key: string, keyPath: string[]) => {
   display: flex;
   align-items: center;
   gap: 10px;
+  margin-left: auto;
 }
+.show-on-desktop { display: line; }
+@media (max-width: 768px) {
+    .show-on-desktop { display: none; }
+  }
 </style>
