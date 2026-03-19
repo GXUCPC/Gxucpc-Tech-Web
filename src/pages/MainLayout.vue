@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { onMounted } from 'vue'
 import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
+import LoginWindow from '@/components/LoginWindow.vue' // 引入登录组件
 
 const { dialogVisibleLogin } = useDialog()
 const router = useRouter()
@@ -118,49 +119,9 @@ const switchToRegister = () => {
 </script>
 
 <template>
-  <FeedbackModal />
+  <FeedbackModal /> <!-- 意见反馈模块 -->
 
-  <el-dialog v-model="dialogVisibleLogin" width="40%" style="text-align: center;">
-    <template #header>
-      <div style="font-size: 30px; text-align: left; margin-top: 20px; margin-left: 30px;">用户登录</div>
-    </template>
-    <el-form :model="loginData" label-width="60px">
-      <el-form-item label="账号" style="margin-bottom: 30px;">
-        <el-input v-model="loginData.username" size="large" placeholder="请输入账号" />
-      </el-form-item>
-      <el-form-item label="密码" style="margin-bottom: 20px;">
-        <el-input v-model="loginData.password" size="large" type="password" placeholder="请输入密码" />
-      </el-form-item>
-    </el-form>
-    <el-button size="large" @click.prevent="login" text style="font-size: 24px; margin: 10px;">登录</el-button>
-    <div style="margin-top: 10px; color: #666;">
-      还没有账号？<el-link type="primary" @click="switchToRegister">立即注册</el-link>
-    </div>
-  </el-dialog>
-
-  <el-dialog v-model="registerVisible" width="45%" style="text-align: center;">
-    <template #header>
-      <div style="font-size: 30px; text-align: left; margin-top: 20px; margin-left: 30px;">新用户注册</div>
-    </template>
-    <el-form :model="registerData" label-width="80px" style="padding: 0 30px;">
-      <el-form-item label="用户名">
-        <el-input v-model="registerData.username" placeholder="至少4位字符" />
-      </el-form-item>
-      <el-form-item label="邮箱">
-        <el-input v-model="registerData.email" placeholder="请输入邮箱" />
-      </el-form-item>
-      <el-form-item label="验证码">
-        <div style="display: flex; gap: 10px; width: 100%;">
-          <el-input v-model="registerData.captchaCode" placeholder="验证码" />
-          <el-button @click="sendCode" type="info">发送</el-button>
-        </div>
-      </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="registerData.password" type="password" placeholder="至少8位字符" />
-      </el-form-item>
-    </el-form>
-    <el-button size="large" @click="handleRegister" type="primary" style="width: 200px; margin-top: 20px;">提交注册</el-button>
-  </el-dialog>
+  <LoginWindow /> <!-- 登录，注册模块 -->
 
   <header-nav />
   <div class="contentContainer">
