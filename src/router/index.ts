@@ -1,8 +1,9 @@
 import { defineAsyncComponent } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
+const base = import.meta.env.PROD ? '/me/' : '/'
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(base),
   routes: [
     {
       path: '',
@@ -14,18 +15,18 @@ const router = createRouter({
           component: defineAsyncComponent(() => import('@/pages/Home.vue')),
         },
         {
-          name: 'tch_team2-1' ,
-          path: 'tch_team2-1' ,
+          name: 'tch_team2-1',
+          path: 'tch_team2-1',
           component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
         },
         {
-          name: 'tch_team2-2' ,
-          path: 'tch_team2-2' ,
+          name: 'tch_team2-2',
+          path: 'tch_team2-2',
           component: defineAsyncComponent(() => import('@/pages/tech/TiemExprience.vue')),
         },
         {
-          name: 'tch_team2-3' ,
-          path: 'tch_team2-3' ,
+          name: 'tch_team2-3',
+          path: 'tch_team2-3',
           component: defineAsyncComponent(() => import('@/pages/tech/JoinUs.vue')),
         },
         {
@@ -59,18 +60,18 @@ const router = createRouter({
               component: defineAsyncComponent(() => import('@/pages/tech/TechIndex.vue')),
             },
             {
-              name: 'techTeamIntroduction' ,
-              path: 'introduction' ,
+              name: 'techTeamIntroduction',
+              path: 'introduction',
               component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),
             },
             {
-              name: 'techTeamTiemExprience' ,
-              path: 'tiemExprience' ,
+              name: 'techTeamTiemExprience',
+              path: 'tiemExprience',
               component: defineAsyncComponent(() => import('@/pages/tech/TiemExprience.vue')),
             },
             {
-              name: 'techTeamContuctUs' ,
-              path: 'contuctUs' ,
+              name: 'techTeamContuctUs',
+              path: 'contuctUs',
               component: defineAsyncComponent(() => import('@/pages/tech/JoinUs.vue')),
             },
           ],
@@ -78,16 +79,16 @@ const router = createRouter({
       ],
     },
     {
-        path: '/admin',
+      path: '/admin',
       component: () => import('@/pages/admin/AdminLayout.vue'),
       children: [
         {
           name: 'adminHome',
           path: 'interview',
           component: () => import('@/pages/admin/AdminHome.vue'),
-        }
+        },
       ],
-      }
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     // 如果是通过浏览器的“前进/后退”按钮触发的，保持原来的滚动位置
@@ -100,7 +101,7 @@ const router = createRouter({
         behavior: 'smooth',
       }
     }
-  }
+  },
 })
 
 export default router
