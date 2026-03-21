@@ -101,7 +101,7 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
           <template #title>集训队</template>
           <el-menu-item index="/xcpc">集训队主页</el-menu-item>
           <el-menu-item index="/xcpc/introdution">xcpc是什么？</el-menu-item>
-          <el-menu-item index="1-3">item three</el-menu-item>
+          <el-menu-item index="/xcpc/join-us">加入我们</el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="/tech">
           <template #title>技术组</template>
@@ -135,7 +135,7 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
             <template #title>集训队</template>
             <el-menu-item index="/xcpc">> 集训队主页</el-menu-item>
             <el-menu-item index="/xcpc/introdution">> xcpc是什么？</el-menu-item>
-            <el-menu-item index="1-3">> item three</el-menu-item>
+            <el-menu-item index="/xcpc/join-us">> 加入我们</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/tech">
             <template #title>技术组</template>

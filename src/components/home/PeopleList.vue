@@ -1,5 +1,12 @@
 <script setup lang="ts">
 import AniEle from '@/components/AniEle.vue'
+import {
+  DURATION_LONG,
+  DURATION_MEDIAN,
+  DURATION_SHORT,
+  STAGGER_CHAR,
+  STAGGER_SHORT,
+} from '@/constants/animation'
 import { gsap } from 'gsap'
 import { SplitText } from 'gsap/SplitText'
 
@@ -16,44 +23,47 @@ const props = defineProps<{
 
 function animation(ele: HTMLDivElement) {
   const tl = gsap.timeline()
+  const cardStagger = STAGGER_SHORT // 与「加入技术组会获得什么？」同节奏
   Array.from(ele.children).forEach((card, index) => {
+    const t = index * cardStagger
+
     // 主体
     tl.from(
       card,
       {
-        duration: 1,
+        duration: DURATION_LONG,
         ease: 'power2.out',
         autoAlpha: 0,
         scale: 0.5,
         x: 50,
         y: index % 2 === 1 ? -200 : 200,
       },
-      index * 0.25,
+      t
     )
 
     // 头像
     tl.from(
       card.querySelector('.el-image'),
       {
-        duration: 1,
+        duration: DURATION_MEDIAN,
         autoAlpha: 0,
         scale: 2,
         ease: 'power1.out',
       },
-      index * 0.25,
+      t
     )
 
-    // 文本
+    // 文本：紧随卡片出现，快速读完
     tl.from(
       SplitText.create(card.querySelectorAll(':not(.avatar)'), { type: 'lines', mask: 'lines' })
         .lines,
       {
-        duration: 0.7,
+        duration: DURATION_SHORT,
         ease: 'power2.out',
-        stagger: 0.1,
+        stagger: STAGGER_CHAR,
         y: 50,
       },
-      index * 0.25 + 0.25
+      t
     )
   })
 

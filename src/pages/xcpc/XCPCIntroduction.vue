@@ -135,7 +135,7 @@ const scrollToSection = (id: string) => {
 
       <h2 id="about" class="section-title">关于参赛</h2>
       <p class="paragraph">
-        这里的信息我找不到，来个懂哥写吧
+        参赛名额由“网络赛”决定每所学校所能分配的区域赛资格数量，集训队随之组织队伍分配；省赛、区域赛、邀请赛、国际总决赛获奖比例为金牌 10%， 银牌 20%， 铜牌 30%；每年下半年，各高校会陆续举办区域赛，每年区域赛约 4-5 场。
       </p>
 
       <div class="animated-divider" v-slide-show></div>

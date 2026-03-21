@@ -139,6 +139,8 @@ async function submitFeedback() {
 </template>
 
 <style scoped lang="scss">
+@use "sass:color";
+
 .contentContainer { width: 100%; }
 .content { margin: 0 auto; width: min(100%, 1920px); min-height: calc(100vh - 4em); }
 
@@ -246,7 +248,7 @@ async function submitFeedback() {
       background: #F2C94C; /* 主题黄 */
       border: none; color: #000;
       &:hover {
-        background: lighten(#F2C94C, 10%);
+        background: color.adjust(#F2C94C, $lightness: 10%);
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(242, 201, 76, 0.3);
       }

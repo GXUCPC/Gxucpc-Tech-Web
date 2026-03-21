@@ -1,5 +1,23 @@
 /* globalStyle.css */
 
+/* 禁止横向滚动条：100vw 等可能导致页面略宽于视口 */
+html, body {
+  overflow-x: hidden;
+}
+
+/* 动画时长变量：统一维护，便于全局调速
+ * short: 快速反馈（按钮、hover 等）
+ * median: 标准动画（入场、过渡）
+ * long: 强调动画（展开、长序列）
+ * 供 GSAP 使用的数值见 src/constants/animation.ts
+ */
+:root {
+  --duration-short: 0.25s;
+  --duration-median: 0.5s;
+  --duration-long: 1s;
+  --duration-extra-long: 2.5s;
+}
+
 /* 了解更多按钮 */
 .learnMoreBtn {
   appearance: none;
@@ -13,7 +31,7 @@
   position: relative;
   align-items: center;
   gap: 5px;
-  transition: 0.25s ease-in-out;
+  transition: var(--duration-short) ease-in-out;
 }
 
 .learnMoreBtn:hover {
@@ -24,7 +42,7 @@
 
 .learnMoreBtn::before {
   border-radius: 5px;
-  transition: 0.25s ease-in-out;
+  transition: var(--duration-short) ease-in-out;
   content: '';
   position: absolute;
   width: 0;
@@ -101,7 +119,7 @@
   background-color: var(--el-color-primary);
   position: absolute;
   border-radius: 5px;
-  transition: 1s ease-in-out;
+  transition: var(--duration-long) ease-in-out;
 }
 
 .title.show::before,

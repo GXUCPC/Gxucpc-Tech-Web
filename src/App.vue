@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Loading from '@/components/Loading.vue'
-import PageBg from '@/components/pageBg.vue'
+// import PageBg from '@/components/pageBg.vue' // 上升旋转灰色正方形背景，已禁用
+import { DURATION_EXTRA_LONG } from '@/constants/animation'
 import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { gsap } from 'gsap'
 
@@ -9,7 +10,7 @@ const globalLoading = useGlobalLoading()
 const obj = { p: 0 }
 gsap.timeline().to(obj, {
   p: 99,
-  duration: 3,
+  duration: DURATION_EXTRA_LONG,
   ease: 'power1.inOut',
   onUpdate: () => {
     globalLoading.progress = +obj.p.toFixed()
@@ -23,7 +24,9 @@ gsap.timeline().to(obj, {
 
 <template>
   <loading id="globalLoading" v-bind="globalLoading.$state" />
+  <!-- 上升旋转灰色正方形背景，跟随鼠标移动，易分散注意力，已禁用
   <page-bg />
+  -->
   <router-view />
 </template>
 

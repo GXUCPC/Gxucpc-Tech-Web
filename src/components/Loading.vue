@@ -1,4 +1,8 @@
 <script setup lang="ts">
+import {
+  DURATION_LONG,
+  DURATION_MEDIAN,
+} from '@/constants/animation'
 import { gsap } from 'gsap'
 import { nextTick, ref, useTemplateRef, watchEffect } from 'vue'
 
@@ -23,7 +27,7 @@ watchEffect( () => {
       },
       {
         opacity: 1,
-        duration: 0.5,
+        duration: DURATION_MEDIAN,
         backgroundColor: '#1e1e1e',
         onUpdate: function () {
           if (!containerEle) return;
@@ -44,7 +48,7 @@ watchEffect( () => {
     },
     {
       ease: 'power1.out',
-      duration: 0.5,
+      duration: DURATION_MEDIAN,
       scale: 1,
       opacity: 1,
       onUpdateParams: [],
@@ -66,28 +70,28 @@ watchEffect( () => {
 function startLoadingAni() {
   const tl = gsap.timeline({ repeat: -1 })
   tl.to(iconRef.value, {
-    duration: 1,
+    duration: DURATION_LONG,
     ease: 'power2.out',
     rotate: 360,
     borderRadius: '50%',
     yPercent: -100,
   })
     .to(iconRef.value, {
-      duration: 1,
+      duration: DURATION_LONG,
       ease: 'power2.in',
       rotate: 0,
       borderRadius: '50%',
       yPercent: 0,
     })
     .to(iconRef.value, {
-      duration: 1,
+      duration: DURATION_LONG,
       ease: 'power2.out',
       rotate: 360,
       borderRadius: 5,
       yPercent: -100,
     })
     .to(iconRef.value, {
-      duration: 1,
+      duration: DURATION_LONG,
       ease: 'power2.in',
       rotate: 720,
       borderRadius: 5,

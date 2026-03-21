@@ -292,6 +292,8 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
+@use '@/store/mixins.scss' as *;
+
 .headText {
   min-height: 50vh;
   font-size: 2em;
@@ -356,8 +358,6 @@ onMounted(() => {
     transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
 }
-
-@import '@/store/mixins.scss';
 
 /* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
 @include inject-mobile-styles;
