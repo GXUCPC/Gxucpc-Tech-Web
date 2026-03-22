@@ -1,6 +1,5 @@
 <template>
   <div class="interview-page-container">
-    <!-- 已提交提示 -->
     <div class="recruitment-overview-container submitted-container" v-if="hasSubmitted">
       <div class="header">
         <h1 class="title">招新面试申请</h1>
@@ -11,12 +10,11 @@
           你已提交过面试申请，请勿重复提交！
         </div>
         <div style="text-align: center; margin-top: 20px;">
-          <button class="submit-btn" @click="clearSubmitStatus">重新提交申请</button>
+          <el-button class="submit-btn" @click="clearSubmitStatus">重新提交申请</el-button>
         </div>
       </div>
     </div>
 
-    <!-- 表单容器 -->
     <div class="recruitment-overview-container form-container" v-else>
       <div class="header">
         <h1 class="title">招新面试申请</h1>
@@ -26,66 +24,63 @@
       <div class="section">
         <h2 class="section-title">基础信息填写</h2>
 
-        <form class="apply-form" @submit.prevent="handleSubmit">
-
-
+        <el-form class="apply-form" @submit.prevent="handleSubmit">
           <!-- GitHub 主页 URL -->
           <div class="form-item">
             <label class="form-label">GitHub 主页 URL <span class="required">*</span></label>
-            <input
+            <el-input
               v-model="form.githubUrl"
               type="text"
-              class="form-input"
+              class="form-input github-input"
               placeholder="例如：https://github.com/你的昵称"
               :class="{ 'input-error': errors.githubUrl }"
               maxlength="200"
-            />
+            ></el-input>
             <span class="error-tip" v-if="errors.githubUrl">{{ errors.githubUrl }}</span>
           </div>
 
-          <!-- 电子邮箱 -->
           <div class="form-item">
             <label class="form-label">电子邮箱 <span class="required">*</span></label>
-            <input
+            <el-input
               v-model="form.email"
               type="email"
               class="form-input"
               placeholder="请输入你的常用邮箱"
               :class="{ 'input-error': errors.email }"
               maxlength="100"
-            />
+            ></el-input>
             <span class="error-tip" v-if="errors.email">{{ errors.email }}</span>
           </div>
 
-          <!-- 提交按钮 -->
           <div class="form-item submit-item">
-            <button
-              type="submit"
+            <el-button
+              type="button"
               class="submit-btn"
               :disabled="isSubmitting"
+              @click="handleSubmit"
             >
               <span v-if="!isSubmitting">提交申请</span>
               <span v-if="isSubmitting">提交中...</span>
-            </button>
+            </el-button>
           </div>
-        </form>
+        </el-form>
       </div>
     </div>
 
-    <!-- 成功提示弹窗 -->
-    <div class="modal" v-if="showSuccessModal">
-      <div class="modal-content">
-        <div class="header">
-          <h1 class="title" style="font-size: 24px;">提交成功</h1>
-        </div>
-        <div class="content-text" style="text-align: center; font-size: 18px;">
-          申请已提交，请留意邮件通知，我们会尽快与你联系！
-        </div>
-        <div style="text-align: center; margin-top: 20px;">
-          <button class="submit-btn" @click="closeSuccessModal">确认</button>
-        </div>
+    <el-dialog
+      v-model="showSuccessModal"
+      title="提交成功"
+      width="500px"
+      center
+      :close-on-click-modal="false"
+    >
+      <div class="content-text" style="text-align: center; font-size: 18px;">
+        申请已提交，请留意邮件通知，我们会尽快与你联系！
       </div>
-    </div>
+      <template #footer>
+        <el-button class="submit-btn" @click="closeSuccessModal">确认</el-button>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -136,19 +131,16 @@ axios.interceptors.response.use(
   }
 )
 
-// 表单数据
 const form = reactive({
   githubUrl: '',
   email: ''
 })
 
-// 错误提示
 const errors = reactive({
   githubUrl: '',
   email: ''
 })
 
-// 状态管理
 const hasSubmitted = ref(false)
 const isSubmitting = ref(false)
 const showSuccessModal = ref(false)
@@ -156,7 +148,6 @@ const showSuccessModal = ref(false)
 // 邮箱正则（和后端对齐）
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z]{2,6}$/
 
-// URL格式校验
 const isValidUrl = (url) => {
   if (!url) return false
   try {
@@ -167,7 +158,6 @@ const isValidUrl = (url) => {
   }
 }
 
-// 表单校验
 const validateForm = () => {
   let isValid = true
   Object.keys(errors).forEach(key => errors[key] = '')
@@ -208,7 +198,6 @@ const handleSubmit = async () => {
       email: form.email.trim(),
     })
 
-    // 提交成功：标记状态
     localStorage.setItem('interview_submitted', 'true')
     hasSubmitted.value = true
     showSuccessModal.value = true
@@ -219,25 +208,21 @@ const handleSubmit = async () => {
   }
 }
 
-// 关闭成功弹窗
 const closeSuccessModal = () => {
   showSuccessModal.value = false
 }
 
-// 重置表单
 const resetForm = () => {
   form.githubUrl = ''
   form.email = ''
 }
 
-// 清除提交状态
 const clearSubmitStatus = () => {
   localStorage.removeItem('interview_submitted')
   hasSubmitted.value = false
   resetForm()
 }
 
-// 检查提交状态
 const checkSubmitStatus = () => {
   const token = localStorage.getItem('token')
   if (!token) {
@@ -268,6 +253,17 @@ onMounted(() => {
 </script>
 
 <style scoped>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
   --primary-color: #61dafb;
   --text-color-light: #f0f0f0;
@@ -283,14 +279,14 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: transparent !important;
+  background: transparent;
   padding: 20px;
   box-sizing: border-box;
 }
 
-.recruitment-overview-container {
-  max-width: 900px;
+.interview-page-container .recruitment-overview-container {
   width: 100%;
+  max-width: 800px;
   margin: 0 auto;
   padding: 30px;
   background: var(--background-card);
@@ -304,174 +300,155 @@ onMounted(() => {
   box-sizing: border-box;
 }
 
-.submitted-container {
-  text-align: center;
+.interview-page-container .recruitment-overview-container .form-container {
+  max-width: 800px;
 }
 
-.form-container {
-  max-width: 700px;
-}
-
-.header {
+.interview-page-container .recruitment-overview-container .header {
   border-bottom: 3px solid var(--primary-color);
   padding-bottom: 15px;
   margin-bottom: 30px;
 }
 
-.title {
+.interview-page-container .recruitment-overview-container .header .title {
   font-size: 28px;
   font-weight: 700;
   color: var(--text-color-light);
   margin: 0;
+  text-align: left;
 }
 
-.subtitle {
+.interview-page-container .recruitment-overview-container .header .subtitle {
   font-size: 16px;
   color: var(--text-color-medium);
-  margin-top: 5px;
+  margin-top: 6px;
+  text-align: left;
 }
 
-.section {
+.interview-page-container .recruitment-overview-container .section {
   margin-bottom: 30px;
 }
 
-.section-title {
+.interview-page-container .recruitment-overview-container .section .section-title {
   font-size: 30px;
   color: var(--primary-color);
   border-left: 4px solid var(--primary-color);
-  padding-left: 10px;
+  padding-left: 12px;
   margin-top: 0;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   font-weight: 600;
 }
 
-.content-text {
-  font-size: 20px;
-  color: var(--text-color-medium);
-  margin-bottom: 15px;
-}
-
-.apply-form {
+.interview-page-container .recruitment-overview-container .section .apply-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
-.form-item {
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  width: 100%;
 }
 
-.form-label {
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-label {
   font-size: 18px;
   color: var(--text-color-light);
 }
 
-.required {
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-label .required {
   color: var(--primary-color);
 }
 
-.form-input {
-  height: 45px;
-  padding: 0 15px;
+:deep(.interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-input) {
+  width: 100%;
+  max-width: none;
+}
+:deep(.interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-input .el-input__wrapper) {
+  width: 100%;
+  max-width: none;
+  height: 48px;
+  padding: 0 20px;
+  font-size: 16px;
   background-color: rgba(58, 58, 58, 0.9);
   border: 1px solid var(--border-color-dark);
-  border-radius: 4px;
-  color: var(--text-color-light);
+}
+:deep(.interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-input .el-input__inner) {
   font-size: 16px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  box-sizing: border-box;
+  color: var(--text-color-light);
+  background: transparent;
 }
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 2px rgba(97, 218, 251, 0.2);
+:deep(.interview-page-container .recruitment-overview-container .section .apply-form .form-item .github-input .el-input__wrapper) {
+  height: 50px;
+  font-size: 17px;
 }
-
-.input-error {
+:deep(.interview-page-container .recruitment-overview-container .section .apply-form .form-item .input-error .el-input__wrapper) {
   border-color: var(--error-color);
 }
 
-.error-tip {
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item .error-tip {
   font-size: 14px;
   color: var(--error-color);
   line-height: 1.4;
 }
 
-.submit-item {
-  margin-top: 10px;
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item.submit-item {
+  margin-top: 20px;
+  margin-bottom: 10px;
   text-align: center;
+  width: 100%;
 }
 
-.submit-btn {
-  padding: 12px 30px;
-  background-color: var(--primary-color);
-  color: #1a1a1a;
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item.submit-item .submit-btn {
+  padding: 10px 24px;
+  background-color: #ffffff;
+  color: #000000;
   border: none;
   border-radius: 4px;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: none;
+  display: inline-block;
+  min-width: 140px;
+  max-width: 220px;
+  margin: 0 auto;
 }
 
-.submit-btn:disabled {
-  background-color: #4a9fb8;
+.interview-page-container .recruitment-overview-container .section .apply-form .form-item.submit-item .submit-btn:disabled {
+  background-color: #f0f0f0;
+  color: #666666;
   cursor: not-allowed;
   opacity: 0.8;
 }
 
-.submit-btn:hover:not(:disabled) {
-  background-color: #4fc3f7;
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--modal-bg);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.modal-content {
-  width: 90%;
-  max-width: 500px;
-  padding: 30px;
+:deep(.interview-page-container .el-dialog) {
   background: var(--background-card);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  box-sizing: border-box;
+  border-radius: 8px;
+  width: 500px;
+  margin: 0 auto;
 }
-
-@media (max-width: 768px) {
-  .recruitment-overview-container {
-    padding: 20px;
-  }
-
-  .title {
-    font-size: 24px;
-  }
-
-  .section-title {
-    font-size: 24px;
-  }
-
-  .form-input {
-    height: 40px;
-  }
-
-  .submit-btn {
-    padding: 10px 24px;
-    font-size: 16px;
-  }
+:deep(.interview-page-container .el-dialog__header) {
+  border-bottom: 3px solid var(--primary-color);
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+}
+:deep(.interview-page-container .el-dialog__title) {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-color-light);
+  text-align: left;
+}
+:deep(.interview-page-container .el-dialog__body) {
+  padding: 0;
+}
+:deep(.interview-page-container .el-dialog__footer) {
+  padding: 20px 0 0 0;
+  border-top: none;
+  text-align: center;
 }
 </style>
