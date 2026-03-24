@@ -8,12 +8,33 @@ import { useUserStore } from '@/store/user'
 import { onMounted } from 'vue'
 import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
 import LoginWindow from '@/components/LoginWindow.vue' // 引入登录组件
+import  { VisitAPI }  from '@/api/visit.js'
 
 const { dialogVisibleLogin } = useDialog()
 const router = useRouter()
 const userStore = useUserStore()
 
 const registerVisible = ref(false)
+
+onMounted(() => {
+  // 页面加载完成后，发送埋点请求
+  recordVisit()
+})
+
+function recordVisit() {
+  const visitData = {
+    time: new Date().toISOString(),
+  }
+  VisitAPI.submitVisit(visitData)
+    .then((response) => {
+      console.log('埋点成功:', response)
+    })
+    .catch((error) => {
+      console.error('埋点失败:', error)
+    })
+}
+
+
 
 const loginData = ref({
   username: '',
