@@ -48,6 +48,11 @@ const router = createRouter({
               path: 'join-us',
               component: defineAsyncComponent(() => import('@/pages/xcpc/XCPCJoinUs.vue')),
             },
+            {
+              name: 'competitionSignUp',
+              path: 'competitionSignUp',
+              component: defineAsyncComponent(() => import('@/pages/xcpc/competitionSignUp.vue')),
+            },
           ],
         },
         {
@@ -91,6 +96,11 @@ const router = createRouter({
           name: 'adminHome',
           path: 'interview',
           component: () => import('@/pages/admin/AdminHome.vue'),
+        },
+        {
+          name: 'adminCompetition',
+          path: 'competition',
+          component: () => import('@/pages/admin/AdminCompetition.vue'),
         },
       ],
     },

@@ -56,6 +56,9 @@ const logout = () => {
         <router-link to="/admin/interview" class="nav-item" exact-active-class="active">
           控制台首页
         </router-link>
+        <router-link to="/admin/competition" class="nav-item" exact-active-class="active">
+          比赛管理
+        </router-link>
       </nav>
     </aside>
 
