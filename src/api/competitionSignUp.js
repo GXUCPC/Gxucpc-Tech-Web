@@ -19,7 +19,13 @@ export const CompetitionAPI = {
     return http.post('/competition', data);
   },
 
+  // 获取比赛报名人员记录
   getRecords: (competition_id) => {
     return http.get(`/competition/records?competition_id=${competition_id}`);
-  }
+  },
+
+  // 发送验证码
+  sendCode: (data) => {
+    return http.post('/competition/send_code', data);
+  },
 }

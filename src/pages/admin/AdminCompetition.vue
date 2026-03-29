@@ -206,7 +206,7 @@ onMounted(() => {
                 </span>
               </td>
               <td>
-                <span style="font-weight: bold; color: #3b82f6;">{{ item.participant_count || 0 }}</span> 人
+                <span style="font-weight: bold; color: #3b82f6;">{{ item.registered_count || 0 }}</span> 人
               </td>
               <td style="text-align: right;">
                 <div class="action-btns" style="justify-content: flex-end;">

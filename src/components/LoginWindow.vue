@@ -140,10 +140,10 @@ const sendCode = async () => {
     const response = await fetch(`${baseUrl}/user/send_code`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: registerData.value.email })
+      body: JSON.stringify({ email: registerData.value.email, action: 'register' })
     })
     const res = await response.json()
-    alert(res.message || '验证码已发送')
+    alert(res.msg || '验证码已发送')
   } catch (error) { alert('发送失败') }
 }
 </script>

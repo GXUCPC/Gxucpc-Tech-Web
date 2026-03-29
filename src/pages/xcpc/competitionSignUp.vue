@@ -18,6 +18,7 @@
             <span class="meta-item status-tag" :class="comp.status" style="width: 100%; margin-top: -10px;">
               {{ isPastDeadline(comp.registration_end) ? '停止报名' : getStatusText(comp.status) }}
             </span>
+            <span class="meta-item"> 已报名人数：{{ comp.registered_count }}</span>
           </div>
 
           <p class="comp-desc">{{ comp.description }}</p>
@@ -70,6 +71,13 @@
             <label>联系邮箱</label>
             <input type="email" v-model="formData.email" required placeholder="接收通知的邮箱" />
           </div>
+          <div class="form-group">
+  <label>邮箱验证码</label>
+  <div class="code-input-wrapper">
+    <input type="text" v-model="formData.code" required placeholder="请输入邮箱验证码" />
+    <button type="button" class="send-code-btn" @click="sendCode" >发送</button>
+  </div>
+</div>
 
           <div class="modal-actions">
             <button type="button" class="cancel-btn" @click="closeModal">取消</button>
@@ -90,6 +98,23 @@ const userStore = useUserStore()
 
 const competitionList = ref([])
 const loading = ref(false)
+
+const sendCode = async () => {
+  if (!formData.email) {
+    alert('请先输入邮箱地址')
+    return
+  }
+  try {
+    const res = await CompetitionAPI.sendCode({ email: formData.email, action: "signUp" })
+    if (res.code === 200) {
+      alert('验证码已发送，请查收邮箱')
+    } else {
+      alert('发送验证码失败：' + (res.message || '未知错误'))
+    }
+  } catch (error) {
+    alert('发送验证码失败：' + (error.response?.data?.message || error.message))
+  }
+}
 
 const getCompetitionList = async () => {
   loading.value = true;
@@ -119,6 +144,7 @@ const formData = reactive({
   real_name: '',
   phone: '',
   email: '',
+  code: '',
 })
 
 // 打开弹窗
@@ -143,6 +169,7 @@ const submitApplication = async () => {
       real_name: formData.real_name,
       phone: formData.phone,
       email: formData.email,
+      code: formData.code,
     })
 
     if(res.code === 200) alert('🎉 报名成功！请留意邮箱通知。')
@@ -390,6 +417,43 @@ const calculateDuration = (startTime, endTime) => {
 }
 .form-group input:focus {
   border-color: var(--accent-gold, #9e8433);
+}
+/* 新增：验证码输入框和按钮的外层容器 */
+.code-input-wrapper {
+  display: flex;
+  gap: 10px; /* 输入框和按钮之间的间距 */
+  width: 100%; /* 确保总宽度和其他输入框一致 */
+}
+
+/* 新增：让验证码的输入框自动占满剩下的空间 */
+.code-input-wrapper input {
+  flex: 1;
+  /* 注意：这里会自动继承你上面写的 .form-group input 样式 (比如 padding, background) */
+}
+
+/* 新增：发送按钮的专属样式 */
+.send-code-btn {
+  padding: 0 20px; /* 左右留白，高度会自动被 flex 拉伸到和 input 一样高 */
+  background: #222;
+  color: #ccc;
+  border: 1px solid #333;
+  font-size: 0.9rem;
+  cursor: pointer;
+  white-space: nowrap; /* 强制“发送”两个字在一行，不换行 */
+  transition: all 0.3s ease;
+}
+
+/* 按钮悬停效果：用你项目里的暗金色 */
+.send-code-btn:hover:not(:disabled) {
+  border-color: var(--accent-gold, #9e8433);
+  color: var(--accent-gold, #9e8433);
+}
+
+/* 按钮禁用时的状态（比如倒计时60秒时） */
+.send-code-btn:disabled {
+  background: #111;
+  color: #555;
+  cursor: not-allowed;
 }
 .modal-actions {
   margin-top: 25px;
