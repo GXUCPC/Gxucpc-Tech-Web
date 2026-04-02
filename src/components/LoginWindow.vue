@@ -4,6 +4,8 @@ import { useDialog } from '@/store/globalLoading.ts'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { gsap } from 'gsap'
+import type { LoginForm, RegisterForm } from '@/api/user-login'
+import { baseUrl, loginAPI, registerAPI, sendCodeAPI } from '@/api/user-login'
 
 // 获取全局弹窗状态
 const { dialogVisibleLogin } = useDialog()
@@ -12,9 +14,16 @@ const userStore = useUserStore()
 
 const registerVisible = ref(false)
 
-const loginData = ref({ username: '', password: '' })
-const registerData = ref({ username: '', password: '', email: '', captchaCode: '' })
-const baseUrl = 'http://localhost:9090'
+const loginData = ref<LoginForm>({
+  username: '',
+  password: '',
+})
+const registerData = ref<RegisterForm>({
+  username: '',
+  password: '',
+  email: '',
+  captchaCode: '',
+})
 
 // DOM Refs (用于 GSAP 动画)
 const loginOverlayRef = ref<HTMLElement | null>(null)
@@ -90,61 +99,50 @@ const checkLogin = async () => {
 onMounted(() => checkLogin())
 
 const login = async () => {
-  if (!loginData.value.username || !loginData.value.password) {
-    alert('请输入账号和密码！')
-    return
-  }
   try {
-    const response = await fetch(`${baseUrl}/user/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(loginData.value)
-    })
-    const res = await response.json()
-    if (res.code === 200) {
-      userStore.setUser(res.data)
+    const response = await loginAPI(loginData.value)
+    if (response.code === 200) {
+      userStore.setUser(response.data)
       closeLogin()
       alert('登录成功！')
       router.push('/')
-    } else {
-      alert('登录失败：' + (res.message || '账号或密码错误'))
     }
-  } catch (error) {
-    alert('网络错误，请检查后端是否启动')
+    else {
+      alert('登录失败: ' + (response.message || '账号或密码错误'))
+    }
+  }
+  catch(error: any) {
+    alert('网络错误，请检查后端是否启动：' + error.message)
   }
 }
 
 const handleRegister = async () => {
   try {
-    const response = await fetch(`${baseUrl}/user/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(registerData.value)
-    })
-    const res = await response.json()
-    if (res.code === 200) {
+    const response = await registerAPI(registerData.value)
+    if (response.code === 200) {
       alert('注册成功，请登录！')
       switchToLogin()
-    } else {
-      alert('注册失败：' + res.message)
     }
-  } catch (error) {
-    alert('注册请求失败')
+    else {
+      alert('注册失败：' + response.message)
+    } 
+  } catch (error: unknown) {
+    alert('注册请求失败：' + (error instanceof Error ? error.message : '未知错误'))
   }
 }
 
 const sendCode = async () => {
-  if (!registerData.value.email) { alert('请先输入邮箱'); return }
   try {
-    const response = await fetch(`${baseUrl}/user/send_code`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: registerData.value.email, action: 'register' })
-    })
-    const res = await response.json()
-    alert(res.msg || '验证码已发送')
-  } catch (error) { alert('发送失败') }
+    const response = await sendCodeAPI(registerData.value)
+    if (response.code === 200) {
+      alert('验证码已发送')
+    }
+    else {
+      alert('发送失败：' + response.message)
+    }
+  } catch (error: unknown) {
+    alert('发送请求失败：' + (error instanceof Error ? error.message : '未知错误'))
+  }
 }
 </script>
 
@@ -161,7 +159,7 @@ const sendCode = async () => {
         </div>
 
         <div class="gh-auth-form-card">
-          <el-form :model="loginData" label-position="top">
+          <el-form :model="loginData" label-position="top" @submit.prevent="login">
             <div class="gh-form-group">
               <label class="gh-label">账号</label>
               <el-input v-model="loginData.username" class="gh-input" placeholder="Username or email" />
@@ -195,7 +193,7 @@ const sendCode = async () => {
         </div>
 
         <div class="gh-auth-form-card">
-          <el-form :model="registerData" label-position="top">
+          <el-form :model="registerData" label-position="top" @submit.prevent="handleRegister">
             <div class="gh-form-group">
               <label class="gh-label">用户名</label>
               <el-input v-model="registerData.username" class="gh-input" placeholder="至少4位字符" />
@@ -208,14 +206,14 @@ const sendCode = async () => {
               <div class="gh-label-row"><label class="gh-label">验证码</label></div>
               <div class="gh-input-group">
                 <el-input v-model="registerData.captchaCode" class="gh-input" placeholder="Code" />
-                <el-button @click="sendCode" type="info" class="gh-btn-info">发送</el-button>
+                <el-button type="info" class="gh-btn-info" @click.prevent="sendCode">发送</el-button>
               </div>
             </div>
             <div class="gh-form-group">
               <label class="gh-label">密码</label>
               <el-input v-model="registerData.password" type="password" class="gh-input" placeholder="至少8位字符" />
             </div>
-            <el-button class="gh-btn-primary gh-btn-block gh-btn-lg" @click="handleRegister">提交注册</el-button>
+            <el-button class="gh-btn-primary gh-btn-block gh-btn-lg" @click.prevent="handleRegister">提交注册</el-button>
           </el-form>
         </div>
 
