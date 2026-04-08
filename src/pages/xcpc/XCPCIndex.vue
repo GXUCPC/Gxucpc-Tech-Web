@@ -162,23 +162,23 @@ onMounted(() => {
 
       <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
          <Icon
-          icon="pajamas:api"
+          icon="solar:cup-star-bold"
           style="
             color: rgba(227, 47, 47, 0.5);
             position: absolute;
             transform: scale(4);
-            left: 0%;
+            left: -5%;
             bottom: 60%;
             z-index: -1;
           "
         />
          <Icon
-          icon="material-symbols:code-blocks-rounded"
+          icon="mdi:head-cog-outline"
           style="
             color: rgba(47, 174, 227, 0.5);
             position: absolute;
             transform: scale(3) rotate(35deg);
-            left: 55%;
+            left: 45%;
             top: 50%;
             z-index: -1;
           "
@@ -242,11 +242,10 @@ onMounted(() => {
             <p>1. 编程能力，写普通项目就像“满级号回新手村”。</p>
             <p>2. 互联网大厂绿卡，大厂笔试题基本就是集训队的日常练习。</p>
             <p>3. 升学资源，XCPC 经历是保研和申名校最硬核的敲门砖。</p>
-            <p>4. 纯粹的同好圈子，与全校逻辑最强的人并肩作战。</p>
 
         <li>Q: 训练会很辛苦吗？需要投入多少时间？</li>
         <p>
-            老实说 acm 竞赛的强度是很高的。我们需要刷透 CF、洛谷等数千道题目，还有周末 5 小时的模拟赛和寒暑假高强度集训。但请记住：“凡是不能杀死你的，最终都会让你更强大。” 这种脑力极限边缘的快感，只有真正热爱的人才会懂。
+            老实说 acm 竞赛的强度是很高的。我们需要刷透 CF、洛谷等数千道题目，还有周末的模拟赛和寒暑假高强度集训。但请记住：“凡是不能杀死你的，最终都会让你更强大。”
         </p>
 
 <button

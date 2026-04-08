@@ -86,7 +86,7 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
       </div>
 
       <div class="show-on-desktop">
-        <h2>广西大学icpc集训队技术组</h2>
+        <h2>广西大学icpc集训队</h2>
       </div>
 
       <el-menu

@@ -130,6 +130,37 @@ const viewParticipants = async (comp: Competition) => {
   }
 }
 
+// 移除比赛中的某个用户
+const confirmDeleteParticipant = async (participant: any) => {
+  // 1. 二次确认
+  const isConfirmed = confirm(`确定要取消选手【${participant.real_name}】的报名资格吗？`);
+  if (!isConfirmed) return;
+
+  try {
+    // 2. 调用 API (假设你的 CompetitionAPI 里已经定义了 deleteParticipant)
+    // 这里的 compId 建议从当前已打开的弹窗数据中获取，或者从 participant 里的外键获取
+    const res = await CompetitionAPI.deleteParticipant(participant.competition_id, participant.student_id);
+
+    if (res.code === 200) {
+      alert('已成功删除');
+
+      // 3. 内存中同步更新列表，避免重新请求后端（性能更好）
+      currentParticipants.value = currentParticipants.value.filter(
+        (p: any) => p.student_id !== participant.student_id
+      );
+
+      // 4. 可选：如果外层列表需要同步减少人数，可以在这里处理
+      // updateCompetitionCount(participant.competition_id, -1);
+
+    } else {
+      alert(res.msg || '删除失败');
+    }
+  } catch (error) {
+    console.error('删除操作异常:', error);
+    alert('网络错误，请稍后再试');
+  }
+}
+
 // 工具函数：格式化时间
 const formatDate = (dateString: string) => {
   if (!dateString) return '-'
@@ -279,20 +310,24 @@ onMounted(() => {
                   <th>真实姓名</th>
                   <th>联系电话</th>
                   <th>邮箱</th>
+                  <th>操作</th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-if="participantsLoading">
-                  <td colspan="4" class="empty-text">名单加载中...</td>
+                  <td colspan="5" class="empty-text">名单加载中...</td>
                 </tr>
                 <tr v-else-if="currentParticipants.length === 0">
-                  <td colspan="4" class="empty-text">暂无人报名</td>
+                  <td colspan="5" class="empty-text">暂无人报名</td>
                 </tr>
                 <tr v-for="p in currentParticipants" :key="p.id">
                   <td>{{ p.student_id }}</td>
                   <td>{{ p.real_name }}</td>
                   <td>{{ p.phone }}</td>
                   <td>{{ p.email }}</td>
+                  <td>
+                    <button class="delete-btn" @click="confirmDeleteParticipant(p)">删除</button>
+                  </td>
                 </tr>
               </tbody>
             </table>

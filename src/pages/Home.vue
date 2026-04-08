@@ -1285,11 +1285,12 @@ function endTeamDrag() {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 1.75rem 1.5rem;
-  min-height: calc(64vh);
+  padding:16px 20px;
+  min-height: calc(50vh);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
+  gap: 12px;
   transition: border-color var(--duration-short) ease,
     background-color var(--duration-short) ease;
 
@@ -1336,11 +1337,11 @@ function endTeamDrag() {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: auto;
+  margin-top: 5px;
   padding-top: 1.25rem;
   font-size: 1.1em;
   color: rgba(255, 255, 255, 0.82);
-  line-height: 1.5;
+  line-height: 1;
 
   .projectHighlightItem :deep(span) {
     display: flex;

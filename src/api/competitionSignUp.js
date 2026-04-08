@@ -24,6 +24,11 @@ export const CompetitionAPI = {
     return http.get(`/competition/records?competition_id=${competition_id}`);
   },
 
+  // 删除特定参数选手
+  deleteParticipant: (competition_id, student_id) => {
+    return http.delete(`/competition/${competition_id}/participant/${student_id}`);
+  },
+
   // 发送验证码
   sendCode: (data) => {
     return http.post('/competition/send_code', data);

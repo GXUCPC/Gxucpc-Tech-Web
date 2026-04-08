@@ -8,6 +8,14 @@
       <div class="main-content">
         <div class="competition-card" v-for="comp in competitionList" :key="comp.id">
           <h2 class="comp-title">{{ comp.name }}</h2>
+          <a
+    class="details-link"
+    :href="comp.detail_image"
+    target="_blank"
+    v-if="comp.detail_image && comp.detail_image !== '0'"
+  >
+    详情安排 &gt;
+  </a>
 
           <div class="comp-meta">
             <span class="meta-item"> 地点：{{ comp.location || '线上/待定' }}</span>
