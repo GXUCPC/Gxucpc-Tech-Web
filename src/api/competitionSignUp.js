@@ -12,7 +12,7 @@ export const CompetitionAPI = {
   },
 
   deleteCompetition: (id) => {
-    return http.delete(`/competition/${id}`);
+    return http.post(`/competition/${id}`);
   },
 
   addCompetition: (data) => {
@@ -26,7 +26,7 @@ export const CompetitionAPI = {
 
   // 删除特定参数选手
   deleteParticipant: (competition_id, student_id) => {
-    return http.delete(`/competition/${competition_id}/participant/${student_id}`);
+    return http.post(`/competition/${competition_id}/participant/${student_id}`);
   },
 
   // 发送验证码

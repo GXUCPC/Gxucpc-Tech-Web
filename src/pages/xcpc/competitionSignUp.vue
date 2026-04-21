@@ -55,7 +55,7 @@
       </aside> -->
     </div>
 
-    <div class="modal-overlay" v-if="showModal" @click.self="closeModal">
+    <div class="modal-overlay" v-if="showModal">
       <div class="modal-content">
         <h3>报名：{{ selectedComp?.name }}</h3>
         <form @submit.prevent="submitApplication" class="apply-form">
@@ -323,6 +323,7 @@ const calculateDuration = (startTime, endTime) => {
   color: #d9534f;
 }
 .comp-desc {
+  white-space: pre-wrap;
   line-height: 1.8;
   margin-bottom: 25px;
   color: #cccccc;
@@ -399,7 +400,7 @@ const calculateDuration = (startTime, endTime) => {
   width: 100%;
   max-width: 450px;
   border-radius: 4px;
-  border: 1px solid var(--accent-gold, #9e8433);
+  border: 1px solid var(--accent-gold, #4c4940);
 }
 .modal-content h3 {
   margin-top: 0;
