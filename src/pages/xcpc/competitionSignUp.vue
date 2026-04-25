@@ -180,10 +180,14 @@ const submitApplication = async () => {
       code: formData.code,
     })
 
-    if(res.code === 200) alert('🎉 报名成功！请留意邮箱通知。')
-    closeModal()
+    if(res.code === 200) {
+      alert('🎉 报名成功！请留意邮箱通知。');
+      closeModal();
+    } else {
+      alert('报名失败：' + (res.msg || '未知错误'));
+    }
   } catch (error) {
-    alert('报名失败：' + (error.response?.data?.message || error.message))
+    alert('报名失败：' + (error.response?.data?.message || error.message));
   }
 }
 

@@ -2,10 +2,13 @@
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { onMounted, watchEffect } from 'vue'
+import http from '@/api/http'
+import { logoutAPI } from '@/api/user-login'
+
 const userStore = useUserStore()
 
 const router = useRouter()
-const base_url = 'http://localhost:9090'
+
 // 权限检查逻辑
 const checkPermission = () => {
   // 如果没登录，或者登录了但不是管理员
@@ -16,33 +19,26 @@ const checkPermission = () => {
 }
 
 onMounted(async () => {
-  try{
-    const response=await fetch(`${base_url}/user/info`,{
-      method:'GET',
-      credentials:'include',
-    });
-
-    const res=await response.json();
-    if (res.code===200&&res.data){
-      userStore.setUser(res.data);
+  try {
+    const res = await http.get('/user/info')
+    if (res.code === 200 && res.data) {
+      userStore.setUser(res.data)
     }
   }
-  catch (error){
-    console.error('身份验证请求失败', error);
+  catch (error) {
+    console.error('身份验证请求失败', error)
   }
   checkPermission()
 })
 
 watchEffect(() => {
-  if (userStore.userInfo&&!userStore.isLoggedIn) {
+  if (userStore.userInfo && !userStore.isLoggedIn) {
     router.replace('/')
   }
 })
 
-const logout = () => {
-  fetch(`${base_url}/user/info`,{
-     method: 'POST', credentials: 'include'
-  });
+const logout = async () => {
+  await logoutAPI()
   userStore.logout()
   router.push('/')
 }

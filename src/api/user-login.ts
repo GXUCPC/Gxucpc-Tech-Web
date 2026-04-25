@@ -1,3 +1,5 @@
+import http from './http';
+
 export interface LoginForm {
     username: string;
     password: string;
@@ -26,8 +28,6 @@ export interface SendCodeResponse {
     message?: string;
 }
 
-export const baseUrl = 'http://localhost:9090'
-
 /**
  * 登录
  * @param loginData 登录数据
@@ -42,15 +42,7 @@ export async function loginAPI(loginData: LoginForm) : Promise<LoginResponse<unk
         }
     }
     try {
-        const response = await fetch(`${baseUrl}/user/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(loginData),
-        })
-        const res = await response.json();
+        const res = await http.post<LoginResponse<unknown>>('/user/login', loginData);
         if(res.code === 200) {
             return {
                 code: 200,
@@ -77,13 +69,8 @@ export async function loginAPI(loginData: LoginForm) : Promise<LoginResponse<unk
 
 export async function registerAPI(registerData: RegisterForm) : Promise<RegisterResponse> {
     try{
-        const response = await fetch(`${baseUrl}/user/register`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(registerData)
-          })
-          const res = await response.json();
-          if(res.code === 200) {
+        const res = await http.post<RegisterResponse>('/user/register', registerData);
+        if(res.code === 200) {
             return {
                 code: 200,
                 message: '注册成功',
@@ -112,12 +99,10 @@ export async function sendCodeAPI(registerData: RegisterForm) : Promise<SendCode
         }
     }
     try {
-        const response = await fetch(`${baseUrl}/user/send_code`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email: registerData.email, action: 'register' })
+        const res = await http.post<SendCodeResponse>('/user/send_code', {
+            email: registerData.email,
+            action: 'register'
         });
-        const res = await response.json();
         return {
             code: res.code,
             message: res.message,
@@ -128,5 +113,14 @@ export async function sendCodeAPI(registerData: RegisterForm) : Promise<SendCode
             code: 500,
             message: error instanceof Error ? error.message : '未知错误',
         }
+    }
+}
+
+export async function logoutAPI() {
+    try {
+        await http.post('/user/logout');
+    }
+    catch(error: unknown) {
+        console.error('Logout error:', error);
     }
 }

@@ -5,7 +5,8 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { gsap } from 'gsap'
 import type { LoginForm, RegisterForm } from '@/api/user-login'
-import { baseUrl, loginAPI, registerAPI, sendCodeAPI } from '@/api/user-login'
+import { loginAPI, registerAPI, sendCodeAPI } from '@/api/user-login'
+import http from '@/api/http'
 
 // 获取全局弹窗状态
 const { dialogVisibleLogin } = useDialog()
@@ -88,8 +89,7 @@ const switchToLogin = () => {
 // === 业务接口逻辑 ===
 const checkLogin = async () => {
   try {
-    const response = await fetch(`${baseUrl}/user/info`, { method: 'GET', credentials: 'include' })
-    const res = await response.json()
+    const res = await http.get('/user/info')
     if (res.code === 200) userStore.setUser(res.data)
   } catch (e) {
     userStore.clearUser()

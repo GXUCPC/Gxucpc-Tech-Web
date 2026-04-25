@@ -5,6 +5,7 @@ import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useDialog } from '@/store/globalLoading.ts'
 import { useUserStore } from '@/store/user'
+import { logoutAPI } from '@/api/user-login'
 
 const { dialogVisibleLogin } = useDialog()
 const { dialogVisibleFeedback } = useDialog()
@@ -23,7 +24,6 @@ watch(
 )
 
 const userStore = useUserStore()
-const baseUrl = 'http://localhost:9090'
 
 // --- 新增：控制手机端下拉菜单显示/隐藏的开关 ---
 const isMobileMenuOpen = ref(false)
@@ -36,10 +36,7 @@ const expressionFeedback = () => {
 }
 const handleLogout = async () => {
     if (confirm('确定要退出登录吗？')) {
-        await fetch(`${baseUrl}/user/logout`, {
-            method: 'POST',
-            credentials: 'include'
-        });
+        await logoutAPI();
         userStore.logout();
         location.reload();
     }
