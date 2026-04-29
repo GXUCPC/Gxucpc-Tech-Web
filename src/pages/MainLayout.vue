@@ -60,7 +60,7 @@ const checkLogin = async () => {
       userStore.setUser(res.data)
     }
   } catch (e) {
-    userStore.clearUser()
+    userStore.logout()
   }
 }
 

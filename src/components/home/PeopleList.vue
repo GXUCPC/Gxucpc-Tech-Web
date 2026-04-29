@@ -26,6 +26,8 @@ function animation(ele: HTMLDivElement) {
   const cardStagger = STAGGER_SHORT // 与「加入技术组会获得什么？」同节奏
   Array.from(ele.children).forEach((card, index) => {
     const t = index * cardStagger
+    const avatarElement = card.querySelector('.el-image')
+    const textTargets = Array.from(card.querySelectorAll('.name, .comment, .info'))
 
     // 主体
     tl.from(
@@ -42,29 +44,32 @@ function animation(ele: HTMLDivElement) {
     )
 
     // 头像
-    tl.from(
-      card.querySelector('.el-image'),
-      {
-        duration: DURATION_MEDIAN,
-        autoAlpha: 0,
-        scale: 2,
-        ease: 'power1.out',
-      },
-      t
-    )
+    if (avatarElement) {
+      tl.from(
+        avatarElement,
+        {
+          duration: DURATION_MEDIAN,
+          autoAlpha: 0,
+          scale: 2,
+          ease: 'power1.out',
+        },
+        t
+      )
+    }
 
     // 文本：紧随卡片出现，快速读完
-    tl.from(
-      SplitText.create(card.querySelectorAll(':not(.avatar)'), { type: 'lines', mask: 'lines' })
-        .lines,
-      {
-        duration: DURATION_SHORT,
-        ease: 'power2.out',
-        stagger: STAGGER_CHAR,
-        y: 50,
-      },
-      t
-    )
+    if (textTargets.length > 0) {
+      tl.from(
+        SplitText.create(textTargets, { type: 'lines', mask: 'lines' }).lines,
+        {
+          duration: DURATION_SHORT,
+          ease: 'power2.out',
+          stagger: STAGGER_CHAR,
+          y: 50,
+        },
+        t
+      )
+    }
   })
 
   return tl
@@ -83,7 +88,7 @@ function animation(ele: HTMLDivElement) {
       <div v-if="people.comment" class="comment">
         {{ people.comment }}
       </div>
-      <div style="text-align: center">
+      <div class="info" style="text-align: center">
         {{ people.info }}
       </div>
     </div>

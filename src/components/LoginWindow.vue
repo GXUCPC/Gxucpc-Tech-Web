@@ -92,7 +92,7 @@ const checkLogin = async () => {
     const res = await http.get('/user/info')
     if (res.code === 200) userStore.setUser(res.data)
   } catch (e) {
-    userStore.clearUser()
+    userStore.logout()
   }
 }
 

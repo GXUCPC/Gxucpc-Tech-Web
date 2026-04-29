@@ -15,5 +15,9 @@ export const useUserStore = defineStore('user', () => {
     isLoggedIn.value = false
   }
 
-  return { userInfo, isLoggedIn, setUser, logout }
+  const clearUser = () => {
+    logout()
+  }
+
+  return { userInfo, isLoggedIn, setUser, logout, clearUser }
 })
