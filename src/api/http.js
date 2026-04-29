@@ -1,18 +1,21 @@
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
-import router from "@/router";
+import { useUserStore } from '@/store/user';
 
 const http = axios.create({
     baseURL: '/api',
     timeout: 10000, // 请求超时时间
 });
 
-let isRefreshing = false;
-let subscribers = [];
+function clearAuthState() {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
 
-function onAccessTokenFetched(response) {
-    subscribers.forEach(callback => callback(response));
-    subscribers = [];
+    try {
+        useUserStore().logout();
+    } catch (error) {
+        console.warn('Clear auth state failed:', error);
+    }
 }
 
 // 请求拦截器
@@ -37,56 +40,14 @@ http.interceptors.response.use(
     async error => {
         const { config, response } = error;
         const originalRequest = config;
+        const requestUrl = originalRequest?.url ?? '';
 
-        // 如果是401错误且不是登录接口
-        if (response && response.status === 401 && !originalRequest._retry &&
-            !originalRequest.url.includes('/auth/login')) {
-
-            if (isRefreshing) {
-                // 如果正在刷新token，将请求存入队列
-                return new Promise(resolve => {
-                    subscribers.push(() => {
-                        originalRequest.headers['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
-                        resolve(http(originalRequest));
-                    });
-                });
-            }
-
-            originalRequest._retry = true;
-            isRefreshing = true;
-
-            try {
-                // 获取刷新token
-                const refreshToken = localStorage.getItem('refreshToken');
-                if (!refreshToken) {
-                    throw new Error('No refresh token');
-                }
-
-                // 使用刷新token获取新的access token
-                const response = await http.get(`/auth/refresh-token?refreshToken=${refreshToken}`);
-                const accessToken = response.data;
-
-                // 保存新的token
-                localStorage.setItem('accessToken', accessToken);
-
-                // 更新请求头
-                originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-
-                // 重新发送之前的请求
-                const retryRequest = http(originalRequest);
-
-                // 处理其他被挂起的请求
-                onAccessTokenFetched();
-                return retryRequest;
-            } catch (refreshError) {
-                // 刷新token失败，跳转到登录页
-                localStorage.removeItem('accessToken');
-                localStorage.removeItem('refreshToken');
-                await router.push('/login');
-                return Promise.reject(refreshError);
-            } finally {
-                isRefreshing = false;
-            }
+        // 未登录或登录态失效时，仅清理鉴权状态并留在当前页。
+        if (response && response.status === 401 &&
+            !requestUrl.includes('/auth/login') &&
+            !requestUrl.includes('/user/login')) {
+            clearAuthState();
+            return Promise.reject(error);
         }
 
         // 其他错误处理
