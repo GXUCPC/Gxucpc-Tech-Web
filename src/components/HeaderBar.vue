@@ -6,6 +6,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { useDialog } from '@/store/globalLoading.ts'
 import { useUserStore } from '@/store/user'
 import { logoutAPI } from '@/api/user-login'
+import http from '@/api/http'
+import { ElMessage } from 'element-plus'
 
 const { dialogVisibleLogin } = useDialog()
 const { dialogVisibleFeedback } = useDialog()
@@ -68,6 +70,56 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
   isMobileMenuOpen.value = false; // 关闭下拉菜单
   handleSelect(key, keyPath);     // 执行原本的跳转逻辑
 }
+// 通知功能
+enum NoticeStatus {
+  DRAFT = 'draft',
+  PUBLISHED = 'published',
+}
+interface Notice {
+  id?: number
+  title: string
+  content: string
+  status: NoticeStatus
+  username: string
+  created_at: string
+}
+const noticeVisible = ref(false)
+const notices = ref<Notice[]>([])
+const loading = ref(false)
+
+const openNoticeDialog = () => {
+  if (!userStore.isLoggedIn) {
+    ElMessage.warning('请先登录！')
+    return
+  }
+  noticeVisible.value = true
+  getAllNotices()
+}
+
+const getAllNotices = async () => {
+  loading.value = true
+  try {
+    const res = await http.get('/notice/published', { params: { page: 1, size: 100 } })
+    if (res.code === 200) notices.value = res.data.list
+  } catch (err) {
+    ElMessage.error('获取通知失败')
+  } finally {
+    loading.value = false
+  }
+}
+
+const formatDate = (isoString: string) => {
+  if (!isoString) return ''
+  const date = new Date(isoString)
+  return date.toLocaleString('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).replace(/\//g, '-')
+}
 </script>
 
 <template>
@@ -110,6 +162,7 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
       </el-menu>
 
       <div class="headerRight">
+        <el-button size="large" @click="openNoticeDialog" text>通知</el-button>
         <el-button size="large" @click.prevent="expressionFeedback" text>意见反馈</el-button>
         <el-button v-if="!userStore.isLoggedIn" size="large" @click.prevent="expression" text>登录</el-button>
         <div v-else class="userInfo">
@@ -145,6 +198,28 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
         </el-menu>
       </div>
     </el-collapse-transition>
+    
+    <Teleport to="body">
+      <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
+        <div class="notice-modal">
+          <div class="modal-header">
+            <h3>系统通知</h3>
+            <button class="close-btn" @click="noticeVisible = false">×</button>
+          </div>
+          <div class="modal-body">
+            <div class="notice-list">
+              <div v-if="loading" class="loading-tip">加载中...</div>
+              <div v-else-if="notices.length === 0" class="empty-tip">暂无通知</div>
+              <div v-else class="notice-item" v-for="item in notices" :key="item.id">
+                <div class="notice-title">{{ item.title }}</div>
+                <div class="notice-content">{{ item.content }}</div>
+                <div class="notice-time">{{ formatDate(item.created_at) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Teleport>
   </div>
 </template>
 
@@ -237,5 +312,89 @@ const handleMobileSelect = (key: string, keyPath: string[]) => {
   .headerBar {
     padding: 0 15px; /* 手机端两边边距缩短，留出更多空间 */
   }
+}
+/* 通知弹窗 */
+.notice-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.notice-modal {
+  width: 550px;
+  max-width: 90%;
+  background: rgba(20, 20, 20, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  overflow: hidden;
+
+  .modal-header {
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+    h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s;
+      &:hover { color: #fff; }
+    }
+  }
+
+  .modal-body {
+    padding: 16px 24px 24px;
+  }
+}
+
+.notice-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+.notice-item {
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.notice-item:last-child { border-bottom: none; }
+.notice-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+}
+.notice-content {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+  margin-bottom: 8px;
+  white-space: pre-wrap;
+}
+.notice-time {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+}
+.loading-tip, .empty-tip {
+  text-align: center;
+  padding: 40px 0;
+  color: rgba(255, 255, 255, 0.4);
 }
 </style>

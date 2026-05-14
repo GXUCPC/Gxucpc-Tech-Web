@@ -55,6 +55,9 @@ const logout = async () => {
         <router-link to="/admin/competition" class="nav-item" exact-active-class="active">
           比赛管理
         </router-link>
+        <router-link to="/admin/notice" class="nav-item" exact-active-class="active">
+          通知管理
+        </router-link>
       </nav>
     </aside>
 

@@ -93,6 +93,11 @@ const router = createRouter({
       component: () => import('@/pages/admin/AdminLayout.vue'),
       children: [
         {
+          name: 'adminNotice',
+          path: 'notice',
+          component: () => import('@/pages/admin/AdminNotice.vue'),
+        },
+        {
           name: 'adminHome',
           path: 'interview',
           component: () => import('@/pages/admin/AdminHome.vue'),
