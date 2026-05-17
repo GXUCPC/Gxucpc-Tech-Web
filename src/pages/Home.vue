@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import AniEle from '@/components/AniEle.vue'
+import ArticleCard from '@/components/ArticleCard.vue'
+import type { ArticleMeta } from '@/types/article'
+import { ArticleAPI } from '@/api/article'
 import PeopleList, { type PeopleData } from '@/components/home/PeopleList.vue'
 import {
   DELAY_INITIAL,
@@ -149,6 +152,9 @@ onMounted(() => {
       animation: tl,
       onEnter: (self) => ele.classList.add('show'),
     })
+  })
+  ArticleAPI.getLatestArticles(4).then((list) => {
+    latestArticles.value = list
   })
 })
 
@@ -309,6 +315,8 @@ const techProjectList = [
   },
 ]
 
+const latestArticles = ref<ArticleMeta[]>([])
+
 // Hero 首屏：算竞/开发 双栏，默认展开左侧，填充全屏，展开 70% / 折叠 30%
 const heroActiveIndex = ref<number>(0)
 const HERO_EXPANDED_PERCENT = 70
@@ -457,6 +465,40 @@ function endTeamDrag() {
       </div>
     </div>
   </section>
+
+  <h2 class="subtitle">代表项目展示</h2>
+  <ani-ele
+    class="benefitsCardGrid projectCardGrid"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.querySelectorAll('.projectCard'), {
+          duration: DURATION_LONG,
+          ease: 'power2.out',
+          y: 40,
+          autoAlpha: 0,
+          stagger: STAGGER_SHORT,
+          clearProps: 'transform,opacity',
+        })
+        return tl
+      }
+    ">
+    <div
+      v-for="(project, i) in techProjectList"
+      :key="i"
+      class="projectCard">
+      <div class="projectCardBadge">{{ project.grade }}</div>
+      <div class="projectCardTitle">{{ project.teamName }}</div>
+      <div class="projectCardTech">
+        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
+      </div>
+      <div class="projectCardHighlights">
+        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
+          <component :is="medal" />
+        </div>
+      </div>
+    </div>
+  </ani-ele>
 
   <h1 class="title heroNextSection" id="learnMoreTarget">集训队概要</h1>
   <ani-ele
@@ -706,13 +748,13 @@ function endTeamDrag() {
     </div>
   </ani-ele>
 
-  <h2 class="subtitle">代表项目展示</h2>
+  <h2 class="subtitle">最新文章</h2>
   <ani-ele
-    class="benefitsCardGrid projectCardGrid"
+    class="articleListGridHome"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
-        tl.from(ele.querySelectorAll('.projectCard'), {
+        tl.from(ele.querySelectorAll('.articleCard'), {
           duration: DURATION_LONG,
           ease: 'power2.out',
           y: 40,
@@ -723,22 +765,19 @@ function endTeamDrag() {
         return tl
       }
     ">
-    <div
-      v-for="(project, i) in techProjectList"
-      :key="i"
-      class="projectCard">
-      <div class="projectCardBadge">{{ project.grade }}</div>
-      <div class="projectCardTitle">{{ project.teamName }}</div>
-      <div class="projectCardTech">
-        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
-      </div>
-      <div class="projectCardHighlights">
-        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
-          <component :is="medal" />
-        </div>
-      </div>
-    </div>
+    <ArticleCard
+      v-for="article in latestArticles"
+      :key="article.id"
+      :article="article"
+    />
   </ani-ele>
+
+  <div class="articleMoreLink" v-if="latestArticles.length">
+    <router-link to="/articles" class="learnMoreBtn">
+      查看更多
+      <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
+    </router-link>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -1272,6 +1311,24 @@ function endTeamDrag() {
     border-width: 0 1px 1px 0;
   }
 }
+
+.articleListGridHome {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  margin: 2em 0 2em;
+  padding: 0 2em;
+  box-sizing: border-box;
+}
+
+.articleMoreLink {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4em;
+}
+
 /* ====================================
    代表项目展示：与「加入技术组会获得什么」同风格卡片网格
    ==================================== */
@@ -1492,6 +1549,16 @@ function endTeamDrag() {
     font-size: 1em;
     margin-top: 0;
     padding-top: 1rem;
+  }
+
+  .articleListGridHome {
+    grid-template-columns: 1fr;
+    padding: 0 15px;
+    margin: 1.5em 0 2em;
+  }
+
+  .articleMoreLink {
+    margin-bottom: 3em;
   }
 }
 </style>

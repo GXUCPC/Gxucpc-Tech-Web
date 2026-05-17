@@ -15,6 +15,16 @@ const router = createRouter({
           component: defineAsyncComponent(() => import('@/pages/Home.vue')),
         },
         {
+          name: 'articleList',
+          path: 'articles',
+          component: defineAsyncComponent(() => import('@/pages/articles/ArticleList.vue')),
+        },
+        {
+          name: 'articleDetail',
+          path: 'articles/:id',
+          component: defineAsyncComponent(() => import('@/pages/articles/ArticleDetail.vue')),
+        },
+        {
           name: 'tch_team2-1',
           path: 'tch_team2-1',
           component: defineAsyncComponent(() => import('@/pages/tech/Introduction.vue')),

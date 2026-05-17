@@ -27,7 +27,6 @@ watch(
 
 const userStore = useUserStore()
 
-// --- 新增：控制手机端下拉菜单显示/隐藏的开关 ---
 const isMobileMenuOpen = ref(false)
 
 const expression = () => {
@@ -159,6 +158,7 @@ const formatDate = (isoString: string) => {
           <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
           <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
         </el-sub-menu>
+        <el-menu-item index="/articles">文章</el-menu-item>
       </el-menu>
 
       <div class="headerRight">
@@ -195,6 +195,7 @@ const formatDate = (isoString: string) => {
             <el-menu-item index="/tech/contuctUs">> 加入我们</el-menu-item>
             <el-menu-item index="/tech/interview">> 招新面试申请</el-menu-item>
           </el-sub-menu>
+          <el-menu-item index="/articles">> 文章</el-menu-item>
         </el-menu>
       </div>
     </el-collapse-transition>
