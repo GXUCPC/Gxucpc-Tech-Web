@@ -1,0 +1,10 @@
+services:
+  gxucpc-web:
+    build: .
+    image: gxucpc-tech-web:prod
+    container_name: gxucpc-web
+    ports:
+      # 把容器里的 80 端口，映射到宿主机本地的 26800 端口
+      # 外部流量必须通过宿主机的全局 Nginx 代理来访问 26800
+      - "127.0.0.1:26800:80"
+    restart: unless-stopped

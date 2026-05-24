@@ -6,9 +6,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
-const base = process.env.NODE_ENV === 'production' ? '/me/' : '/'
 export default defineConfig({
-  base,
   plugins: [vue(), vueJsx(), vueDevTools()],
   resolve: {
     alias: {
