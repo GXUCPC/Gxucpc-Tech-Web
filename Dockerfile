@@ -1,11 +1,11 @@
 # === 阶段一：胖镜像编译 ===
 FROM node:22-alpine AS builder
 
-RUN corepack enable && corepack prepare pnpm@latest --activate
+RUN corepack enable && corepack prepare pnpm@9 --activate
 WORKDIR /app
 
 COPY package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --config.ignore-scripts=false
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 RUN pnpm run build
