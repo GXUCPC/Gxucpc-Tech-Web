@@ -8,6 +8,7 @@ import type { ChatMessage } from '@/types/ai-chat'
 
 const messages = ref<ChatMessage[]>([
   {
+    id: crypto.randomUUID(),
     role: 'assistant',
     content:
       '你好！我是你的项目需求分析师。请告诉我，你想做一个什么样的项目？',
@@ -28,6 +29,7 @@ const latestDoc = computed(() => {
 
 async function handleSend(content: string) {
   const userMessage: ChatMessage = {
+    id: crypto.randomUUID(),
     role: 'user',
     content,
     timestamp: Date.now(),
@@ -40,6 +42,7 @@ async function handleSend(content: string) {
 
     if (res.code === 200 && res.data) {
       messages.value.push({
+        id: crypto.randomUUID(),
         role: res.data.role,
         content: res.data.content,
         timestamp: Date.now(),

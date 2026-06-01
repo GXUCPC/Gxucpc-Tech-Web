@@ -13,7 +13,8 @@ export interface ChatResponse {
 export const AIChatAPI = {
   async sendChat(messages: ChatMessage[]): Promise<ChatResponse> {
     try {
-      const res = await http.post('/ai-chat', { messages })
+      const cleanMessages = messages.map(({ role, content }) => ({ role, content }))
+      const res = await http.post('/ai-chat', { messages: cleanMessages })
       if (res.code === 200 && res.data) {
         return {
           code: 200,

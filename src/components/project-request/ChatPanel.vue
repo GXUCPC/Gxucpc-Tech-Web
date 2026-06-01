@@ -51,7 +51,7 @@ watch(
     <div class="chat-messages" ref="messageListRef">
       <div
         v-for="(msg, index) in messages"
-        :key="msg.timestamp || index"
+        :key="msg.id || index"
         :class="['message-row', msg.role === 'user' ? 'user' : 'assistant']"
       >
         <div class="message-bubble">
