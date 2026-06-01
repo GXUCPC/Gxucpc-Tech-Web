@@ -96,6 +96,11 @@ const router = createRouter({
             },
           ],
         },
+        {
+          name: 'projectRequest',
+          path: 'project-request',
+          component: defineAsyncComponent(() => import('@/pages/project-request/ProjectRequest.vue')),
+        },
       ],
     },
     {
