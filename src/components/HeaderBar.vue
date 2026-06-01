@@ -159,6 +159,7 @@ const formatDate = (isoString: string) => {
           <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
         </el-sub-menu>
         <el-menu-item index="/articles">文章</el-menu-item>
+        <el-menu-item index="/project-request">项目合作</el-menu-item>
       </el-menu>
 
       <div class="headerRight">
@@ -196,6 +197,7 @@ const formatDate = (isoString: string) => {
             <el-menu-item index="/tech/interview">> 招新面试申请</el-menu-item>
           </el-sub-menu>
           <el-menu-item index="/articles">> 文章</el-menu-item>
+          <el-menu-item index="/project-request">> 项目合作</el-menu-item>
         </el-menu>
       </div>
     </el-collapse-transition>
