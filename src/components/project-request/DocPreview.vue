@@ -80,7 +80,8 @@ function handleDownload() {
 .doc-preview {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   background: #111;
   color: #fff;
 }
@@ -140,6 +141,7 @@ function handleDownload() {
 .doc-body {
   flex: 1;
   overflow-y: auto;
+  overscroll-behavior: contain;
   padding: 24px;
 }
 
