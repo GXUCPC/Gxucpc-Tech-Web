@@ -154,4 +154,12 @@ const switchToRegister = () => {
 <style scoped>
 .contentContainer { width: 100%; }
 .content { margin: 0 auto; width: min(100%, 1920px); min-height: calc(100vh - 4em); }
+
+/* 大屏（2K/4K）流式放大：仅 >1920 生效，1921px 处 0.83vw≈16px 保证边界连续无跳变 */
+@media (min-width: 1921px) {
+  .content {
+    width: min(92vw, 2560px);
+    font-size: clamp(16px, 0.83vw, 24px);
+  }
+}
 </style>

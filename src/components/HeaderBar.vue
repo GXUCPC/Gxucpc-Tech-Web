@@ -314,6 +314,11 @@ const formatDate = (isoString: string) => {
     padding: 0 15px; /* 手机端两边边距缩短，留出更多空间 */
   }
 }
+
+/* 大屏对齐：与正文内容列同宽，避免导航与内容错位 */
+@media (min-width: 1921px) {
+  .headerBar { width: min(92vw, 2560px); }
+}
 /* 通知弹窗 */
 .notice-overlay {
   position: fixed;

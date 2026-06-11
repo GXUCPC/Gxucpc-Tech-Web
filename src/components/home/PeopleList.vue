@@ -141,4 +141,16 @@ function animation(ele: HTMLDivElement) {
     font-style: italic;
   }
 }
+
+/* 手机端：卡片换行排列，避免横向溢出（额外的行间距给悬浮头像留位） */
+@media (max-width: 768px) {
+  .peopleContainer {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4em 1em;
+  }
+  .peopleCard {
+    width: min(15em, 80vw);
+  }
+}
 </style>

@@ -715,7 +715,7 @@ function endTeamDrag() {
     <b style="font-size: 1.2em">
       选课、教务、OJ评测、算法训练统计
     </b>
-    <br />等多个应用场景，累计服务人次超
+    <br />等多个应用场景，累计服务人次
     <span style="font-size: 1.5em; font-weight: bold; color: chocolate">0</span>
   </ani-ele>
 
@@ -1139,7 +1139,7 @@ function endTeamDrag() {
 /* 收益卡片网格：全宽铺平，仿 Microsoft 内容卡片布局 */
 .benefitsCardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   width: 100%;
   max-width: 100%;
@@ -1314,7 +1314,7 @@ function endTeamDrag() {
 
 .articleListGridHome {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1.5rem;
   width: 100%;
   max-width: 100%;
@@ -1334,8 +1334,8 @@ function endTeamDrag() {
    ==================================== */
 .projectCardGrid {
   margin-bottom: 6em;
-  /* 4 列，每列 1/4 屏宽，恰填充横向页面 */
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* 自适应列：宽屏 4 列，平板 2~3 列，手机 1 列，自动降级 */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .projectCard {
@@ -1343,7 +1343,8 @@ function endTeamDrag() {
   flex-direction: column;
   align-items: flex-start;
   padding:16px 20px;
-  min-height: calc(50vh);
+  /* 固定展示高度，避免随视口高度在 2K/4K 上膨胀 */
+  min-height: clamp(340px, 24vw, 420px);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
