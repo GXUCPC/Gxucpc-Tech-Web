@@ -251,69 +251,7 @@ const workerList: PeopleData[] = [
 
 
 
-// 技术组代表项目列表
-const techProjectList = [
-  {
-    grade: 'Active',
-    teamName: '青鸾管理系统',
-    mainMedal: [
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:web' }),
-        '集训队核心教务与人员管理中枢',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:server' }),
-        '前后端分离架构，承载高频访问',
-      ]),
-    ],
-    teammates: ['Vue 3', 'Spring Boot', 'TypeScript'], // 借用 teammates 字段展示技术栈
-  },
-  {
-    grade: 'Core',
-    teamName: 'GXU-OJ 评测平台',
-    mainMedal: [
-      h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
-        h(Icon, { inline: true, icon: 'mdi:code-braces', color: '#b388ff' }),
-        '毫秒级沙箱隔离评测，保障代码安全执行',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:chart-bar' }),
-        '支持高并发提交，保障同学们的学习体验',
-      ]),
-    ],
-    teammates: ['Go', 'Docker', 'Vue 3', 'Redis'], // OJ 常见的核心技术栈
-  },
-  {
-    grade: 'v2.0',
-    teamName: '谛听 Bot',
-    mainMedal: [
-      h('span', { style: 'color: #67c23a' }, [
-        h(Icon, { inline: true, icon: 'mdi:robot', color: '#67c23a' }),
-        '全天候统计集训队刷题与训练进度',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:flash' }),
-        '课群智能答疑与学习热情激发',
-      ]),
-    ],
-    teammates: ['Python', 'NoneBot', 'LLM API'],
-  },
-  {
-    grade: 'Hot',
-    teamName: '西大教务工具箱 & 插件',
-    mainMedal: [
-      h('span', { style: 'color: #e6a23c' }, [
-        h(Icon, { inline: true, icon: 'mdi:tools', color: '#e6a23c' }),
-        '极大简化繁琐的校园教务流程',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:fire' }),
-        '候补抢课神器，广受同学们好评',
-      ]),
-    ],
-    teammates: ['JavaScript', 'Browser Extension'],
-  },
-]
+
 
 const latestArticles = ref<ArticleMeta[]>([])
 
@@ -466,39 +404,7 @@ function endTeamDrag() {
     </div>
   </section>
 
-  <h2 class="subtitle">代表项目展示</h2>
-  <ani-ele
-    class="benefitsCardGrid projectCardGrid"
-    :scroll-in-ani="
-      (ele) => {
-        const tl = gsap.timeline()
-        tl.from(ele.querySelectorAll('.projectCard'), {
-          duration: DURATION_LONG,
-          ease: 'power2.out',
-          y: 40,
-          autoAlpha: 0,
-          stagger: STAGGER_SHORT,
-          clearProps: 'transform,opacity',
-        })
-        return tl
-      }
-    ">
-    <div
-      v-for="(project, i) in techProjectList"
-      :key="i"
-      class="projectCard">
-      <div class="projectCardBadge">{{ project.grade }}</div>
-      <div class="projectCardTitle">{{ project.teamName }}</div>
-      <div class="projectCardTech">
-        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
-      </div>
-      <div class="projectCardHighlights">
-        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
-          <component :is="medal" />
-        </div>
-      </div>
-    </div>
-  </ani-ele>
+  
 
   <h1 class="title heroNextSection" id="learnMoreTarget">集训队概要</h1>
   <ani-ele
