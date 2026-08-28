@@ -134,7 +134,7 @@ const formatDate = (isoString: string) => {
       </div>
 
       <div class="show-on-desktop">
-        <h2>广西大学icpc集训队</h2>
+        <h2>广西大学计算机协会</h2>
       </div>
 
       <el-menu
@@ -199,7 +199,7 @@ const formatDate = (isoString: string) => {
         </el-menu>
       </div>
     </el-collapse-transition>
-    
+
     <Teleport to="body">
       <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
         <div class="notice-modal">

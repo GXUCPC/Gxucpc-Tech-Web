@@ -6,6 +6,11 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
+import { h } from 'vue'
+import {
+  DURATION_LONG,
+  STAGGER_SHORT,
+} from '@/constants/animation'
 
 const router = useRouter()
 
@@ -14,6 +19,8 @@ const goToNextPage = () => {
   // 把 '/about' 换成你实际配置的路由路径，比如 '/join' 或者 '/detail'
   router.push('/tech/contuctUs')
 }
+
+
 
 const globalLoading = useGlobalLoading()
 
@@ -156,8 +163,70 @@ onMounted(() => {
   })
 
 
-
+//技术组代表项目列表
 })
+const techProjectList = [
+  {
+    grade: 'Active',
+    teamName: '青鸾管理系统',
+    mainMedal: [
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:web' }),
+        '集训队核心教务与人员管理中枢',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:server' }),
+        '前后端分离架构，承载高频访问',
+      ]),
+    ],
+    teammates: ['Vue 3', 'Spring Boot', 'TypeScript'], // 借用 teammates 字段展示技术栈
+  },
+  {
+    grade: 'Core',
+    teamName: 'GXU-OJ 评测平台',
+    mainMedal: [
+      h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
+        h(Icon, { inline: true, icon: 'mdi:code-braces', color: '#b388ff' }),
+        '毫秒级沙箱隔离评测，保障代码安全执行',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:chart-bar' }),
+        '支持高并发提交，保障同学们的学习体验',
+      ]),
+    ],
+    teammates: ['Go', 'Docker', 'Vue 3', 'Redis'], // OJ 常见的核心技术栈
+  },
+  {
+    grade: 'v2.0',
+    teamName: '谛听 Bot',
+    mainMedal: [
+      h('span', { style: 'color: #67c23a' }, [
+        h(Icon, { inline: true, icon: 'mdi:robot', color: '#67c23a' }),
+        '全天候统计集训队刷题与训练进度',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:flash' }),
+        '课群智能答疑与学习热情激发',
+      ]),
+    ],
+    teammates: ['Python', 'NoneBot', 'LLM API'],
+  },
+  {
+    grade: 'Hot',
+    teamName: '西大教务工具箱 & 插件',
+    mainMedal: [
+      h('span', { style: 'color: #e6a23c' }, [
+        h(Icon, { inline: true, icon: 'mdi:tools', color: '#e6a23c' }),
+        '极大简化繁琐的校园教务流程',
+      ]),
+      h('span', {}, [
+        h(Icon, { inline: true, icon: 'mdi:fire' }),
+        '候补抢课神器，广受同学们好评',
+      ]),
+    ],
+    teammates: ['JavaScript', 'Browser Extension'],
+  },
+]
 
 </script>
 
@@ -218,7 +287,39 @@ onMounted(() => {
     </div>
   </section>
 
-
+<h1 class="title">代表项目展示</h1>
+ <ani-ele
+   class="benefitsCardGrid projectCardGrid"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.querySelectorAll('.projectCard'), {
+          duration: DURATION_LONG,
+          ease: 'power2.out',
+          y: 40,
+          autoAlpha: 0,
+          stagger: STAGGER_SHORT,
+          clearProps: 'transform,opacity',
+        })
+        return tl
+      }
+    ">
+    <div
+      v-for="(project, i) in techProjectList"
+      :key="i"
+      class="projectCard">
+      <div class="projectCardBadge">{{ project.grade }}</div>
+      <div class="projectCardTitle">{{ project.teamName }}</div>
+      <div class="projectCardTech">
+        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
+      </div>
+      <div class="projectCardHighlights">
+        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
+          <component :is="medal" />
+        </div>
+      </div>
+    </div>
+  </ani-ele>
 
 
   <h1 class="title">招新相关</h1>
@@ -361,4 +462,84 @@ onMounted(() => {
 
 /* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
 @include inject-mobile-styles;
+
+.projectCardGrid {
+  display: grid;
+  margin-bottom: 6em;
+  /* 自适应列：宽屏 4 列，平板 2~3 列，手机 1 列，自动降级 */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.projectCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding:16px 20px;
+  /* 固定展示高度，避免随视口高度在 2K/4K 上膨胀 */
+  min-height: clamp(340px, 24vw, 420px);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  gap: 12px;
+  transition: border-color var(--duration-short) ease,
+    background-color var(--duration-short) ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
+
+.projectCardBadge {
+  font-size: 0.95em;
+  font-family: 'Courier New', monospace;
+  color: var(--el-color-primary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.projectCardTitle {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.projectCardTech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.projectTechTag {
+  font-size: 1em;
+  font-family: monospace;
+  color: rgba(96, 165, 250, 0.95);
+  background: rgba(96, 165, 250, 0.12);
+  border: 1px solid rgba(96, 165, 250, 0.25);
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.projectCardHighlights {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 5px;
+  padding-top: 1.25rem;
+  font-size: 1.1em;
+  color: rgba(255, 255, 255, 0.82);
+  line-height: 1;
+
+  .projectHighlightItem :deep(span) {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+}
+
+
 </style>

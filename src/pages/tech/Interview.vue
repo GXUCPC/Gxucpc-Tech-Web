@@ -9,6 +9,22 @@
         <div class="content-text" style="text-align: center; font-size: 22px;">
           你已提交过面试申请，请勿重复提交！
         </div>
+        <div class="applicationstatus">
+          <div class="content-text" style="text-align: center; font-size: 22px;">
+           面试申请状态：
+        </div>
+         <el-steps
+            style="max-width: 600px"
+            :space="200"
+            :active="currentStep"
+            finish-status="success"
+          align-center>
+          <el-step title="筛选中" />
+          <el-step title="面试中" />
+          <el-step title="评估中" />
+          <el-step title="已结束" />
+        </el-steps>
+        </div>
         <div style="text-align: center; margin-top: 20px;">
           <el-button class="submit-btn" @click="clearSubmitStatus">重新提交申请</el-button>
         </div>
@@ -144,6 +160,15 @@ const errors = reactive({
 const hasSubmitted = ref(false)
 const isSubmitting = ref(false)
 const showSuccessModal = ref(false)
+const currentStep = ref(0)
+
+// 后端状态 → 步骤条索引
+const statusToStep = {
+  screening: 0,
+  interviewing: 1,
+  evaluating: 2,
+  ended: 3,
+}
 
 // 邮箱正则（和后端对齐）
 const emailReg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+\.[a-zA-Z]{2,6}$/
@@ -198,9 +223,8 @@ const handleSubmit = async () => {
       email: form.email.trim(),
     })
 
-    localStorage.setItem('interview_submitted', 'true')
-    hasSubmitted.value = true
     showSuccessModal.value = true
+    await fetchInterviewStatus()
   } catch (error) {
     alert(error.message)
   } finally {
@@ -223,15 +247,18 @@ const clearSubmitStatus = () => {
   resetForm()
 }
 
-const checkSubmitStatus = () => {
-  const token = localStorage.getItem('token')
-  if (!token) {
-    localStorage.removeItem('interview_submitted')
+// 从后端查询当前用户的面试状态
+const fetchInterviewStatus = async () => {
+  try {
+    const res = await axios.get('/interview/my')
+    if (res.code === 200 && res.data) {
+      hasSubmitted.value = true
+      currentStep.value = statusToStep[res.data.status] ?? 0
+    }
+  } catch {
+    // 未提交或接口异常，保持表单显示
     hasSubmitted.value = false
-    return
   }
-  const submittedStatus = localStorage.getItem('interview_submitted')
-  hasSubmitted.value = submittedStatus === 'true'
 }
 
 // 监听登录状态变化
@@ -239,7 +266,6 @@ watch(
   () => localStorage.getItem('token'),
   (newToken) => {
     if (!newToken) {
-      localStorage.removeItem('interview_submitted')
       hasSubmitted.value = false
     }
   },
@@ -248,7 +274,7 @@ watch(
 
 // 页面挂载时检查状态
 onMounted(() => {
-  checkSubmitStatus()
+  fetchInterviewStatus()
 })
 </script>
 
@@ -450,5 +476,17 @@ html, body {
   padding: 20px 0 0 0;
   border-top: none;
   text-align: center;
+}
+
+/* 步骤条暗色适配 */
+.applicationstatus :deep(.el-step__title) {
+  color: var(--text-color-light);
+  font-size: 14px;
+}
+.applicationstatus :deep(.el-step__title.is-process) {
+  color: var(--primary-color);
+}
+.applicationstatus :deep(.el-step__title.is-success) {
+  color: #67c23a;
 }
 </style>
