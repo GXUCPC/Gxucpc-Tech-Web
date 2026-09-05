@@ -3,7 +3,7 @@ import FooterContent from '@/components/FotterBar.vue'
 import HeaderNav from '@/components/HeaderBar.vue'
 import { ref } from 'vue'
 import { useDialog } from '@/store/globalLoading.ts'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { onMounted } from 'vue'
 import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
@@ -12,6 +12,7 @@ import  { VisitAPI }  from '@/api/visit.js'
 
 const { dialogVisibleLogin } = useDialog()
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const registerVisible = ref(false)
@@ -146,7 +147,8 @@ const switchToRegister = () => {
 
   <header-nav />
   <div class="contentContainer">
-    <div class="content"><router-view /></div>
+    <!-- 按 path 重新挂载，使每次切换页面时内容整体渐显 -->
+    <div :key="route.path" class="content pageFadeIn"><router-view /></div>
   </div>
   <footer-content />
 </template>
@@ -154,6 +156,15 @@ const switchToRegister = () => {
 <style scoped>
 .contentContainer { width: 100%; }
 .content { margin: 0 auto; width: min(100%, 1920px); min-height: calc(100vh - 4em); }
+
+/* 页面内容渐显：挂载（首次加载 / 切换路由）时整体淡入 */
+.pageFadeIn {
+  animation: pageFadeIn 0.6s ease both;
+}
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
 /* 大屏（2K/4K）流式放大：仅 >1920 生效，1921px 处 0.83vw≈16px 保证边界连续无跳变 */
 @media (min-width: 1921px) {
