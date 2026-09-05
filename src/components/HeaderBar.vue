@@ -7,6 +7,7 @@ import { logoutAPI } from '@/api/user-login'
 import http from '@/api/http'
 import { ElMessage } from 'element-plus'
 import { Icon } from '@iconify/vue'
+import { BACKEND_ENABLED } from '@/config/features'
 
 const { dialogVisibleLogin } = useDialog()
 const { dialogVisibleFeedback } = useDialog()
@@ -44,10 +45,11 @@ const NAV_ITEMS: NavItem[] = [
     label: '集训队',
     path: '/xcpc',
     children: [
-      { label: '集训队主页', path: '/xcpc' },
+      { label: '集训队简介', path: '/xcpc' },
       { label: 'XCPC 是什么？', path: '/xcpc/introdution' },
       { label: '加入我们', path: '/xcpc/join-us' },
-      { label: '赛事报名', path: '/xcpc/competitionSignUp' },
+      // 赛事报名页挂载即请求后端，纯前端模式下隐藏入口
+      ...(BACKEND_ENABLED ? [{ label: '赛事报名', path: '/xcpc/competitionSignUp' }] : []),
     ],
   },
   {
@@ -56,10 +58,11 @@ const NAV_ITEMS: NavItem[] = [
     children: [
       { label: '技术组简介', path: '/tech/introduction' },
       { label: '加入我们', path: '/tech/contuctUs' },
-      { label: '招新面试申请', path: '/tech/interview' },
+      // { label: '招新面试申请', path: '/tech/interview' },
     ],
   },
-  { label: '文章', path: '/articles' },
+  // 文章列表页数据全部来自后端，纯前端模式下隐藏入口
+  ...(BACKEND_ENABLED ? [{ label: '文章', path: '/articles' }] : []),
 ]
 
 function isActive(item: NavItem) {
@@ -145,7 +148,7 @@ const formatDate = (isoString: string) => {
 
 <template>
   <div class="headerBarContainer">
-    <div class="headerBar">d
+    <div class="headerBar">
       <div class="mobile-menu-btn" @click="isMobileMenuOpen = !isMobileMenuOpen">
         <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
           <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -185,7 +188,8 @@ const formatDate = (isoString: string) => {
         </template>
       </nav>
 
-      <div class="headerActions">
+      <!-- 通知/意见反馈/登录均依赖后端，纯前端模式下整体隐藏 -->
+      <div class="headerActions" v-if="BACKEND_ENABLED">
         <button class="textLink" type="button" @click="openNoticeDialog">通知</button>
         <button class="textLink" type="button" @click="expressionFeedback">意见反馈</button>
         <button v-if="!userStore.isLoggedIn" type="button" class="pillBtn" @click="expression">登录</button>
@@ -208,18 +212,18 @@ const formatDate = (isoString: string) => {
           <el-menu-item index="/">首页</el-menu-item>
           <el-sub-menu index="/xcpc">
             <template #title>集训队</template>
-            <el-menu-item index="/xcpc">集训队主页</el-menu-item>
+            <el-menu-item index="/xcpc">集训队简介</el-menu-item>
             <el-menu-item index="/xcpc/introdution">XCPC 是什么？</el-menu-item>
             <el-menu-item index="/xcpc/join-us">加入我们</el-menu-item>
-            <el-menu-item index="/xcpc/competitionSignUp">赛事报名</el-menu-item>
+            <el-menu-item v-if="BACKEND_ENABLED" index="/xcpc/competitionSignUp">赛事报名</el-menu-item>
           </el-sub-menu>
           <el-sub-menu index="/tech">
             <template #title>技术组</template>
             <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
             <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
-            <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
+            <!-- <el-menu-item index="/tech/interview">招新面试申请</el-menu-item> -->
           </el-sub-menu>
-          <el-menu-item index="/articles">文章</el-menu-item>
+          <el-menu-item v-if="BACKEND_ENABLED" index="/articles">文章</el-menu-item>
         </el-menu>
       </div>
     </el-collapse-transition>
