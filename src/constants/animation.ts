@@ -13,7 +13,7 @@ export const DURATION_LONG = 1
 export const DURATION_EXTRA_LONG = 2.5
 
 /** 延迟：与 duration 同比例缩放，避免节奏失调 */
-export const DELAY_INITIAL = 3
+export const DELAY_INITIAL = 0.2
 export const DELAY_MEDIAN = 0.3
 export const DELAY_SHORT = 0.1
 

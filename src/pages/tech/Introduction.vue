@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -15,7 +14,6 @@ const goToNextPage = () => {
   router.push('/tech/contuctUs')
 }
 
-const globalLoading = useGlobalLoading()
 
 function infoSectionAni(ele: HTMLDivElement | null) {
   const tl = gsap.timeline()

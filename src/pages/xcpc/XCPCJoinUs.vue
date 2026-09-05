@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 
-const globalLoading = useGlobalLoading()
 </script>
 
 <template>

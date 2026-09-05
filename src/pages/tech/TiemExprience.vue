@@ -1,13 +1,11 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
 
-const globalLoading = useGlobalLoading()
 
 function infoSectionAni(ele: HTMLDivElement | null) {
   const tl = gsap.timeline()

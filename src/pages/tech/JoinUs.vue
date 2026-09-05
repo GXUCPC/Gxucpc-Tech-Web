@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { onMounted, onUnmounted, ref } from 'vue'
 
-const globalLoading = useGlobalLoading()
 
 // ==========================================
 // 1. 滚动动画指令：v-slide-show
