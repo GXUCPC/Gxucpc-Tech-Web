@@ -24,6 +24,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { HERO_BG_ALGO, HERO_BG_DEV } from '@/config/heroBg'
 import { HERO_BG_BLUR, HERO_PANEL_BACKDROP_BLUR } from '@/constants/hero'
+import { BACKEND_ENABLED } from '@/config/features'
 import { h, onMounted, useTemplateRef, ref, type Ref, type VNode } from 'vue'
 
 const heroBgBlur = `${HERO_BG_BLUR}px`
@@ -153,9 +154,12 @@ onMounted(() => {
       onEnter: (self) => ele.classList.add('show'),
     })
   })
-  ArticleAPI.getLatestArticles(4).then((list) => {
-    latestArticles.value = list
-  })
+  if (BACKEND_ENABLED) {
+    // 纯前端模式下不请求后端，「最新文章」区块一并隐藏
+    ArticleAPI.getLatestArticles(4).then((list) => {
+      latestArticles.value = list
+    })
+  }
 })
 
 const mainTeamList: {
@@ -736,8 +740,10 @@ function endTeamDrag() {
     </div>
   </ani-ele>
 
-  <h2 class="subtitle">最新文章</h2>
+  <!-- 最新文章依赖后端接口，纯前端模式下隐藏 -->
+  <h2 v-if="BACKEND_ENABLED" class="subtitle">最新文章</h2>
   <ani-ele
+    v-if="BACKEND_ENABLED"
     class="articleListGridHome"
     :scroll-in-ani="
       (ele) => {
@@ -760,7 +766,7 @@ function endTeamDrag() {
     />
   </ani-ele>
 
-  <div class="articleMoreLink" v-if="latestArticles.length">
+  <div class="articleMoreLink" v-if="BACKEND_ENABLED && latestArticles.length">
     <router-link to="/articles" class="learnMoreBtn">
       查看更多
       <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
