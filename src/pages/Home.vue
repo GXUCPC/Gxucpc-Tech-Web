@@ -224,29 +224,17 @@ const mainTeamList: {
 
 // 命名抛弃大脑
 const studentList: PeopleData[] = [
-  {
-    avatar: '/img/avatar/lzx.jpg',
-    comment: '大爱详哥',
-    info: '保研天津大学',
-    name: '李周详',
-  },
+  { avatar: '/img/avatar/lzx.jpg', comment: '大爱详哥', info: '保研天津大学',  name: '李周详' },
   { avatar: '/img/avatar/sxy.jpg', info: '保研东南大学', name: '石新阳' },
-  { info: '考研浙江大学', name: '陈松盛' },
-  { info: '前往中国工程物理研究院', name: '武成志' },
-  { info: '保研至中国科学院大学', name: '李韵锋' },
-  { info: '保研电子科技大学', name: '龙泽宇' },
+  { avatar: '/img/avatar/lyf.jpg', info: '保研至中国科学院大学', name: '李韵锋' },
+  { avatar: '/img/avatar/lzy.jpg', info: '保研电子科技大学', name: '龙泽宇' },
 ]
 const workerList: PeopleData[] = [
-  {
-    avatar: '/img/avatar/jmr.jpg',
-    comment: 'B推搜熟人',
-    info: '哔哩哔哩Offer',
-    name: '金珉瑞',
-  },
+  { avatar: '/img/avatar/jmr.jpg',comment: 'B推搜熟人',info: '哔哩哔哩推搜中台', name: '金珉瑞',},
   { avatar: '/img/avatar/sct.jpg', info: '小马智行Offer', name: '孙城涛' },
   { avatar: '/img/avatar/wzh.jpg', info: '腾讯实习优秀个人、腾讯质量效应部门Offer', comment: '韦老师', name: '韦祖豪' },
   { avatar: '/img/avatar/wlm.jpg', info: '字节运维Offer', comment: '「电话告警」', name: '王利明' },
-  { avatar: '/img/avatar/cjl.jpg', info: 'Offer', name: '陈佳林' },
+  { avatar: '/img/avatar/cjl.jpg', info: '拼多多Offer', name: '陈佳林' },
 ]
 
 
