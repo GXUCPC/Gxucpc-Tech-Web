@@ -9,6 +9,7 @@ import { onMounted } from 'vue'
 import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
 import LoginWindow from '@/components/LoginWindow.vue' // 引入登录组件
 import  { VisitAPI }  from '@/api/visit.js'
+import { BACKEND_ENABLED } from '@/config/features'
 
 const { dialogVisibleLogin } = useDialog()
 const router = useRouter()
@@ -23,6 +24,7 @@ onMounted(() => {
 })
 
 function recordVisit() {
+  if (!BACKEND_ENABLED) return // 纯前端模式：跳过埋点上报
   const visitData = {
     time: new Date().toISOString(),
   }
@@ -51,6 +53,7 @@ const registerData = ref({
 
 const baseUrl = 'http://localhost:9090'
 const checkLogin = async () => {
+  if (!BACKEND_ENABLED) return // 纯前端模式：跳过登录态检查
   try {
     const response = await fetch(`${baseUrl}/user/info`, {
       method: 'GET',
@@ -150,7 +153,8 @@ const switchToRegister = () => {
     <!-- 按 path 重新挂载，使每次切换页面时内容整体渐显 -->
     <div :key="route.path" class="content pageFadeIn"><router-view /></div>
   </div>
-  <footer-content />
+  <!-- 纯前端模式（BACKEND_ENABLED=false）下隐藏 footer 及 Giscus 留言区 -->
+  <footer-content v-if="BACKEND_ENABLED" />
 </template>
 
 <style scoped>
