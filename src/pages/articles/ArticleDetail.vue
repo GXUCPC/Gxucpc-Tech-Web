@@ -357,13 +357,14 @@ watch(article, () => {
   a { color: var(--el-color-primary); }
 }
 
-@media (max-width: 1100px) {
+/* 屏幕变窄时隐藏目录（统一断点 ≤1024） */
+@include touch {
   .sidebar-container { display: none; }
   .page-layout { gap: 0; }
 }
 
-@media (max-width: 768px) {
-  .articleDetailPage { padding: 1.5em 15px 3em; }
+@include mobile {
+  .articleDetailPage { padding: 1.5em var(--page-padding-x) 3em; }
   .articleTitle { font-size: 1.6em; }
   .article-body { font-size: 0.95em; }
 }

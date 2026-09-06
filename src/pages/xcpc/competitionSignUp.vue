@@ -250,7 +250,7 @@ const calculateDuration = (startTime, endTime) => {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* 核心暗黑主题配色 */
 :root {
   --bg-dark: #141414;
@@ -494,5 +494,50 @@ const calculateDuration = (startTime, endTime) => {
 }
 .submit-btn:hover {
   background: var(--accent-gold-hover, #bda247);
+}
+
+/* ===== 响应式（本页原先无任何断点） ===== */
+@include touch {
+  .competition-page {
+    padding: 28px 5%;
+  }
+}
+
+@include mobile {
+  .competition-page {
+    padding: 20px var(--page-padding-x);
+  }
+
+  /* 内容/侧栏纵向堆叠（侧栏恢复启用后不再挤压正文） */
+  .content-layout {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .side-nav {
+    position: static;
+    width: auto;
+    border-left: none;
+    border-top: 2px solid var(--border-dark, #333);
+    border-right: none;
+    padding: 12px 0 0;
+  }
+
+  .main-title {
+    font-size: 1.8rem;
+  }
+
+  .comp-meta {
+    gap: 10px 16px;
+    font-size: 0.85rem;
+  }
+
+  .comp-title {
+    font-size: 1.4rem;
+  }
+
+  .modal-content {
+    padding: 20px;
+  }
 }
 </style>

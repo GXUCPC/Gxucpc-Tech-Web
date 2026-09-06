@@ -114,15 +114,17 @@ onMounted(() => {
   margin-top: 3em;
 }
 
-@media (max-width: 1024px) {
+/* 平板：两列 */
+@include touch {
   .articleListGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (max-width: 768px) {
+/* 手机：单列 */
+@include mobile {
   .articleListPage {
-    padding: 1.5em 15px 3em;
+    padding: 1.5em var(--page-padding-x) 3em;
   }
 
   .articleListGrid {

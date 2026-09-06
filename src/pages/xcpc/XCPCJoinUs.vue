@@ -88,4 +88,15 @@
   border-top: 1px solid #374151;
   margin: 40px 0;
 }
+
+/* 手机端适配 */
+@include mobile {
+  .page-layout {
+    padding: 24px var(--page-padding-x);
+  }
+
+  .subtitle {
+    font-size: 2em;
+  }
+}
 </style>

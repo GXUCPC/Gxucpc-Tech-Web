@@ -101,7 +101,7 @@ onMounted(() => {
     autoAlpha: 0,
     stagger: 1,
   })
-    .from(headTextEle.querySelector('.item2'), {
+    .from(headTextEle.querySelector('.introTitle'), {
       duration: 0.5,
       yPercent: 100,
       autoAlpha: 0,
@@ -127,32 +127,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
+  <section class="headText introHead" ref="headText">
 
-      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+      <div class="introTitle">
          <Icon
           icon="pajamas:api"
-          style="
-            color: rgba(227, 47, 47, 0.5);
-            position: absolute;
-            transform: scale(4);
-            left: 0%;
-            bottom: 60%;
-            z-index: -1;
-          "
+          class="introIcon introIconRed"
         />
          <Icon
           icon="material-symbols:code-blocks-rounded"
-          style="
-            color: rgba(47, 174, 227, 0.5);
-            position: absolute;
-            transform: scale(3) rotate(35deg);
-            left: 55%;
-            top: 50%;
-            z-index: -1;
-          "
+          class="introIcon introIconBlue"
         />
-        <p style="margin-bottom: 1px; ">广西大学ICPC集训队技术组</p>
+        <p>广西大学ICPC集训队技术组</p>
       </div>
 
   </section>
@@ -185,44 +171,68 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-.headText {
-  min-height: 50vh;
-  font-size: 2em;
-  text-align: right;
-  word-spacing: 1em;
-  padding: 10%;
-  user-select: none;
+/* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
+   此处仅保留页面私有差异 */
 
-  .item1 {
-    height: 5em;
-  }
-  .item2 {
-    height: 2em;
-  }
+/* 页面标题块（原为内联 width:1000px，手机端必然溢出，改流式 min()） */
+.introHead {
+  text-align: left;
+  min-height: 20vh;
+  margin-left: 20px;
+  padding: 8%;
+}
 
-  .keyword {
-    font-size: 3em;
+.introTitle {
+  position: relative;
+  width: min(1000px, 100%);
+  min-height: 60px;
+  font-size: 50px;
+
+  p {
+    margin-bottom: 1px;
   }
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
+.introIcon {
+  position: absolute;
+  z-index: -1;
+}
+.introIconRed {
+  color: rgba(227, 47, 47, 0.5);
+  transform: scale(4);
+  left: 0;
+  bottom: 60%;
+}
+.introIconBlue {
+  color: rgba(47, 174, 227, 0.5);
+  transform: scale(3) rotate(35deg);
+  left: 55%;
+  top: 50%;
+}
 
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: white;
+/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
+.infoContainer .line > div {
+  background-color: white;
+}
+
+/* ===== 手机端适配 ===== */
+@include mobile {
+  .introHead {
+    padding: 10% 5%;
+    margin-left: 0;
   }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
 
-    .text2 * {
-      color: gray;
-    }
+  .introTitle {
+    font-size: 28px;
+  }
+
+  .introIconRed {
+    transform: scale(2.5);
+  }
+
+  .introIconBlue {
+    transform: scale(2) rotate(35deg);
+    left: 70%;
   }
 }
 </style>

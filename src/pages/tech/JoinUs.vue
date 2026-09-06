@@ -361,12 +361,30 @@ const scrollToSection = (id: string) => {
   }
 }
 
-@media (max-width: 1100px) {
+/* 响应式处理：屏幕变窄时隐藏目录（统一断点 ≤1024） */
+@include touch {
   .sidebar-container {
     display: none;
   }
   .page-layout {
     gap: 0;
+  }
+}
+
+/* 手机端：标题/正文字号收敛，避免 2.5em 标题折行局促 */
+@include mobile {
+  .page-layout {
+    padding: 24px var(--page-padding-x);
+  }
+
+  .subtitle {
+    font-size: 1.8em;
+  }
+
+  .paragraph,
+  .tech-matrix td,
+  .value-list li {
+    font-size: 16px;
   }
 }
 </style>
