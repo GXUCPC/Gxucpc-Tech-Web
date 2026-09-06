@@ -147,8 +147,7 @@ const handleClose = () => {
 
 .feedback-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  inset: 0;
   z-index: 9999; /* 保证最顶层 */
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);       /* 背景模糊 */
@@ -160,8 +159,7 @@ const handleClose = () => {
 
 /* 2. 弹窗主体 (磨砂玻璃) */
 .feedback-modal {
-  width: 450px;
-  max-width: 90%;
+  width: min(450px, calc(100vw - 32px));
 
   background: rgba(20, 20, 20, 0.75);
   backdrop-filter: blur(20px);

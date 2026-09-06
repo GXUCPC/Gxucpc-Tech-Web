@@ -255,14 +255,14 @@ const expressionFeedback = () => {
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 /* ===== 顶栏：参考 anthropic.com —— 简洁文字导航 + 描边胶囊按钮 =====
    载入时从视口上方划入 */
 .headerBarContainer {
   position: sticky;
   top: 0;
   width: 100%;
-  z-index: 99;
+  z-index: $z-header;
   background: rgba(17, 17, 17, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
@@ -281,8 +281,8 @@ const expressionFeedback = () => {
 
 .headerBar {
   padding: 0 2.5em;
-  width: min(100%, 1920px);
-  height: 64px;
+  width: min(100%, var(--content-max));
+  height: var(--header-h);
   position: relative;
   margin: 0 auto;
   display: flex;
@@ -368,7 +368,7 @@ const expressionFeedback = () => {
   visibility: hidden;
   transition: opacity var(--duration-short) ease, transform var(--duration-short) ease,
     visibility var(--duration-short);
-  z-index: 100;
+  z-index: $z-header-dropdown;
 }
 
 @media (hover: hover) {
@@ -465,7 +465,7 @@ const expressionFeedback = () => {
 }
 .mobile-dropdown {
   position: absolute;
-  top: 64px;
+  top: var(--header-h);
   left: 0;
   width: 100%;
   background: rgba(17, 17, 17, 0.95);
@@ -479,8 +479,8 @@ const expressionFeedback = () => {
   background: transparent;
 }
 
-/* --- 响应式断点：当屏幕小于 768px 时 --- */
-@media (max-width: 768px) {
+/* --- 响应式断点：手机（≤768px） --- */
+@include mobile {
   .desktopNav { display: none; } /* 隐藏电脑端导航 */
 
   .mobile-menu-btn {
@@ -488,16 +488,26 @@ const expressionFeedback = () => {
     align-items: center;
   } /* 显示汉堡按钮 */
 
-  .brand { display: none; } /* 手机端隐藏站名，与原版一致 */
+  /* 品牌名保留缩小版，顶栏仍有站点标识 */
+  .brand {
+    font-size: 0.85em;
+    letter-spacing: 0;
+  }
 
   .headerBar {
     padding: 0 15px; /* 手机端两边边距缩短，留出更多空间 */
     gap: 0.75em;
   }
+
+  /* 低端机降档背景模糊，滚动更顺 */
+  .headerBarContainer {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
 }
 
 /* 大屏对齐：与正文内容列同宽，避免导航与内容错位 */
-@media (min-width: 1921px) {
+@include wide {
   .headerBar { width: min(92vw, 2560px); }
 }
 

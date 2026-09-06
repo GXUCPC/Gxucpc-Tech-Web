@@ -68,7 +68,7 @@ const year = new Date().getFullYear()
   -->
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .footerBar {
   width: 100%;
   margin-top: 4em;
@@ -77,6 +77,10 @@ const year = new Date().getFullYear()
   backdrop-filter: blur(20px);
   padding: 3em 2.5em 2em;
   box-sizing: border-box;
+
+  @include mobile {
+    padding: 2em var(--page-padding-x) 1.5em;
+  }
 }
 
 .footerInner {
@@ -85,6 +89,10 @@ const year = new Date().getFullYear()
   display: flex;
   flex-wrap: wrap;
   gap: 3em 6em;
+
+  @include mobile {
+    gap: 2em 1.5em;
+  }
 }
 
 .footerBrand {

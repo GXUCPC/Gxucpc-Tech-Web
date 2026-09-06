@@ -934,60 +934,7 @@ HERO_PANELS.forEach((panel, i) => {
   margin-top: 4em;
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
-
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: var(--el-color-primary);
-  }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
-
-    .text2 * {
-      color: gray;
-    }
-  }
-}
-
-// 标题样式
-.title {
-  margin: 3em auto;
-  padding: 0.5em 1em;
-  font-size: 2.5em;
-  width: fit-content;
-  position: relative;
-
-  &::before,
-  &::after {
-    content: '';
-    height: 5px;
-    width: 0%;
-    background-color: var(--el-color-primary);
-    position: absolute;
-    border-radius: 5px;
-    transition: var(--duration-long) ease-in-out;
-  }
-  &.show::before,
-  &.show::after {
-    width: 100%;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-  }
-
-  &::after {
-    bottom: 0;
-    right: 0;
-  }
-}
+/* .infoContainer / .title 全局类样式由 styles/global.scss 提供，此处不再重复 */
 
 // 副标题样式
 .subtitle {
@@ -1178,20 +1125,9 @@ HERO_PANELS.forEach((panel, i) => {
 }
 
 /* ====================================
-   全站移动端（手机直屏）终极适配方案
+   首页移动端适配（全局类 .title/.infoContainer 的响应式见 styles/global.scss）
    ==================================== */
-@media (max-width: 768px) {
-  /* 1. 全局基础排版缩放 */
-  body, html {
-    overflow-x: hidden; /* 🔑 绝对禁止横向滚动条出现 */
-  }
-
-  .title {
-    font-size: 1.8em; /* 缩小主标题 */
-    margin: 1.5em auto;
-    text-align: center;
-  }
-
+@include mobile {
   .subtitle {
     font-size: 1.5em; /* 缩小副标题 */
     margin: 1.5em auto;
@@ -1275,25 +1211,6 @@ HERO_PANELS.forEach((panel, i) => {
     font-size: 0.9em;
     margin-bottom: 1em;
     max-width: 100%;
-  }
-
-  /* 3. 简介区域 (ICPC & 技术组 Info) 抢救 */
-  .infoContainer {
-    flex-direction: column; /* 🔑 横排改竖排 */
-    max-width: 100%;
-    margin-left: 15px !important;
-    margin-right: 15px !important;
-    font-size: 1.1em;
-
-    // 技术组原本是右对齐，手机端强制全部左对齐
-    &.icpc-tech { text-align: left !important; }
-    &.icpc-tech .infoBrief { flex-direction: row !important; }
-
-    .text3 {
-      font-size: 0.9em;
-      margin-left: 0 !important;
-      text-align: justify !important; /* 两端对齐，阅读更舒适 */
-    }
   }
 
   /* 4. 收益卡片网格 (加入集训队/技术组获得什么) 移动端 */

@@ -229,8 +229,7 @@ const switchToLogin = () => {
 <style scoped lang="scss">
 .gh-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  inset: 0;
   z-index: 9999;
   /* 关键修复：纯黑 60% 透明度 */
   background-color: rgba(0, 0, 0, 0.6);
@@ -256,8 +255,11 @@ const switchToLogin = () => {
   border-radius: 8px; /* 外部圆角，干净整洁 */
   padding: 24px; /* 增加大容器内边距，内容不贴边 */
 
+  @include mobile {
+    padding: 16px;
+    max-width: calc(100vw - 32px);
+  }
 }
-.gh-register-modal .gh-auth-form-card { width: 450px; max-width: 90vw; }
 
 /* 3. 头部：Logo 和标题 */
 .gh-header {
@@ -277,7 +279,7 @@ const switchToLogin = () => {
 
 /* 4. 核心登录卡片：提亮底板，拉开和遮罩的对比度 */
 .gh-auth-form-card {
-  width: 340px;
+  width: min(340px, calc(100vw - 32px));
   /* 关键修复：改成不透明的中性深灰，明显的小框背景就出来了 */
   background-color: rgba(52, 52, 52, 0.5);
   border: 1px solid rgba(79, 74, 74, 0.2); /* 边框稍微提亮，增加立体感 */
@@ -286,7 +288,7 @@ const switchToLogin = () => {
   /* 增强阴影，把卡片从背景里“托”起来 */
   //box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
 }
-.gh-register-modal .gh-auth-form-card { width: 450px; max-width: 90vw; }
+.gh-register-modal .gh-auth-form-card { width: min(450px, calc(100vw - 32px)); }
 /* 5. 表单内部控件 */
 .gh-form-group { margin-bottom: 16px; }
 .gh-label {
@@ -350,7 +352,7 @@ const switchToLogin = () => {
   padding: 0 !important; /* 关键修正：去内边距 */
   margin-bottom: 0 !important;
 
-  width: 340px;
+  width: min(340px, calc(100vw - 32px));
   text-align: center;
   font-size: 14px;
   font-weight: 300;
@@ -358,5 +360,10 @@ const switchToLogin = () => {
   border-top: 1px solid rgba(255, 255, 255, 0.1); /* 关键新增：底部上方分割线 */
   padding-top: 20px;
 }
-.gh-or-signin { width: 450px; max-width: 90vw; }
+.gh-or-signin { width: min(450px, calc(100vw - 32px)); }
+
+/* 手机端：注册标题缩小，避免换行溢出 */
+@include mobile {
+  .gh-register-modal .gh-title { font-size: 22px; }
+}
 </style>

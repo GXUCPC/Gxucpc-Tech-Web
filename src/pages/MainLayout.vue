@@ -158,9 +158,9 @@ const userStore = useUserStore()
   <footer-content />
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .contentContainer { width: 100%; }
-.content { margin: 0 auto; width: min(100%, 1920px); min-height: calc(100vh - 4em); }
+.content { margin: 0 auto; width: min(100%, var(--content-max)); min-height: calc(100vh - 4em); }
 
 /* 页面内容渐显：挂载（首次加载 / 切换路由）时整体淡入 */
 .pageFadeIn {
@@ -172,7 +172,7 @@ const userStore = useUserStore()
 }
 
 /* 大屏（2K/4K）流式放大：仅 >1920 生效，1921px 处 0.83vw≈16px 保证边界连续无跳变 */
-@media (min-width: 1921px) {
+@include wide {
   .content {
     width: min(92vw, 2560px);
     font-size: clamp(16px, 0.83vw, 24px);
