@@ -287,47 +287,14 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/store/mixins.scss' as *;
+/* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
+   此处仅保留页面私有差异 */
 
-.headText {
-  min-height: 50vh;
-  font-size: 2em;
-  text-align: right;
-  word-spacing: 1em;
-  padding: 10%;
-  user-select: none;
-
-  .item1 {
-    height: 5em;
-  }
-  .item2 {
-    height: 2em;
-  }
-
-
-  .keyword {
-    font-size: 3em;
-  }
+/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
+.infoContainer .line > div {
+  background-color: white;
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
-
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: white;
-  }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
-
-
-  }
-}
 // 加入我们按钮
 .learnMoreBtn {
   /* 1. 字体调大 */
@@ -352,8 +319,12 @@ onMounted(() => {
     //border-color: #93c5fd;
     transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
-}
 
-/* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
-@include inject-mobile-styles;
+  /* 手机端按钮居中，不再依赖桌面端的右推布局 */
+  @include mobile {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+  }
+}
 </style>

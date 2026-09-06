@@ -1,0 +1,248 @@
+/* ============================================================
+   全局样式（原 src/store/globalStyle.css 迁移）
+   全局类的响应式基线集中在文件末尾；组件私有类的响应式写在各组件 scoped 内
+   ============================================================ */
+
+/* 禁止横向滚动条：100vw 等可能导致页面略宽于视口 */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* ===== 运行时 Design Token =====
+ * 动画时长：统一维护便于全局调速，供 GSAP 使用的数值见 src/constants/animation.ts
+ * --page-padding-x：手机 15px → 平板流式过渡 → 大屏 160px（原先 10rem/15px 两级跳的中间态）
+ */
+:root {
+  --duration-short: 0.25s;
+  --duration-median: 0.5s;
+  --duration-long: 1s;
+  --duration-extra-long: 2.5s;
+
+  --page-padding-x: clamp(24px, 10vw, 160px);
+
+  /* 内容列上限（MainLayout / HeaderBar 同源） */
+  --content-max: 1920px;
+
+  /* 顶栏高度 */
+  --header-h: 64px;
+}
+
+@include mobile {
+  :root {
+    --page-padding-x: 15px;
+  }
+}
+
+/* 了解更多按钮 */
+.learnMoreBtn {
+  appearance: none;
+  background-color: transparent;
+  font-size: 0.8em;
+  border: none;
+  cursor: pointer;
+  border-bottom: 1px solid var(--el-color-primary);
+  padding: 0.5em 1em;
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  gap: 5px;
+  transition: var(--duration-short) ease-in-out;
+}
+
+.learnMoreBtn:hover {
+  gap: 10px;
+  font-weight: bold;
+  color: var(--el-color-primary);
+}
+
+.learnMoreBtn::before {
+  border-radius: 5px;
+  transition: var(--duration-short) ease-in-out;
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 5px;
+  background-color: var(--el-color-primary);
+  bottom: -2.5px;
+  right: 0;
+}
+
+.learnMoreBtn:hover::before {
+  left: 0;
+  width: 100%;
+}
+
+/* 头部文字区域 */
+.headText {
+  min-height: 50vh;
+  font-size: 2em;
+  text-align: right;
+  word-spacing: 1em;
+  padding: 10%;
+  user-select: none;
+}
+
+.headText .item1 {
+  height: 5em;
+}
+
+.headText .item2 {
+  height: 2em;
+}
+
+.headText .keyword {
+  font-size: 3em;
+}
+
+/* 信息容器 */
+.infoContainer {
+  display: flex;
+  gap: 20px;
+  max-width: 60vw;
+  font-size: 1.4em;
+}
+
+.infoContainer .line > div {
+  width: 5px;
+  border-radius: 2.5px;
+  background-color: var(--el-color-primary);
+}
+
+.infoContainer .infoBrief {
+  display: flex;
+  gap: 20px;
+}
+
+.infoContainer .infoBrief .text2 * {
+  color: gray;
+}
+
+/* 标题样式 */
+.title {
+  margin: 3em auto;
+  padding: 0.5em 1em;
+  font-size: 2.5em;
+  width: fit-content;
+  position: relative;
+}
+
+.title::before,
+.title::after {
+  content: '';
+  height: 5px;
+  width: 0%;
+  background-color: var(--el-color-primary);
+  position: absolute;
+  border-radius: 5px;
+  transition: var(--duration-long) ease-in-out;
+}
+
+.title.show::before,
+.title.show::after {
+  width: 100%;
+}
+
+.title::before {
+  top: 0;
+  left: 0;
+}
+
+.title::after {
+  bottom: 0;
+  right: 0;
+}
+
+li {
+  list-style: none;
+  font-weight: bold;
+  color: #8ab4dd; // 问答环节的 Q 设为蓝色，增加层次
+  margin-top: 1em;
+}
+
+.text3 {
+  font-size: 20px;
+  line-height: 1.8;
+  color: #d1d5db;
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   全局响应式基线（桌面优先渐进降级）
+   ≤1024 平板档为本次补齐的中间态；≤768 手机档沿用原移动端适配
+   ============================================================ */
+
+/* 平板 769–1024 */
+@include touch {
+  .infoContainer {
+    max-width: 100%;
+    /* 覆盖页面模板里的内联 margin（5% / 5em 等） */
+    margin-left: var(--page-padding-x) !important;
+    margin-right: var(--page-padding-x) !important;
+    font-size: 1.2em;
+  }
+
+  .title {
+    font-size: 2em;
+    margin: 2em auto;
+  }
+}
+
+/* 手机 ≤768 */
+@include mobile {
+  .title {
+    font-size: 1.8em;
+    margin: 1.5em auto;
+    text-align: center;
+  }
+
+  .headText {
+    text-align: center;
+    padding: 15% 5%;
+    font-size: 1.5em;
+    min-height: auto;
+
+    .item1 {
+      justify-content: center;
+      flex-wrap: wrap;
+      height: auto;
+    }
+
+    .keyword {
+      font-size: 2em;
+
+      /* 调整背景图标位置，防止飞出屏幕 */
+      svg {
+        transform: scale(1.2) !important;
+        left: -10% !important;
+        right: auto !important;
+      }
+    }
+
+    .item3 {
+      margin: 0 auto;
+    }
+  }
+
+  /* 简介区域：横排改竖排 */
+  .infoContainer {
+    flex-direction: column;
+    max-width: 100%;
+    font-size: 1.1em;
+
+    /* 技术组原本右对齐，手机端统一左对齐 */
+    &.icpc-tech {
+      text-align: left !important;
+
+      .infoBrief {
+        flex-direction: row !important;
+      }
+    }
+
+    .text3 {
+      font-size: 0.9em;
+      margin-left: 0 !important;
+      text-align: justify !important; /* 两端对齐，阅读更舒适 */
+    }
+  }
+}

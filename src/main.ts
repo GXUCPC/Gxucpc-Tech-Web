@@ -1,5 +1,5 @@
 import './index.scss'
-import './store/globalStyle.css'
+import './styles/global.scss'
 
 import ElementPlus from 'element-plus'
 import { createPinia } from 'pinia'
