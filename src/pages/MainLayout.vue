@@ -154,8 +154,8 @@ const userStore = useUserStore()
     <!-- 按 path 重新挂载，使每次切换页面时内容整体渐显 -->
     <div :key="route.path" class="content pageFadeIn"><router-view /></div>
   </div>
-  <!-- 纯前端模式（BACKEND_ENABLED=false）下隐藏 footer 及 Giscus 留言区 -->
-  <footer-content v-if="BACKEND_ENABLED" />
+  <!-- footer 内容已改为纯前端静态信息（品牌/导航/QQ群），不依赖后端，恢复常显 -->
+  <footer-content />
 </template>
 
 <style scoped>

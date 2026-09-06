@@ -1,49 +1,152 @@
 <script setup lang="ts">
-import Giscus from '@giscus/vue';
+// ===== 纯前端模式：留言区（Giscus，第三方 GitHub Discussions）暂时不对外展示 =====
+// import Giscus from '@giscus/vue'
+import { Icon } from '@iconify/vue'
 
+// 站内导航：仅包含当前开放的板块（文章/赛事报名入口依赖后端，暂不展示）
+const quickLinks = [
+  { label: '首页', path: '/' },
+  { label: '集训队', path: '/xcpc' },
+  { label: '技术组', path: '/tech' },
+]
+
+const year = new Date().getFullYear()
 </script>
 
 <template>
-  <div class="footerContentContainer">
-    <div class="footerContent">
-      <el-text>This is Footer</el-text>
-    </div>
-  </div>
-  <div class="comment-container">
-      <h3 class="comment-title"> 留言区</h3>
+  <footer class="footerBar">
+    <div class="footerInner">
+      <div class="footerBrand">
+        <div class="footerLogo">广西大学 ICPC 集训队</div>
+        <p class="footerDesc">
+          以算法竞赛锤炼思维，以真实项目积累经验——集训队与技术组共同构成西大的算法竞赛与校园技术开发社区。
+        </p>
+      </div>
 
-      <Giscus
-        id="comments"
-        repo="susitata/Gxu-Tch-Web-discussion"
-        repoId="R_kgDOQuwzKA"
-        category="General"
-        categoryId="DIC_kwDOQuwzKM4C0O3T"
-        mapping="pathname"
-        strict="0"
-        reactionsEnabled="1"
-        emitMetadata="0"
-        inputPosition="top"
-        theme="transparent_dark" lang="zh-CN"
-        loading="lazy"
-      />
+      <div class="footerCol">
+        <div class="footerColTitle">站内导航</div>
+        <router-link v-for="link in quickLinks" :key="link.path" :to="link.path" class="footerLink">
+          {{ link.label }}
+        </router-link>
+      </div>
+
+      <div class="footerCol">
+        <div class="footerColTitle">加入我们</div>
+        <span class="footerText">
+          <Icon icon="mdi:account-group-outline" :inline="true" />
+          招新 QQ 群：1040465549
+        </span>
+        <span class="footerText">
+          <Icon icon="mdi:trophy-outline" :inline="true" />
+          ICPC / CCPC / 天梯赛 / 蓝桥杯
+        </span>
+      </div>
     </div>
+
+    <div class="footerMeta">© {{ year }} 广西大学 ICPC 集训队技术组 · 网站由技术组开发维护</div>
+  </footer>
+
+  <!-- 纯前端模式：留言区暂时不对外展示（恢复时取消注释并还原 Giscus 导入） -->
+  <!--
+  <div class="comment-container">
+    <h3 class="comment-title">留言区</h3>
+
+    <Giscus
+      id="comments"
+      repo="susitata/Gxu-Tch-Web-discussion"
+      repoId="R_kgDOQuwzKA"
+      category="General"
+      categoryId="DIC_kwDOQuwzKM4C0O3T"
+      mapping="pathname"
+      strict="0"
+      reactionsEnabled="1"
+      emitMetadata="0"
+      inputPosition="top"
+      theme="transparent_dark" lang="zh-CN"
+    />
+  </div>
+  -->
 </template>
 
 <style scoped>
-.footerContentContainer {
+.footerBar {
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  margin-top: 4em;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(20px);
-  padding: 50px;
+  padding: 3em 2.5em 2em;
+  box-sizing: border-box;
 }
-.footerContent {
+
+.footerInner {
   width: min(100%, 1092px);
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3em 6em;
 }
 
-/* --- 下面是新增的评论区样式 --- */
+.footerBrand {
+  max-width: 24em;
+}
+
+.footerLogo {
+  font-weight: 800;
+  font-size: 1.05em;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.footerDesc {
+  margin-top: 0.8em;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9em;
+  line-height: 1.7;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+
+.footerColTitle {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85em;
+  letter-spacing: 2px;
+  margin-bottom: 0.3em;
+}
+
+.footerLink {
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.92em;
+  transition: color var(--duration-short) ease;
+}
+
+.footerLink:hover {
+  color: #fff;
+}
+
+.footerText {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92em;
+}
+
+.footerMeta {
+  width: min(100%, 1092px);
+  margin: 2.5em auto 0;
+  padding-top: 1.5em;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8em;
+}
+
+/* --- 评论区样式 --- */
 
 .comment-container {
   width: 90%;
