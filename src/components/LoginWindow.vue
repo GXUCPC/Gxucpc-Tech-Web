@@ -5,8 +5,9 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/store/user'
 import { gsap } from 'gsap'
 import type { LoginForm, RegisterForm } from '@/api/user-login'
-import { loginAPI, registerAPI, sendCodeAPI } from '@/api/user-login'
-import http from '@/api/http'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { loginAPI, registerAPI, sendCodeAPI } from '@/api/user-login'
+// import http from '@/api/http'
 
 // 获取全局弹窗状态
 const { dialogVisibleLogin } = useDialog()
@@ -86,64 +87,64 @@ const switchToLogin = () => {
   dialogVisibleLogin.value = true
 }
 
-// === 业务接口逻辑 ===
-const checkLogin = async () => {
-  try {
-    const res = await http.get('/user/info')
-    if (res.code === 200) userStore.setUser(res.data)
-  } catch (e) {
-    userStore.logout()
-  }
-}
+// // === 业务接口逻辑 ===
+// const checkLogin = async () => {
+//   try {
+//     const res = await http.get('/user/info')
+//     if (res.code === 200) userStore.setUser(res.data)
+//   } catch (e) {
+//     userStore.logout()
+//   }
+// }
 
-onMounted(() => checkLogin())
+// onMounted(() => checkLogin())
 
-const login = async () => {
-  try {
-    const response = await loginAPI(loginData.value)
-    if (response.code === 200) {
-      userStore.setUser(response.data)
-      closeLogin()
-      alert('登录成功！')
-      router.push('/')
-    }
-    else {
-      alert('登录失败: ' + (response.message || '账号或密码错误'))
-    }
-  }
-  catch(error: any) {
-    alert('网络错误，请检查后端是否启动：' + error.message)
-  }
-}
+// const login = async () => {
+//   try {
+//     const response = await loginAPI(loginData.value)
+//     if (response.code === 200) {
+//       userStore.setUser(response.data)
+//       closeLogin()
+//       alert('登录成功！')
+//       router.push('/')
+//     }
+//     else {
+//       alert('登录失败: ' + (response.message || '账号或密码错误'))
+//     }
+//   }
+//   catch(error: any) {
+//     alert('网络错误，请检查后端是否启动：' + error.message)
+//   }
+// }
 
-const handleRegister = async () => {
-  try {
-    const response = await registerAPI(registerData.value)
-    if (response.code === 200) {
-      alert('注册成功，请登录！')
-      switchToLogin()
-    }
-    else {
-      alert('注册失败：' + response.message)
-    }
-  } catch (error: unknown) {
-    alert('注册请求失败：' + (error instanceof Error ? error.message : '未知错误'))
-  }
-}
-
-const sendCode = async () => {
-  try {
-    const response = await sendCodeAPI(registerData.value)
-    if (response.code === 200) {
-      alert('验证码已发送')
-    }
-    else {
-      alert('发送失败：' + response.message)
-    }
-  } catch (error: unknown) {
-    alert('发送请求失败：' + (error instanceof Error ? error.message : '未知错误'))
-  }
-}
+// const handleRegister = async () => {
+//   try {
+//     const response = await registerAPI(registerData.value)
+//     if (response.code === 200) {
+//       alert('注册成功，请登录！')
+//       switchToLogin()
+//     }
+//     else {
+//       alert('注册失败：' + response.message)
+//     }
+//   } catch (error: unknown) {
+//     alert('注册请求失败：' + (error instanceof Error ? error.message : '未知错误'))
+//   }
+// }
+// 
+// const sendCode = async () => {
+//   try {
+//     const response = await sendCodeAPI(registerData.value)
+//     if (response.code === 200) {
+//       alert('验证码已发送')
+//     }
+//     else {
+//       alert('发送失败：' + response.message)
+//     }
+//   } catch (error: unknown) {
+//     alert('发送请求失败：' + (error instanceof Error ? error.message : '未知错误'))
+//   }
+// }
 </script>
 
 <template>
