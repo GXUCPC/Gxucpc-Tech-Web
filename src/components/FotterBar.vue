@@ -34,7 +34,7 @@ const year = new Date().getFullYear()
         <div class="footerColTitle">加入我们</div>
         <span class="footerText">
           <Icon icon="mdi:account-group-outline" :inline="true" />
-          招新 QQ 群：1040465549
+          招新 QQ 群：977870023
         </span>
         <span class="footerText">
           <Icon icon="mdi:trophy-outline" :inline="true" />

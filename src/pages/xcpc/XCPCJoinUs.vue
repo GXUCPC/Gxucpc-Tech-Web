@@ -10,7 +10,7 @@
       <h1 class="main-title">广西大学 ICPC 集训队招新</h1>
 
       <p class="paragraph">
-        集训队每年招新只在 9 月初，可搜索加入 QQ 群（1040465549）了解更多。
+        集训队每年招新只在 9 月初，可搜索加入 QQ 群（977870023）了解更多。
       </p>
 
       <div class="divider"></div>

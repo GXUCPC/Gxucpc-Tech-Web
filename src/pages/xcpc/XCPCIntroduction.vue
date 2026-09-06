@@ -172,7 +172,7 @@ const scrollToSection = (id: string) => {
         <strong>编译器的选择：</strong>
         对于 XCPC 入门者而言，选择开发工具的原则是“轻量、稳定、易调试”。如果你追求开箱即用，小熊猫 C++ (Red Panda C++)
          是当下的最优选，它延续了 Dev-C++ 的极简风格，同时针对算法竞赛强化了代码补全、静态分析和一键调试功能。
-        其他IED如 VS Code, CLion 等配置过程较为复杂，可以作为日后的进阶选择，但对 XCPC 入门来说，小熊猫 C++
+        其他IDE如 VS Code, CLion 等配置过程较为复杂，可以作为日后的进阶选择，但对 XCPC 入门来说，小熊猫 C++
         绝对是完全够用的了。      </p>
 
 

@@ -148,8 +148,8 @@ const scrollToSection = (id: string) => {
         如果你对技术组感兴趣，欢迎通过以下方式联系我们投递实习简历：
       </p>
       <ul class="value-list" style="margin-bottom: 50px;" v-slide-show>
-        <li><strong>GitHub:</strong> ? (填写链接)</li>
-        <li><strong>Email:</strong> ? (填写邮箱)</li>
+        <li><strong>GitHub: <a href="https://github.com/E1aina2007/Gxutech-Recruitment" target="_blank" style="color: white;">https://github.com/E1aina2007/Gxutech-Recruitment</a></strong> </li>
+        <li><strong>QQ群:</strong> 977870023</li>
       </ul>
 
       <div style="height: 30vh"></div>
