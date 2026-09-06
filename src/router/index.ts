@@ -98,27 +98,29 @@ const router = createRouter({
         },
       ],
     },
-    {
-      path: '/admin',
-      component: () => import('@/pages/admin/AdminLayout.vue'),
-      children: [
-        {
-          name: 'adminNotice',
-          path: 'notice',
-          component: () => import('@/pages/admin/AdminNotice.vue'),
-        },
-        {
-          name: 'adminHome',
-          path: 'interview',
-          component: () => import('@/pages/admin/AdminHome.vue'),
-        },
-        {
-          name: 'adminCompetition',
-          path: 'competition',
-          component: () => import('@/pages/admin/AdminCompetition.vue'),
-        },
-      ],
-    },
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// 纯前端模式：/admin 管理台依赖后端接口，整块注释
+//     {
+//       path: '/admin',
+//       component: () => import('@/pages/admin/AdminLayout.vue'),
+//       children: [
+//         {
+//           name: 'adminNotice',
+//           path: 'notice',
+//           component: () => import('@/pages/admin/AdminNotice.vue'),
+//         },
+//         {
+//           name: 'adminHome',
+//           path: 'interview',
+//           component: () => import('@/pages/admin/AdminHome.vue'),
+//         },
+//         {
+//           name: 'adminCompetition',
+//           path: 'competition',
+//           component: () => import('@/pages/admin/AdminCompetition.vue'),
+//         },
+//       ],
+//     },
   ],
   scrollBehavior(to, from, savedPosition) {
     // 如果是通过浏览器的“前进/后退”按钮触发的，保持原来的滚动位置
