@@ -101,46 +101,47 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import { CompetitionAPI } from '../../api/competitionSignUp'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { CompetitionAPI } from '../../api/competitionSignUp'
 const userStore = useUserStore()
 
 const competitionList = ref([])
 const loading = ref(false)
 
-const sendCode = async () => {
-  if (!formData.email) {
-    alert('请先输入邮箱地址')
-    return
-  }
-  try {
-    const res = await CompetitionAPI.sendCode({ email: formData.email, action: "signUp" })
-    if (res.code === 200) {
-      alert('验证码已发送，请查收邮箱')
-    } else {
-      alert('发送验证码失败：' + (res.message || '未知错误'))
-    }
-  } catch (error) {
-    alert('发送验证码失败：' + (error.response?.data?.message || error.message))
-  }
-}
-
-const getCompetitionList = async () => {
-  loading.value = true;
-  try {
-    const res = await CompetitionAPI.getCompetitionList();
-
-    // 假设你的后端统一返回格式是 { code: 200, data: [...] }
-    if (res.code === 200) {
-      competitionList.value = res.data;
-    } else {
-      console.error('获取比赛列表失败:', res.message || '未知错误');}
-  } catch (error) {
-    console.error('获取比赛列表失败:', error);
-  } finally {
-    loading.value = false;
-  }
-};
-getCompetitionList();
+// const sendCode = async () => {
+//   if (!formData.email) {
+//     alert('请先输入邮箱地址')
+//     return
+//   }
+//   try {
+//     const res = await CompetitionAPI.sendCode({ email: formData.email, action: "signUp" })
+//     if (res.code === 200) {
+//       alert('验证码已发送，请查收邮箱')
+//     } else {
+//       alert('发送验证码失败：' + (res.message || '未知错误'))
+//     }
+//   } catch (error) {
+//     alert('发送验证码失败：' + (error.response?.data?.message || error.message))
+//   }
+// }
+// 
+// const getCompetitionList = async () => {
+//   loading.value = true;
+//   try {
+//     const res = await CompetitionAPI.getCompetitionList();
+// 
+//     // 假设你的后端统一返回格式是 { code: 200, data: [...] }
+//     if (res.code === 200) {
+//       competitionList.value = res.data;
+//     } else {
+//       console.error('获取比赛列表失败:', res.message || '未知错误');}
+//   } catch (error) {
+//     console.error('获取比赛列表失败:', error);
+//   } finally {
+//     loading.value = false;
+//   }
+// };
+// getCompetitionList();
 
 // 弹窗状态管理
 const showModal = ref(false)
@@ -168,28 +169,28 @@ const closeModal = () => {
   Object.keys(formData).forEach((key) => (formData[key] = ''))
 }
 
-// 提交表单（这里对接你刚才写好的后端接口）
-const submitApplication = async () => {
-  try {
-    const res = await CompetitionAPI.applyCompetition({
-      competition_id: selectedComp.value.id,
-      student_id: formData.student_id,
-      real_name: formData.real_name,
-      phone: formData.phone,
-      email: formData.email,
-      code: formData.code,
-    })
-
-    if(res.code === 200) {
-      alert('🎉 报名成功！请留意邮箱通知。');
-      closeModal();
-    } else {
-      alert('报名失败：' + (res.msg || '未知错误'));
-    }
-  } catch (error) {
-    alert('报名失败：' + (error.response?.data?.message || error.message));
-  }
-}
+// // 提交表单（这里对接你刚才写好的后端接口）
+// const submitApplication = async () => {
+//   try {
+//     const res = await CompetitionAPI.applyCompetition({
+//       competition_id: selectedComp.value.id,
+//       student_id: formData.student_id,
+//       real_name: formData.real_name,
+//       phone: formData.phone,
+//       email: formData.email,
+//       code: formData.code,
+//     })
+// 
+//     if(res.code === 200) {
+//       alert('🎉 报名成功！请留意邮箱通知。');
+//       closeModal();
+//     } else {
+//       alert('报名失败：' + (res.msg || '未知错误'));
+//     }
+//   } catch (error) {
+//     alert('报名失败：' + (error.response?.data?.message || error.message));
+//   }
+// }
 
 // 工具函数：格式化日期
 const formatDate = (dateString) => {
