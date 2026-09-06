@@ -355,15 +355,15 @@ function scrollInAni(ele: HTMLDivElement) {
   }
 }
 
-/* 平板：一屏两卡 */
-@media (max-width: 992px) {
+/* 平板（≤1024）：一屏两卡 */
+@include touch {
   .storyCard {
     flex-basis: calc((100% - 1.5rem) / 2);
   }
 }
 
-/* 手机：一屏一卡 */
-@media (max-width: 768px) {
+/* 手机（≤768）：一屏一卡 */
+@include mobile {
   .storySection {
     padding: 0 var(--page-padding-x);
     margin: 1.5em 0 3em;

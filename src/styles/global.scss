@@ -167,6 +167,24 @@ li {
   margin-bottom: 16px;
 }
 
+/* 锚点滚动定位补偿：页内跳转（如首页「了解更多」）避开 sticky 顶栏遮挡 */
+.title[id],
+.subtitle[id] {
+  scroll-margin-top: calc(var(--header-h) + 12px);
+}
+
+/* 系统开启「减少动态效果」：压缩所有 CSS 动画/过渡（JS 动画在组件内单独判断降级） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* ============================================================
    全局响应式基线（桌面优先渐进降级）
    ≤1024 平板档为本次补齐的中间态；≤768 手机档沿用原移动端适配

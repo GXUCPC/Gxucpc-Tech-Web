@@ -17,13 +17,15 @@ import {
 } from '@/constants/animation'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { HERO_BG_ALGO, HERO_BG_DEV } from '@/config/heroBg'
 import { HERO_BG_BLUR, HERO_PANEL_BACKDROP_BLUR } from '@/constants/hero'
 import { BACKEND_ENABLED } from '@/config/features'
+import { useBreakpoint } from '@/composables/useBreakpoint'
 import { h, onMounted, useTemplateRef, ref, type Ref } from 'vue'
+
+const { isTouch, reduceMotion } = useBreakpoint()
 
 const heroBgBlur = `${HERO_BG_BLUR}px`
 const heroPanelBackdropBlur = `${HERO_PANEL_BACKDROP_BLUR}px`
@@ -108,9 +110,16 @@ function infoSectionAni(ele: HTMLDivElement | null) {
 const headTextRef = useTemplateRef('headText')
 const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
 onMounted(() => {
-  gsap.registerPlugin(SplitText, ScrollTrigger, ScrollSmoother)
+  gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
   if (!headTextEle) return
+
+  // 系统开启「减少动态效果」：跳过全部入场动画，直接呈现终态
+  if (reduceMotion.value) {
+    document.querySelectorAll('.title, .subtitle').forEach((ele) => ele.classList.add('show'))
+    return
+  }
+
   const tl = gsap.timeline()
   // 初始动画：Hero 手风琴淡入
   const heroAccordion = headTextEle.querySelector('.heroAccordion')
@@ -321,10 +330,18 @@ function getHeroBgIndex(i: number) {
   return heroBgIndex[i]?.value ?? 0
 }
 const getHeroAccordionStyle = (index: number) => {
+  // 窄屏（≤1024）为上下堆叠布局，完全交给 CSS 控制，不输出内联 left/width，
+  // 这样样式表也无需再用 !important 去对抗内联样式
+  if (isTouch.value) return {}
   const expanded = heroActiveIndex.value === index
   const width = expanded ? HERO_EXPANDED_PERCENT : HERO_COLLAPSED_PERCENT
   const left = index === 0 ? 0 : heroActiveIndex.value === 0 ? HERO_EXPANDED_PERCENT : HERO_COLLAPSED_PERCENT
   return { left: `${left}%`, width: `${width}%` }
+}
+
+// 平滑滚动到目标锚点（原生能力即可，替代旧版「每次点击新建 ScrollSmoother」的做法）
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 // 加入集训队 / 技术组 收益卡片（仿 Microsoft 内容卡片布局）
@@ -370,6 +387,7 @@ HERO_PANELS.forEach((panel, i) => {
         :class="{ collapsed: heroActiveIndex !== i }"
         :style="getHeroAccordionStyle(i)"
         @mouseover="heroActiveIndex = i"
+        @click="heroActiveIndex = i"
       >
         <!-- 固定尺寸容器 + 面板裁剪：图片不随面板缩放 -->
         <div class="heroPanelBgClip">
@@ -403,17 +421,7 @@ HERO_PANELS.forEach((panel, i) => {
           </p>
           <button
             class="learnMoreBtn heroLearnBtn"
-            @click="
-              () => {
-                const targetId = i === 0 ? 'learnMoreTarget' : 'techGroupTarget'
-                const smoother = ScrollSmoother.create({ effects: false, smooth: false })
-                gsap.to(smoother, {
-                  scrollTop: smoother.offset(`#${targetId}`, 'top 100px'),
-                  ease: 'power2.out',
-                  duration: DURATION_LONG,
-                })
-              }
-            ">
+            @click="scrollToSection(i === 0 ? 'learnMoreTarget' : 'techGroupTarget')">
             了解更多
             <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
           </button>
@@ -1125,33 +1133,20 @@ HERO_PANELS.forEach((panel, i) => {
 }
 
 /* ====================================
-   首页移动端适配（全局类 .title/.infoContainer 的响应式见 styles/global.scss）
+   首页平板/手机适配（≤1024）：Hero 手风琴
+   由「左右 70/30」改为「上下 68/32」纵向堆叠，
+   避免窄屏下展开面板文字被挤压截断（内容占满全宽）。
+   窄屏下 getHeroAccordionStyle 不输出内联 left/width，CSS 直接接管布局
    ==================================== */
-@include mobile {
-  .subtitle {
-    font-size: 1.5em; /* 缩小副标题 */
-    margin: 1.5em auto;
-    padding: 0.5em;
-  }
-
-  .textCenter {
-    font-size: 1.1em; /* 缩小中间的统计数据文字 */
-    padding: 0 var(--page-padding-x);
-    line-height: 1.8em;
-  }
-
-  /* 2. 顶部首屏 (Hero Section) 抢救：
-     手风琴由「左右 70/30」改为「上下 68/32」纵向堆叠，
-     避免窄屏下展开面板文字被挤压截断（内容占满全宽） */
+@include touch {
   .heroSection {
     height: 100vh;
     height: 100svh; /* 移动端地址栏收起时不留黑边 */
   }
 
-  /* 覆盖内联的 left/width（横向手风琴布局），改为纵向排布 */
   .heroAccordionItem {
-    left: 0 !important;
-    width: 100% !important;
+    left: 0;
+    width: 100%;
     transition: top var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1),
       height var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1);
   }
@@ -1168,14 +1163,17 @@ HERO_PANELS.forEach((panel, i) => {
     height: 32%;
   }
 
-  /* 背景图层不再做水平位移补偿：展开面板锚顶、折叠面板锚底 */
-  .heroPanelBgFixed {
-    left: 0 !important;
-    right: auto !important;
-    transform: none !important;
-    top: 0;
+  /* 背景图层取消水平位移补偿：选择器与桌面 nth-child 位移规则同优先级，靠源顺序覆盖 */
+  .heroAccordionItem:nth-child(1).collapsed .heroPanelBgFixed.isLeft,
+  .heroAccordionItem:nth-child(1):not(.collapsed) .heroPanelBgFixed.isLeft,
+  .heroAccordionItem:nth-child(2).collapsed .heroPanelBgFixed.isRight,
+  .heroAccordionItem:nth-child(2):not(.collapsed) .heroPanelBgFixed.isRight {
+    left: 0;
+    right: auto;
+    transform: none;
   }
 
+  /* 展开面板锚顶、折叠面板锚底 */
   .heroAccordionItem.collapsed .heroPanelBgFixed {
     top: auto;
     bottom: 0;
@@ -1190,6 +1188,23 @@ HERO_PANELS.forEach((panel, i) => {
       font-size: 1.1em;
       letter-spacing: 4px;
     }
+  }
+}
+
+/* ====================================
+   首页手机端适配（≤768，全局类的响应式见 styles/global.scss）
+   ==================================== */
+@include mobile {
+  .subtitle {
+    font-size: 1.5em; /* 缩小副标题 */
+    margin: 1.5em auto;
+    padding: 0.5em;
+  }
+
+  .textCenter {
+    font-size: 1.1em; /* 缩小中间的统计数据文字 */
+    padding: 0 var(--page-padding-x);
+    line-height: 1.8em;
   }
 
   .heroExpandedContent {
