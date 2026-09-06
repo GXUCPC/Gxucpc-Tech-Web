@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { ArticleAPI } from '@/api/article'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { ArticleAPI } from '@/api/article'
 import ArticleCard from '@/components/ArticleCard.vue'
 import type { ArticleMeta } from '@/types/article'
 
@@ -10,31 +11,35 @@ const currentPage = ref(1)
 const pageSize = 12
 const loading = ref(true)
 
-onMounted(async () => {
-  try {
-    const result = await ArticleAPI.getArticleList({ page: 1, size: pageSize })
-    articles.value = result.items
-    total.value = result.total
-  } catch (e) {
-    console.error('Failed to load articles:', e)
-  } finally {
-    loading.value = false
-  }
+// onMounted(async () => {
+//   try {
+//     const result = await ArticleAPI.getArticleList({ page: 1, size: pageSize })
+//     articles.value = result.items
+//     total.value = result.total
+//   } catch (e) {
+//     console.error('Failed to load articles:', e)
+//   } finally {
+//     loading.value = false
+//   }
+// })
+// 
+onMounted(() => {
+  loading.value = false // 纯前端模式：无后端数据，直接结束加载态
 })
 
-async function onPageChange(page: number) {
-  currentPage.value = page
-  loading.value = true
-  try {
-    const result = await ArticleAPI.getArticleList({ page, size: pageSize })
-    articles.value = result.items
-  } catch (e) {
-    console.error('Failed to load articles:', e)
-  } finally {
-    loading.value = false
-  }
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
+// async function onPageChange(page: number) {
+//   currentPage.value = page
+//   loading.value = true
+//   try {
+//     const result = await ArticleAPI.getArticleList({ page, size: pageSize })
+//     articles.value = result.items
+//   } catch (e) {
+//     console.error('Failed to load articles:', e)
+//   } finally {
+//     loading.value = false
+//   }
+//   window.scrollTo({ top: 0, behavior: 'smooth' })
+// }
 </script>
 
 <template>

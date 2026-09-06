@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { ArticleAPI } from '@/api/article'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { ArticleAPI } from '@/api/article'
 import type { ArticleDetail } from '@/types/article'
 import { Icon } from '@iconify/vue'
 
@@ -27,21 +28,21 @@ function formatDate(iso: string) {
   }).replace(/\//g, '-')
 }
 
-async function loadArticle(id: number) {
-  loading.value = true
-  article.value = null
-  tocList.value = []
-  try {
-    const result = await ArticleAPI.getArticleDetail(id)
-    article.value = result
-  } catch (e) {
-    console.error('Failed to load article:', e)
-    article.value = null
-  } finally {
-    loading.value = false
-  }
-}
-
+// async function loadArticle(id: number) {
+//   loading.value = true
+//   article.value = null
+//   tocList.value = []
+//   try {
+//     const result = await ArticleAPI.getArticleDetail(id)
+//     article.value = result
+//   } catch (e) {
+//     console.error('Failed to load article:', e)
+//     article.value = null
+//   } finally {
+//     loading.value = false
+//   }
+// }
+// 
 function buildToc() {
   const headings = document.querySelectorAll('.article-body h2, .article-body h3')
   tocList.value = []
@@ -78,16 +79,20 @@ function scrollToSection(id: string) {
   }
 }
 
-watch(
-  () => route.params.id,
-  async (id) => {
-    if (id) await loadArticle(Number(id))
-  },
-)
-
-onMounted(async () => {
-  if (route.params.id) await loadArticle(Number(route.params.id))
-})
+// watch(
+//   () => route.params.id,
+//   async (id) => {
+//     if (id) await loadArticle(Number(id))
+//   },
+// )
+// 
+// onMounted(async () => {
+//   if (route.params.id) await loadArticle(Number(route.params.id))
+// })
+// 
+// onMounted(() => {
+//   loading.value = false // 纯前端模式：无后端数据，直接结束加载态
+// })
 
 onUnmounted(() => {
   if (tocObserver) tocObserver.disconnect()
