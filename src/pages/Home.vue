@@ -459,39 +459,6 @@ function endTeamDrag() {
     </div>
   </section>
 
-  <h2 class="subtitle">代表项目展示</h2>
-  <ani-ele
-    class="benefitsCardGrid projectCardGrid"
-    :scroll-in-ani="
-      (ele) => {
-        const tl = gsap.timeline()
-        tl.from(ele.querySelectorAll('.projectCard'), {
-          duration: DURATION_LONG,
-          ease: 'power2.out',
-          y: 40,
-          autoAlpha: 0,
-          stagger: STAGGER_SHORT,
-          clearProps: 'transform,opacity',
-        })
-        return tl
-      }
-    ">
-    <div
-      v-for="(project, i) in techProjectList"
-      :key="i"
-      class="projectCard">
-      <div class="projectCardBadge">{{ project.grade }}</div>
-      <div class="projectCardTitle">{{ project.teamName }}</div>
-      <div class="projectCardTech">
-        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
-      </div>
-      <div class="projectCardHighlights">
-        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
-          <component :is="medal" />
-        </div>
-      </div>
-    </div>
-  </ani-ele>
 
   <h1 class="title heroNextSection" id="learnMoreTarget">集训队概要</h1>
   <ani-ele
@@ -738,6 +705,40 @@ function endTeamDrag() {
       </div>
       <div class="benefitsCardTitle">{{ item.title }}</div>
       <div class="benefitsCardDesc">{{ item.desc }}</div>
+    </div>
+  </ani-ele>
+
+  <h2 class="subtitle">代表项目展示</h2>
+  <ani-ele
+    class="benefitsCardGrid projectCardGrid"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.querySelectorAll('.projectCard'), {
+          duration: DURATION_LONG,
+          ease: 'power2.out',
+          y: 40,
+          autoAlpha: 0,
+          stagger: STAGGER_SHORT,
+          clearProps: 'transform,opacity',
+        })
+        return tl
+      }
+    ">
+    <div
+      v-for="(project, i) in techProjectList"
+      :key="i"
+      class="projectCard">
+      <div class="projectCardBadge">{{ project.grade }}</div>
+      <div class="projectCardTitle">{{ project.teamName }}</div>
+      <div class="projectCardTech">
+        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
+      </div>
+      <div class="projectCardHighlights">
+        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
+          <component :is="medal" />
+        </div>
+      </div>
     </div>
   </ani-ele>
 
