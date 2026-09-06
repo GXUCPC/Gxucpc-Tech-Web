@@ -16,6 +16,15 @@ html, body {
   --duration-median: 0.5s;
   --duration-long: 1s;
   --duration-extra-long: 2.5s;
+
+  /* 页面内容全局左右内边距：首页各板块统一留白，避免内容贴屏幕边缘 */
+  --page-padding-x: 10rem;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding-x: 15px;
+  }
 }
 
 /* 了解更多按钮 */

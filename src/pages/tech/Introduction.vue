@@ -199,7 +199,6 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
 
           <div class="text1">广西大学ICPC集训队技术组</div>
@@ -227,7 +226,6 @@ onMounted(() => {
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
-        <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
           <div class="text1">
             常见问题
@@ -258,7 +256,6 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
         <div style="display: flex; flex-direction: column; gap: 5px">
 
           <div class="text1">广西大学ICPC集训队技术组</div>

@@ -4,17 +4,14 @@ import ArticleCard from '@/components/ArticleCard.vue'
 import type { ArticleMeta } from '@/types/article'
 // ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
 // import { ArticleAPI } from '@/api/article'
-import PeopleList, { type PeopleData } from '@/components/home/PeopleList.vue'
+import StoryCards, { type StoryItem } from '@/components/home/StoryCards.vue'
 import {
   DELAY_INITIAL,
-  DELAY_SHORT,
   DURATION_EXTRA_LONG,
-  DURATION_INSTANT,
   DURATION_LONG,
   DURATION_MEDIAN,
   DURATION_SHORT,
   STAGGER_CHAR,
-  STAGGER_LONG,
   STAGGER_MEDIAN,
   STAGGER_SHORT,
 } from '@/constants/animation'
@@ -26,7 +23,7 @@ import { SplitText } from 'gsap/SplitText'
 import { HERO_BG_ALGO, HERO_BG_DEV } from '@/config/heroBg'
 import { HERO_BG_BLUR, HERO_PANEL_BACKDROP_BLUR } from '@/constants/hero'
 import { BACKEND_ENABLED } from '@/config/features'
-import { h, onMounted, useTemplateRef, ref, type Ref, type VNode } from 'vue'
+import { h, onMounted, useTemplateRef, ref, type Ref } from 'vue'
 
 const heroBgBlur = `${HERO_BG_BLUR}px`
 const heroPanelBackdropBlur = `${HERO_PANEL_BACKDROP_BLUR}px`
@@ -163,83 +160,84 @@ onMounted(() => {
 //   }
 })
 
-const mainTeamList: {
-  teammates: string[]
-  teamName: string
-  grade: string
-  mainMedal: (string | VNode)[]
-}[] = [
+// 优秀队伍：仿 JetBrains「Customer Stories」卡片布局，年级沿用原版艺术字水印
+const teamStories: StoryItem[] = [
   {
-    grade: '22级',
-    teamName: '流星一条',
-    mainMedal: [
-      h('span', { style: 'color: silver' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
-        '第48届ICPC国际大学生程序设计竞赛亚洲区域赛（西安）银奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第九届中国⼤学⽣程序设计竞赛（深圳）铜奖',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:prize' }),
-        'ICPC西部大学生程序设计竞赛三等奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['写不下力……']),
+    name: '流星一条',
+    watermark: '22级',
+    infoSuffix: '队员：付家锐、石新阳、韦祖豪',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届ICPC亚洲区域赛（西安）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 9 届CCPC（深圳）铜奖',
+      },
+      {
+        icon: 'mdi:prize',
+        text: 'ICPC（西部）三等奖',
+      },
     ],
-    teammates: ['付家锐', '石新阳', '韦祖豪'],
+    footer: '写不下力……',
   },
   {
-    grade: '23级',
-    teamName: '远航者的幻想乡',
-    mainMedal: [
-      h('span', { style: 'color: gold' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'gold' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛邀请赛（西安）金奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛（西安）铜奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 11 届 CCPC 中国大学生程序设计竞赛（郑州）铜奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['真的只打最后一把……']),
+    name: '远航者的幻想乡',
+    watermark: '23级',
+    infoSuffix: '队员：张健明、陶康、孙怿翔',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第 50 届 ICPC 邀请赛（西安）金奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 50 届 ICPC（西安）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 11 届 CCPC（郑州）铜奖',
+      },
     ],
-    teammates: ['张健明', '陶康', '孙怿翔'],
+    footer: '真的只打最后一把……',
   },
   {
-    grade: '24级',
-    teamName: '队名WA2了',
-    mainMedal: [
-      h('span', { style: 'color: silver' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛区域赛（沈阳）银奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 11 届 CCPC 中国大学生程序设计竞赛（重庆）铜奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['在蒸了，在蒸了……']),
+    name: '队名WA2了',
+    watermark: '24级',
+    infoSuffix: '队员：郑毅、陈君屹、杜永坤',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第 50 届 ICPC 区域赛（沈阳）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 11 届 CCPC（重庆）铜奖',
+      },
     ],
-    teammates: ['郑毅', '陈君屹', '杜永坤'],
+    footer: '在蒸了，在蒸了……',
   },
 ]
 
-// 命名抛弃大脑
-const studentList: PeopleData[] = [
-  { avatar: '/img/avatar/lzx.jpg', comment: '大爱详哥', info: '保研天津大学',  name: '李周详' },
-  { avatar: '/img/avatar/sxy.jpg', info: '保研东南大学', name: '石新阳' },
-  { avatar: '/img/avatar/lyf.jpg', info: '保研至中国科学院大学', name: '李韵锋' },
-  { avatar: '/img/avatar/lzy.jpg', info: '保研电子科技大学', name: '龙泽宇' },
-]
-const workerList: PeopleData[] = [
-  { avatar: '/img/avatar/jmr.jpg',comment: 'B推搜熟人',info: '哔哩哔哩推搜中台', name: '金珉瑞',},
-  { avatar: '/img/avatar/sct.jpg', info: '小马智行Offer', name: '孙城涛' },
-  { avatar: '/img/avatar/wzh.jpg', info: '', comment: '韦老师', name: '韦祖豪' },
-  { avatar: '/img/avatar/wlm.jpg', info: '字节飞书中台Offer', comment: '「电话告警」', name: '王利明' },
-  { avatar: '/img/avatar/cjl.jpg', info: '拼多多Offer', name: '陈佳林' },
+// 优秀队员（升学 & 就业）：一组翻页展示，一页三张
+const memberStories: StoryItem[] = [
+  { avatar: '/img/avatar/lzx.jpg', name: '李周详', info: '保研天津大学', quote: '大爱详哥' },
+  { avatar: '/img/avatar/sxy.jpg', name: '石新阳', info: '保研东南大学' },
+  { avatar: '/img/avatar/lyf.jpg', name: '李韵锋', info: '保研至中国科学院大学' },
+  { avatar: '/img/avatar/lzy.jpg', name: '龙泽宇', info: '保研电子科技大学' },
+  { avatar: '/img/avatar/jmr.jpg', name: '金珉瑞', info: '哔哩哔哩推搜中台', quote: 'B推搜熟人' },
+  { avatar: '/img/avatar/sct.jpg', name: '孙城涛', info: '小马智行Offer' },
+  { avatar: '/img/avatar/wzh.jpg', name: '韦祖豪', quote: '韦老师' },
+  { avatar: '/img/avatar/wlm.jpg', name: '王利明', info: '字节飞书中台Offer', quote: '「电话告警」' },
+  { avatar: '/img/avatar/cjl.jpg', name: '陈佳林', info: '拼多多Offer' },
 ]
 
 
@@ -357,41 +355,6 @@ HERO_PANELS.forEach((panel, i) => {
   }
 })
 
-// 代表队伍：横向滚动 + 拖拽（使用 RAF 提升流畅度）
-const teamScrollRef = useTemplateRef<HTMLDivElement>('teamScroll')
-const teamDragState = ref({ isDragging: false, startX: 0, startScrollLeft: 0 })
-let teamDragRafId = 0
-let teamDragLastX = 0
-
-function scrollTeams(direction: number) {
-  const el = teamScrollRef.value
-  if (!el) return
-  el.scrollBy({ left: direction * 400, behavior: 'smooth' })
-}
-function startTeamDrag(e: MouseEvent) {
-  if (e.button !== 0) return
-  const el = teamScrollRef.value
-  if (!el) return
-  teamDragLastX = e.pageX
-  teamDragState.value = { isDragging: true, startX: e.pageX, startScrollLeft: el.scrollLeft }
-}
-function onTeamDrag(e: MouseEvent) {
-  if (!teamDragState.value.isDragging) return
-  teamDragLastX = e.pageX
-  if (teamDragRafId) return
-  teamDragRafId = requestAnimationFrame(() => {
-    teamDragRafId = 0
-    const el = teamScrollRef.value
-    if (!el) return
-    const { startX, startScrollLeft } = teamDragState.value
-    el.scrollLeft = startScrollLeft - (teamDragLastX - startX)
-  })
-}
-function endTeamDrag() {
-  if (teamDragRafId) cancelAnimationFrame(teamDragRafId)
-  teamDragRafId = 0
-  teamDragState.value.isDragging = false
-}
 
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
@@ -548,79 +511,9 @@ function endTeamDrag() {
     </div>
   </ani-ele>
   <h2 class="subtitle">优秀队员</h2>
-  <div class="teamCardsSection">
-    <button
-      type="button"
-      class="teamScrollBtn teamScrollBtnLeft"
-      aria-label="向左滚动"
-      @click="scrollTeams(-1)">
-      <Icon icon="mdi:chevron-left" />
-    </button>
-    <div
-      ref="teamScroll"
-      class="teamCardsScrollWrapper"
-      :class="{ grabbing: teamDragState.isDragging }"
-      @mousedown="startTeamDrag"
-      @mousemove="onTeamDrag"
-      @mouseup="endTeamDrag"
-      @mouseleave="endTeamDrag">
-      <ani-ele
-        class="teamCardContainer"
-    :scroll-in-ani="
-      (ele) => {
-        const tl = gsap.timeline()
-        const cardStagger = STAGGER_SHORT // 与「加入技术组会获得什么？」同节奏
-        ele.childNodes.forEach((cardEle, index) => {
-          const t = index * cardStagger
-          tl.from(
-            cardEle,
-            {
-              scale: 0,
-              autoAlpha: 0,
-              duration: DURATION_LONG,
-              ease: 'power2.out',
-            },
-            t,
-          ).from(
-            SplitText.create(cardEle.childNodes, { type: 'lines', mask: 'lines' }).lines,
-            {
-              y: 24,
-              autoAlpha: 0,
-              duration: DURATION_SHORT,
-              ease: 'sine.out',
-              stagger: STAGGER_CHAR,
-            },
-            t,
-          )
-        })
-        return tl
-      }
-    ">
-    <div class="teamCard" v-for="(team, i) in mainTeamList" :key="i">
-      <div class="gradeText">{{ team.grade }}</div>
-      <div style="font-weight: bold; font-size: 2em; line-height: 2em">{{ team.teamName }}</div>
-      <div>
-        <b><Icon icon="mdi:account" :inline="true" />队员：</b>{{ team.teammates.join('、') }}
-      </div>
-      <div>
-        <b><Icon icon="mdi:achievement" :inline="true" />主要奖项：</b>
-      </div>
-      <div v-for="(medal, i) in team.mainMedal" :key="i" style="text-indent: 2em">
-        <component :is="medal" />
-      </div>
-    </div>
-  </ani-ele>
-    </div>
-    <button
-      type="button"
-      class="teamScrollBtn teamScrollBtnRight"
-      aria-label="向右滚动"
-      @click="scrollTeams(1)">
-      <Icon icon="mdi:chevron-right" />
-    </button>
-  </div>
-  <people-list :list="studentList" />
-  <people-list :list="workerList" />
+  <!-- 优秀队伍 & 优秀队员：仿 JetBrains「Customer Stories」卡片布局，一页三张翻页展示 -->
+  <story-cards :items="teamStories" />
+  <story-cards :items="memberStories" />
 
 
   <h1 class="title" id="techGroupTarget">技术组概要</h1>
@@ -1130,6 +1023,7 @@ function endTeamDrag() {
   font-size: 2em;
   line-height: 1.5em;
   margin: 1em 0;
+  padding: 0 var(--page-padding-x);
 }
 
 /* 收益卡片网格：全宽铺平，仿 Microsoft 内容卡片布局 */
@@ -1140,7 +1034,7 @@ function endTeamDrag() {
   width: 100%;
   max-width: 100%;
   margin: 2em 0 4em;
-  padding: 0 2em;
+  padding: 0 var(--page-padding-x);
   box-sizing: border-box;
 }
 
@@ -1184,129 +1078,7 @@ function endTeamDrag() {
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* 代表队伍：横向滚动容器，防止页面溢出 */
-.teamCardsSection {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* 仅禁止横向溢出，纵向允许完整显示 */
-  margin-bottom: 2em;
-}
-
-.teamCardsScrollWrapper {
-  overflow-x: auto;
-  overflow-y: visible; /* 允许年级、角标等溢出显示 */
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  cursor: grab;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-  /* 为年级水印(5em)、角标预留上下空间，避免截断 */
-  padding: 5em 0 2.5em;
-
-  &.grabbing {
-    cursor: grabbing;
-    user-select: none;
-  }
-
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-  }
-}
-
-.teamScrollBtn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, opacity 0.2s;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
-  &:active {
-    background: rgba(255, 255, 255, 0.35);
-  }
-
-  &.teamScrollBtnLeft {
-    left: 0;
-  }
-  &.teamScrollBtnRight {
-    right: 0;
-  }
-}
-
-.teamCardContainer {
-  display: grid;
-  justify-content: flex-start;
-  grid-auto-flow: column;
-  column-gap: 2em;
-  grid-template-columns: repeat(3, 35em);
-  grid-row: 1;
-  width: max-content;
-  padding: 0 50px; /* 为左右按钮留出空间 */
-  align-items: start; /* 避免 grid 拉伸导致高度异常 */
-}
-
-// 小队卡片
-.teamCard {
-  background-color: rgba(255, 255, 255, 0.1);
-  transform-origin: left top;
-  padding: 1em 1.5em;
-  position: relative;
-  border-radius: 5px;
-
-  .gradeText {
-    position: absolute;
-    right: 0.2em;
-    top: -0.7em;
-    font-style: italic;
-    font-size: 5em;
-    font-weight: 900;
-    color: var(--el-color-primary);
-    opacity: 0.3;
-  }
-
-  &::before,
-  &::after {
-    transform: scale(1);
-    $size: 25px;
-    position: absolute;
-    content: '';
-    width: $size;
-    height: $size;
-    border: var(--el-color-primary) solid;
-  }
-
-  $offset: -5px;
-  &::before {
-    top: $offset;
-    left: $offset;
-    border-width: 1px 0 0 1px;
-  }
-  &::after {
-    bottom: $offset;
-    right: $offset;
-    border-width: 0 1px 1px 0;
-  }
-}
+/* 代表队伍 / 优秀队员卡片样式已迁移至 components/home/StoryCards.vue */
 
 .articleListGridHome {
   display: grid;
@@ -1315,7 +1087,7 @@ function endTeamDrag() {
   width: 100%;
   max-width: 100%;
   margin: 2em 0 2em;
-  padding: 0 2em;
+  padding: 0 var(--page-padding-x);
   box-sizing: border-box;
 }
 
@@ -1428,7 +1200,7 @@ function endTeamDrag() {
 
   .textCenter {
     font-size: 1.1em; /* 缩小中间的统计数据文字 */
-    padding: 0 15px;
+    padding: 0 var(--page-padding-x);
     line-height: 1.8em;
   }
 
@@ -1527,7 +1299,7 @@ function endTeamDrag() {
   /* 4. 收益卡片网格 (加入集训队/技术组获得什么) 移动端 */
   .benefitsCardGrid {
     grid-template-columns: 1fr;
-    padding: 0 15px;
+    padding: 0 var(--page-padding-x);
     margin: 1.5em 0 3em;
   }
 
@@ -1543,40 +1315,7 @@ function endTeamDrag() {
     font-size: 0.9em;
   }
 
-  /* 5. 队伍卡片 (代表队伍) 抢救 */
-  .teamCardsSection {
-    padding: 0 15px;
-  }
-
-  .teamScrollBtn {
-    display: none !important; /* 窄屏纵向排列时隐藏，用触摸滑动即可 */
-  }
-
-  .teamCardsScrollWrapper {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    padding: 3em 0 1.5em; /* 移动端缩小预留空间 */
-  }
-
-  .teamCardContainer {
-    grid-auto-flow: row; /* 🔑 从横向排布改为纵向瀑布流 */
-    grid-template-columns: 1fr; /* 🔑 强行变成单列 */
-    padding: 0;
-    row-gap: 2em; /* 卡片上下间距 */
-    width: 100%;
-  }
-
-  .teamCard {
-    width: 100%; /* 卡片占满手机屏幕宽度 */
-    box-sizing: border-box;
-    padding: 1.5em;
-
-    .gradeText {
-      font-size: 3.5em; /* 缩小背后的年级水印 */
-      top: -0.2em;
-    }
-  }
+  /* 5. 优秀队员卡片 (StoryCards) 响应式规则在组件内部处理 */
 
   /* 6. 代表项目展示 (卡片网格) 移动端 */
   .projectCardGrid {
@@ -1609,7 +1348,7 @@ function endTeamDrag() {
 
   .articleListGridHome {
     grid-template-columns: 1fr;
-    padding: 0 15px;
+    padding: 0 var(--page-padding-x);
     margin: 1.5em 0 2em;
   }
 
