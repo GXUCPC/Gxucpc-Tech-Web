@@ -1431,18 +1431,77 @@ function endTeamDrag() {
     line-height: 1.8em;
   }
 
-  /* 2. 顶部首屏 (Hero Section) 抢救 */
+  /* 2. 顶部首屏 (Hero Section) 抢救：
+     手风琴由「左右 70/30」改为「上下 68/32」纵向堆叠，
+     避免窄屏下展开面板文字被挤压截断（内容占满全宽） */
+  .heroSection {
+    height: 100vh;
+    height: 100svh; /* 移动端地址栏收起时不留黑边 */
+  }
+
+  /* 覆盖内联的 left/width（横向手风琴布局），改为纵向排布 */
+  .heroAccordionItem {
+    left: 0 !important;
+    width: 100% !important;
+    transition: top var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1),
+      height var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .heroAccordionItem:not(.collapsed) {
+    top: 0;
+    height: 68%;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .heroAccordionItem.collapsed {
+    top: auto;
+    bottom: 0;
+    height: 32%;
+  }
+
+  /* 背景图层不再做水平位移补偿：展开面板锚顶、折叠面板锚底 */
+  .heroPanelBgFixed {
+    left: 0 !important;
+    right: auto !important;
+    transform: none !important;
+    top: 0;
+  }
+
+  .heroAccordionItem.collapsed .heroPanelBgFixed {
+    top: auto;
+    bottom: 0;
+  }
+
+  /* 折叠条变为宽而矮：文字改为水平摆放 */
+  .heroCollapsedCover {
+    gap: 0.4em;
+
+    span {
+      transform: none;
+      font-size: 1.1em;
+      letter-spacing: 4px;
+    }
+  }
+
   .heroExpandedContent {
     padding: 20px;
   }
 
+  .heroWatermark {
+    font-size: 2.2em;
+    top: 12px;
+    right: 20px;
+  }
+
   .heroTitle {
     font-size: 1.5em;
+    margin-bottom: 0.6em;
   }
 
   .heroDesc {
     font-size: 0.9em;
     margin-bottom: 1em;
+    max-width: 100%;
   }
 
   /* 3. 简介区域 (ICPC & 技术组 Info) 抢救 */
