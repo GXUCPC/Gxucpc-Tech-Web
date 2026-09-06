@@ -2,9 +2,10 @@
 import { useDialog } from '@/store/globalLoading.ts'
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/store/user'
-import { logoutAPI } from '@/api/user-login'
-import http from '@/api/http'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { useUserStore } from '@/store/user'
+// import { logoutAPI } from '@/api/user-login'
+// import http from '@/api/http'
 import { ElMessage } from 'element-plus'
 import { Icon } from '@iconify/vue'
 import { BACKEND_ENABLED } from '@/config/features'
@@ -27,7 +28,7 @@ watch(
   }
 )
 
-const userStore = useUserStore()
+// const userStore = useUserStore()
 
 // 顶部导航结构：带 children 的项 hover 展开下拉（桌面端）
 interface NavChild {
@@ -86,64 +87,64 @@ const expression = () => {
 const expressionFeedback = () => {
     dialogVisibleFeedback.value = true;
 }
-const handleLogout = async () => {
-    if (confirm('确定要退出登录吗？')) {
-        await logoutAPI();
-        userStore.logout();
-        location.reload();
-    }
-}
+// const handleLogout = async () => {
+//     if (confirm('确定要退出登录吗？')) {
+//         await logoutAPI();
+//         userStore.logout();
+//         location.reload();
+//     }
+// }
 
-// 通知功能
-enum NoticeStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-}
-interface Notice {
-  id?: number
-  title: string
-  content: string
-  status: NoticeStatus
-  username: string
-  created_at: string
-}
-const noticeVisible = ref(false)
-const notices = ref<Notice[]>([])
-const loading = ref(false)
-
-const openNoticeDialog = () => {
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('请先登录！')
-    return
-  }
-  noticeVisible.value = true
-  getAllNotices()
-}
-
-const getAllNotices = async () => {
-  loading.value = true
-  try {
-    const res = await http.get('/notice/published', { params: { page: 1, size: 100 } })
-    if (res.code === 200) notices.value = res.data.list
-  } catch (err) {
-    ElMessage.error('获取通知失败')
-  } finally {
-    loading.value = false
-  }
-}
-
-const formatDate = (isoString: string) => {
-  if (!isoString) return ''
-  const date = new Date(isoString)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).replace(/\//g, '-')
-}
+// // 通知功能
+// enum NoticeStatus {
+//   DRAFT = 'draft',
+//   PUBLISHED = 'published',
+// }
+// interface Notice {
+//   id?: number
+//   title: string
+//   content: string
+//   status: NoticeStatus
+//   username: string
+//   created_at: string
+// }
+// const noticeVisible = ref(false)
+// const notices = ref<Notice[]>([])
+// const loading = ref(false)
+// 
+// const openNoticeDialog = () => {
+//   if (!userStore.isLoggedIn) {
+//     ElMessage.warning('请先登录！')
+//     return
+//   }
+//   noticeVisible.value = true
+//   getAllNotices()
+// }
+// 
+// const getAllNotices = async () => {
+//   loading.value = true
+//   try {
+//     const res = await http.get('/notice/published', { params: { page: 1, size: 100 } })
+//     if (res.code === 200) notices.value = res.data.list
+//   } catch (err) {
+//     ElMessage.error('获取通知失败')
+//   } finally {
+//     loading.value = false
+//   }
+// }
+// 
+// const formatDate = (isoString: string) => {
+//   if (!isoString) return ''
+//   const date = new Date(isoString)
+//   return date.toLocaleString('zh-CN', {
+//     year: 'numeric',
+//     month: '2-digit',
+//     day: '2-digit',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     hour12: false,
+//   }).replace(/\//g, '-')
+// }
 </script>
 
 <template>
@@ -188,7 +189,8 @@ const formatDate = (isoString: string) => {
         </template>
       </nav>
 
-      <!-- 通知/意见反馈/登录均依赖后端，纯前端模式下整体隐藏 -->
+      <!-- 纯前端模式：通知/意见反馈/登录/退出均依赖后端，整块暂时注释（恢复时取消注释并还原 script 中对应方法） -->
+      <!--
       <div class="headerActions" v-if="BACKEND_ENABLED">
         <button class="textLink" type="button" @click="openNoticeDialog">通知</button>
         <button class="textLink" type="button" @click="expressionFeedback">意见反馈</button>
@@ -199,6 +201,7 @@ const formatDate = (isoString: string) => {
           <button class="textLink" type="button" @click="handleLogout">退出</button>
         </div>
       </div>
+      -->
     </div>
 
     <el-collapse-transition>
