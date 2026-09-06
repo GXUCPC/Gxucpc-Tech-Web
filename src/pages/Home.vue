@@ -301,7 +301,7 @@ const techProjectList = [
       ]),
       h('span', {}, [
         h(Icon, { inline: true, icon: 'mdi:fire' }),
-        '候补抢课神器，广受同学们好评',
+        '一键教评神器，广受同学们好评',
       ]),
     ],
     teammates: ['JavaScript', 'Browser Extension'],
