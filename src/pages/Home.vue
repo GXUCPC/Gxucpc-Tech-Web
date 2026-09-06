@@ -2,7 +2,8 @@
 import AniEle from '@/components/AniEle.vue'
 import ArticleCard from '@/components/ArticleCard.vue'
 import type { ArticleMeta } from '@/types/article'
-import { ArticleAPI } from '@/api/article'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { ArticleAPI } from '@/api/article'
 import PeopleList, { type PeopleData } from '@/components/home/PeopleList.vue'
 import {
   DELAY_INITIAL,
@@ -154,12 +155,12 @@ onMounted(() => {
       onEnter: (self) => ele.classList.add('show'),
     })
   })
-  if (BACKEND_ENABLED) {
-    // 纯前端模式下不请求后端，「最新文章」区块一并隐藏
-    ArticleAPI.getLatestArticles(4).then((list) => {
-      latestArticles.value = list
-    })
-  }
+//   if (BACKEND_ENABLED) {
+//     // 纯前端模式下不请求后端，「最新文章」区块一并隐藏
+//     ArticleAPI.getLatestArticles(4).then((list) => {
+//       latestArticles.value = list
+//     })
+//   }
 })
 
 const mainTeamList: {
