@@ -240,14 +240,14 @@ const teamStories: StoryItem[] = [
 // 优秀队员（升学 & 就业）：一组翻页展示，一页三张
 const memberStories: StoryItem[] = [
   { avatar: '/img/avatar/lzx.jpg', name: '李周详', info: '保研天津大学', quote: '大爱详哥' },
-  { avatar: '/img/avatar/sxy.jpg', name: '石新阳', info: '保研东南大学' },
-  { avatar: '/img/avatar/lyf.jpg', name: '李韵锋', info: '保研至中国科学院大学' },
-  { avatar: '/img/avatar/lzy.jpg', name: '龙泽宇', info: '保研电子科技大学' },
+  { avatar: '/img/avatar/sxy.jpg', name: '石新阳', info: '保研东南大学', quote:'' },
+  { avatar: '/img/avatar/lyf.jpg', name: '李韵锋', info: '保研至中国科学院大学', quote:'' },
+  { avatar: '/img/avatar/lzy.jpg', name: '龙泽宇', info: '保研电子科技大学', quote:'' },
   { avatar: '/img/avatar/jmr.jpg', name: '金珉瑞', info: '哔哩哔哩推搜中台', quote: 'B推搜熟人' },
-  { avatar: '/img/avatar/sct.jpg', name: '孙城涛', info: '小马智行Offer' },
-  { avatar: '/img/avatar/wzh.jpg', name: '韦祖豪', quote: '韦老师' },
+  { avatar: '/img/avatar/sct.jpg', name: '孙城涛', info: '小马智行Offer', quote:'' },
+  { avatar: '/img/avatar/wzh.jpg', name: '韦祖豪', info: '',quote: '韦老师' },
   { avatar: '/img/avatar/wlm.jpg', name: '王利明', info: '字节飞书中台Offer', quote: '「电话告警」' },
-  { avatar: '/img/avatar/cjl.jpg', name: '陈佳林', info: '拼多多Offer' },
+  { avatar: '/img/avatar/cjl.jpg', name: '陈佳林', info: '拼多多Offer', quote:'' },
 ]
 
 
