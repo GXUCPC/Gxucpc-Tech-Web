@@ -276,7 +276,7 @@ const techProjectList = [
     mainMedal: [
       h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
         h(Icon, { inline: true, icon: 'mdi:code-braces', color: '#b388ff' }),
-        '毫秒级沙箱隔离评测，保障代码安全执行',
+        '毫秒级沙箱隔离评测，保障代码执行',
       ]),
       h('span', {}, [
         h(Icon, { inline: true, icon: 'mdi:chart-bar' }),
