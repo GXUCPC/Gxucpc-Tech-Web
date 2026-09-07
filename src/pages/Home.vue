@@ -179,15 +179,16 @@ const teamStories: StoryItem[] = [
       {
         icon: 'mdi:achievement-variant',
         color: 'silver',
-        text: '第48届ICPC亚洲区域赛（西安）银奖',
+        text: '第48届 ICPC 亚洲区域赛（西安）银奖',
       },
       {
         icon: 'mdi:achievement-variant',
         color: 'chocolate',
-        text: '第 9 届CCPC（深圳）铜奖',
+        text: '第 9 届 CCPC（深圳）铜奖',
       },
       {
-        icon: 'mdi:prize',
+        icon: 'mdi:achievement-variant',
+        color: 'white',
         text: 'ICPC（西部）三等奖',
       },
     ],
