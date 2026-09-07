@@ -1070,8 +1070,8 @@ HERO_PANELS.forEach((panel, i) => {
   align-items: flex-start;
   box-sizing: border-box;
   padding:16px 20px;
-  /* 固定展示高度，避免随视口高度在 2K/4K 上膨胀 */
-  min-height: clamp(340px, 24vw, 420px);
+  /* 降低项目卡片的整体高度，同时保留内容过长时自然撑开的空间。 */
+  min-height: clamp(300px, 20vw, 360px);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
@@ -1259,7 +1259,6 @@ HERO_PANELS.forEach((panel, i) => {
 
   .projectCard {
     padding: 1.25rem 1rem;
-    min-height: auto; /* 移动端取消固定高度 */
   }
 
   .projectCardBadge {
