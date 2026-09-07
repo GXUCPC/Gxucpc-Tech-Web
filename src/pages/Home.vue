@@ -255,7 +255,7 @@ const memberStories: StoryItem[] = [
 // 技术组代表项目列表
 const techProjectList = [
   {
-    grade: 'Active',
+    grade: 'QingLuan',
     teamName: '青鸾管理系统',
     mainMedal: [
       h('span', {}, [
@@ -270,7 +270,7 @@ const techProjectList = [
     teammates: ['Vue 3', 'Spring Boot', 'TypeScript'], // 借用 teammates 字段展示技术栈
   },
   {
-    grade: 'Core',
+    grade: 'Online Judge',
     teamName: 'GXU-OJ 评测平台',
     mainMedal: [
       h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
@@ -285,7 +285,7 @@ const techProjectList = [
     teammates: ['Go', 'Docker', 'Vue 3', 'Redis'], // OJ 常见的核心技术栈
   },
   {
-    grade: 'v2.0',
+    grade: 'NoneBot',
     teamName: '谛听 Bot',
     mainMedal: [
       h('span', { style: 'color: #67c23a' }, [
@@ -300,8 +300,8 @@ const techProjectList = [
     teammates: ['Python', 'NoneBot', 'LLM API'],
   },
   {
-    grade: 'Hot',
-    teamName: '西大教务工具箱 & 插件',
+    grade: 'GXU-Tools',
+    teamName: '西大教务工具箱',
     mainMedal: [
       h('span', { style: 'color: #e6a23c' }, [
         h(Icon, { inline: true, icon: 'mdi:tools', color: '#e6a23c' }),
@@ -347,18 +347,16 @@ function scrollToSection(id: string) {
 
 // 加入集训队 / 技术组 收益卡片（仿 Microsoft 内容卡片布局）
 const TRAINING_BENEFITS = [
-  { icon: 'mdi:trophy-variant', title: '竞赛奖项', desc: 'ICPC/CCPC 等高水平赛事获奖经历，丰富简历、提升竞争力' },
-  { icon: 'mdi:school', title: '保研升学', desc: '竞赛经历为保研加分，多名队员成功进入双一流院校深造' },
-  { icon: 'mdi:briefcase', title: '就业优势', desc: '算法能力受到大厂青睐，往届队员就业情况优异' },
-  { icon: 'mdi:account-group', title: '师长辅导', desc: '学长学姐一对一答疑，从算法到职业规划全面支持' },
-  { icon: 'mdi:certificate', title: '学分综测', desc: '参赛获奖可纳入综合素质评定，助力评优评先' },
+  { icon: 'mdi:trophy-variant', title: '竞赛奖项', desc: 'ICPC/CCPC 等高水平赛事获奖经历' },
+  { icon: 'mdi:school', title: '保研升学', desc: '竞赛经历为保研加分，帮助进入名校深造' },
+  { icon: 'mdi:briefcase', title: '就业优势', desc: '算法能力受大厂青睐，往届就业情况优异' },
+  { icon: 'mdi:account-group', title: '师长辅导', desc: '前辈一对一答疑，算法/职业规划全面支持' },
 ]
 const TECH_BENEFITS = [
-  { icon: 'mdi:code-tags', title: '项目实战', desc: '参与 OJ、教务系统等真实项目，告别玩具代码' },
-  { icon: 'mdi:layers', title: '技术栈', desc: '前后端、DevOps 全栈开发，掌握工业级技术体系' },
-  { icon: 'mdi:git', title: '工程规范', desc: '团队协作与代码规范，提前适应企业开发流程' },
-  { icon: 'mdi:chart-line', title: '求职竞争力', desc: '算法 + 工程双修，互联网大厂 offer 敲门砖' },
-  { icon: 'mdi:account-tie', title: '面试指导', desc: '大厂在职学长亲授技术与面试技巧，少走弯路' },
+  { icon: 'mdi:layers', title: '技术栈', desc: '开发与运维，掌握真实的工程技术体系' },
+  { icon: 'mdi:git', title: '工程规范', desc: '团队协作与代码规范，提前适应真实工程' },
+  { icon: 'mdi:chart-line', title: '求职竞争力', desc: '算法/工程双修，互联网大厂 offer 敲门砖' },
+  { icon: 'mdi:account-tie', title: '面试指导', desc: '大厂在职学长亲授就业技巧，少走弯路' },
 ]
 
 // 各组背景图轮播

@@ -252,9 +252,8 @@ onMounted(() => {
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
         <p style="margin-bottom: 20px;">项目组致力于用技术解决实际问题，基于真实的需求，我们开发了：</p>
         <li style="margin-left: 30px;">QQ机器人：自动统计ICPC集训队内刷题情况，激发训练热情。</li>
-        <li style="margin-left: 30px;">浏览器插件 & 教务工具箱：简化繁琐的教务流程。</li>
-        <li style="margin-left: 30px;">候补抢课工具：（你懂的）为同学们的选课之路保驾护航，广受好评。</li>
-        <li style="margin-left: 30px;">QQ机器人：自动统计集训队内刷题情况，激发训练热情。</li>
+        <li style="margin-left: 30px;">高并发爬虫：实时爬取集训队训练数据，做到管理可视化，自动化。</li>
+        <li style="margin-left: 30px;">教务工具箱：简化繁琐的教务流程。</li>
         <p style="margin-top: 20px;">目前，组内还有gxu课群bot，青鸾管理系统，谛听bot等项目正在同步开发。欢迎所有想要积累项目开发经验，学习技术的同学加入我们。</p>
 
             <button
