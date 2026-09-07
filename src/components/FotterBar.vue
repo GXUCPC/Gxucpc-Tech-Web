@@ -23,23 +23,25 @@ const year = new Date().getFullYear()
         </p>
       </div>
 
-      <div class="footerCol">
-        <div class="footerColTitle">站内导航</div>
-        <router-link v-for="link in quickLinks" :key="link.path" :to="link.path" class="footerLink">
-          {{ link.label }}
-        </router-link>
-      </div>
+      <div class="footerLinks">
+        <div class="footerCol">
+          <div class="footerColTitle">站内导航</div>
+          <router-link v-for="link in quickLinks" :key="link.path" :to="link.path" class="footerLink">
+            {{ link.label }}
+          </router-link>
+        </div>
 
-      <div class="footerCol">
-        <div class="footerColTitle">加入我们</div>
-        <span class="footerText">
-          <Icon icon="mdi:account-group-outline" :inline="true" />
-          招新 QQ 群：977870023
-        </span>
-        <span class="footerText">
-          <Icon icon="mdi:trophy-outline" :inline="true" />
-          ICPC / CCPC / 天梯赛 / 蓝桥杯
-        </span>
+        <div class="footerCol">
+          <div class="footerColTitle">加入我们</div>
+          <span class="footerText">
+            <Icon icon="mdi:account-group-outline" :inline="true" />
+            <span>招新 QQ 群：977870023</span>
+          </span>
+          <span class="footerText">
+            <Icon icon="mdi:trophy-outline" :inline="true" />
+            <span>ICPC / CCPC / 天梯赛 / 蓝桥杯</span>
+          </span>
+        </div>
       </div>
     </div>
 
@@ -99,6 +101,13 @@ const year = new Date().getFullYear()
   max-width: 24em;
 }
 
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  gap: 3em 6em;
+  align-items: start;
+}
+
 .footerLogo {
   font-weight: 800;
   font-size: 1.05em;
@@ -127,6 +136,10 @@ const year = new Date().getFullYear()
 }
 
 .footerLink {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
   color: rgba(255, 255, 255, 0.72);
   text-decoration: none;
   font-size: 0.92em;
@@ -141,8 +154,14 @@ const year = new Date().getFullYear()
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  max-width: 100%;
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.92em;
+
+  > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 }
 
 .footerMeta {
@@ -152,6 +171,52 @@ const year = new Date().getFullYear()
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.35);
   font-size: 0.8em;
+}
+
+/* 触屏设备的可用宽度不足以稳定容纳三列；改为单列，避免“加入我们”的 QQ 信息被裁切。 */
+@include touch {
+  .footerInner {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 2em;
+  }
+
+  .footerBrand,
+  .footerLinks {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .footerLinks {
+    /* 导航列按内容保留宽度，加入我们使用剩余空间，避免“技术组”被压缩。 */
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 1.5em;
+  }
+
+  .footerCol {
+    min-width: 0;
+  }
+
+  .footerText {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
+    line-height: 1.55;
+    white-space: normal;
+    overflow: visible;
+
+    > span {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .footerMeta {
+    margin-top: 2em;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
 }
 
 /* --- 评论区样式 --- */
