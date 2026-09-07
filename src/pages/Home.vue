@@ -4,6 +4,7 @@ import ArticleCard from '@/components/ArticleCard.vue'
 import type { ArticleMeta } from '@/types/article'
 // ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
 // import { ArticleAPI } from '@/api/article'
+import CardCarousel from '@/components/home/CardCarousel.vue'
 import StoryCards, { type StoryItem } from '@/components/home/StoryCards.vue'
 import {
   DELAY_INITIAL,
@@ -491,7 +492,7 @@ HERO_PANELS.forEach((panel, i) => {
   </ani-ele>
   <h2 class="subtitle">加入集训队会获得什么？</h2>
   <ani-ele
-    class="benefitsCardGrid"
+    class="cardCarouselSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -506,21 +507,23 @@ HERO_PANELS.forEach((panel, i) => {
         return tl
       }
     ">
-    <div
-      v-for="(item, i) in TRAINING_BENEFITS"
-      :key="i"
-      class="benefitsCard">
-      <div class="benefitsCardIcon">
-        <Icon :icon="item.icon" />
+    <CardCarousel :item-count="TRAINING_BENEFITS.length" aria-label="加入集训队会获得什么">
+      <div
+        v-for="(item, i) in TRAINING_BENEFITS"
+        :key="i"
+        class="benefitsCard">
+        <div class="benefitsCardIcon">
+          <Icon :icon="item.icon" />
+        </div>
+        <div class="benefitsCardTitle">{{ item.title }}</div>
+        <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
-      <div class="benefitsCardTitle">{{ item.title }}</div>
-      <div class="benefitsCardDesc">{{ item.desc }}</div>
-    </div>
+    </CardCarousel>
   </ani-ele>
   <h2 class="subtitle">优秀队员</h2>
   <!-- 优秀队伍 & 优秀队员：仿 JetBrains「Customer Stories」卡片布局，一页三张翻页展示 -->
-  <story-cards :items="teamStories" />
-  <story-cards :items="memberStories" />
+  <story-cards :items="teamStories" aria-label="优秀队伍" />
+  <story-cards :items="memberStories" aria-label="优秀队员" />
 
 
   <h1 class="title" id="techGroupTarget">技术组概要</h1>
@@ -581,7 +584,7 @@ HERO_PANELS.forEach((panel, i) => {
 
   <h2 class="subtitle">加入技术组会获得什么？</h2>
   <ani-ele
-    class="benefitsCardGrid"
+    class="cardCarouselSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -596,21 +599,23 @@ HERO_PANELS.forEach((panel, i) => {
         return tl
       }
     ">
-    <div
-      v-for="(item, i) in TECH_BENEFITS"
-      :key="i"
-      class="benefitsCard benefitsCardTech">
-      <div class="benefitsCardIcon">
-        <Icon :icon="item.icon" />
+    <CardCarousel :item-count="TECH_BENEFITS.length" aria-label="加入技术组会获得什么">
+      <div
+        v-for="(item, i) in TECH_BENEFITS"
+        :key="i"
+        class="benefitsCard benefitsCardTech">
+        <div class="benefitsCardIcon">
+          <Icon :icon="item.icon" />
+        </div>
+        <div class="benefitsCardTitle">{{ item.title }}</div>
+        <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
-      <div class="benefitsCardTitle">{{ item.title }}</div>
-      <div class="benefitsCardDesc">{{ item.desc }}</div>
-    </div>
+    </CardCarousel>
   </ani-ele>
 
   <h2 class="subtitle">代表项目展示</h2>
   <ani-ele
-    class="benefitsCardGrid projectCardGrid"
+    class="cardCarouselSection projectCardGrid"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -625,21 +630,23 @@ HERO_PANELS.forEach((panel, i) => {
         return tl
       }
     ">
-    <div
-      v-for="(project, i) in techProjectList"
-      :key="i"
-      class="projectCard">
-      <div class="projectCardBadge">{{ project.grade }}</div>
-      <div class="projectCardTitle">{{ project.teamName }}</div>
-      <div class="projectCardTech">
-        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
-      </div>
-      <div class="projectCardHighlights">
-        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
-          <component :is="medal" />
+    <CardCarousel :item-count="techProjectList.length" aria-label="代表项目展示">
+      <div
+        v-for="(project, i) in techProjectList"
+        :key="i"
+        class="projectCard">
+        <div class="projectCardBadge">{{ project.grade }}</div>
+        <div class="projectCardTitle">{{ project.teamName }}</div>
+        <div class="projectCardTech">
+          <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
+        </div>
+        <div class="projectCardHighlights">
+          <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
+            <component :is="medal" />
+          </div>
         </div>
       </div>
-    </div>
+    </CardCarousel>
   </ani-ele>
 
   <!-- 最新文章依赖后端接口，纯前端模式下隐藏 -->
@@ -980,11 +987,8 @@ HERO_PANELS.forEach((panel, i) => {
   padding: 0 var(--page-padding-x);
 }
 
-/* 收益卡片网格：全宽铺平，仿 Microsoft 内容卡片布局 */
-.benefitsCardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+/* 轮播区共用的全宽外层间距。卡片布局由 CardCarousel 统一管理。 */
+.cardCarouselSection {
   width: 100%;
   max-width: 100%;
   margin: 2em 0 4em;
@@ -996,6 +1000,7 @@ HERO_PANELS.forEach((panel, i) => {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  box-sizing: border-box;
   padding: 1.5rem 1.25rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1052,18 +1057,17 @@ HERO_PANELS.forEach((panel, i) => {
 }
 
 /* ====================================
-   代表项目展示：与「加入技术组会获得什么」同风格卡片网格
+   代表项目展示：沿用统一卡片轮播，仅补充项目区专属间距
    ==================================== */
 .projectCardGrid {
   margin-bottom: 6em;
-  /* 自适应列：宽屏 4 列，平板 2~3 列，手机 1 列，自动降级 */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .projectCard {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  box-sizing: border-box;
   padding:16px 20px;
   /* 固定展示高度，避免随视口高度在 2K/4K 上膨胀 */
   min-height: clamp(340px, 24vw, 420px);
@@ -1227,9 +1231,8 @@ HERO_PANELS.forEach((panel, i) => {
     max-width: 100%;
   }
 
-  /* 4. 收益卡片网格 (加入集训队/技术组获得什么) 移动端 */
-  .benefitsCardGrid {
-    grid-template-columns: 1fr;
+  /* 4. 收益卡片轮播 (加入集训队/技术组获得什么) 移动端 */
+  .cardCarouselSection {
     padding: 0 var(--page-padding-x);
     margin: 1.5em 0 3em;
   }
@@ -1248,10 +1251,9 @@ HERO_PANELS.forEach((panel, i) => {
 
   /* 5. 优秀队员卡片 (StoryCards) 响应式规则在组件内部处理 */
 
-  /* 6. 代表项目展示 (卡片网格) 移动端 */
+  /* 6. 代表项目展示（卡片轮播）移动端 */
   .projectCardGrid {
     margin-bottom: 4em;
-    grid-template-columns: 1fr; /* 窄屏单列 */
   }
 
   .projectCard {
