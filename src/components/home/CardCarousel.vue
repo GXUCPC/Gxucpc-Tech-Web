@@ -19,7 +19,7 @@ const props = withDefaults(
   {
     ariaLabel: '卡片轮播',
     autoPlay: true,
-    interval: 5000,
+    interval: 4000,
     loop: true,
   },
 )
