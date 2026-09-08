@@ -24,24 +24,24 @@ const year = new Date().getFullYear()
       </div>
 
       <div class="footerLinks">
-        <div class="footerCol">
+        <div class="footerCol footerNavigation">
           <div class="footerColTitle">站内导航</div>
           <router-link v-for="link in quickLinks" :key="link.path" :to="link.path" class="footerLink">
             {{ link.label }}
           </router-link>
         </div>
 
-        <div class="footerCol">
+        <div class="footerJoin">
           <div class="footerColTitle">加入我们</div>
-          <span class="footerText">
+          <span class="footerText footerQq">
             <Icon icon="mdi:account-group-outline" :inline="true" />
             <span>招新 QQ 群：977870023</span>
           </span>
-          <span class="footerText">
-            <Icon icon="mdi:trophy-outline" :inline="true" />
-            <span>ICPC / CCPC / 天梯赛 / 蓝桥杯</span>
-          </span>
         </div>
+        <span class="footerText footerEvents">
+          <Icon icon="mdi:trophy-outline" :inline="true" />
+          <span>ICPC / CCPC / 天梯赛 / 蓝桥杯</span>
+        </span>
       </div>
     </div>
 
@@ -104,8 +104,28 @@ const year = new Date().getFullYear()
 .footerLinks {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, max-content));
-  gap: 3em 6em;
+  grid-template-areas:
+    'navigation join'
+    'navigation events';
+  column-gap: 6em;
+  row-gap: 0.4em;
   align-items: start;
+}
+
+.footerNavigation {
+  grid-area: navigation;
+}
+
+.footerJoin {
+  grid-area: join;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  min-width: 0;
+}
+
+.footerEvents {
+  grid-area: events;
 }
 
 .footerLogo {
@@ -173,12 +193,18 @@ const year = new Date().getFullYear()
   font-size: 0.8em;
 }
 
-/* 触屏设备的可用宽度不足以稳定容纳三列；改为单列，避免“加入我们”的 QQ 信息被裁切。 */
+/* 触屏端两栏并排；QQ 紧跟右侧标题，较长的赛事信息横跨下一行。 */
 @include touch {
+  .footerBar {
+    /* 避开移动端浏览器安全区以及开发环境右下方的浮动工具按钮。 */
+    padding-bottom: calc(4em + env(safe-area-inset-bottom, 0px));
+    overflow: visible;
+  }
+
   .footerInner {
     flex-direction: column;
     flex-wrap: nowrap;
-    gap: 2em;
+    gap: 1.5em;
   }
 
   .footerBrand,
@@ -189,13 +215,18 @@ const year = new Date().getFullYear()
   }
 
   .footerLinks {
-    /* 导航列按内容保留宽度，加入我们使用剩余空间，避免“技术组”被压缩。 */
     grid-template-columns: max-content minmax(0, 1fr);
-    gap: 1.5em;
+    grid-template-areas:
+      'navigation join'
+      'events events';
+    column-gap: 1.5em;
+    row-gap: 0.75em;
   }
 
-  .footerCol {
+  .footerCol,
+  .footerJoin {
     min-width: 0;
+    gap: 0.5em;
   }
 
   .footerText {
@@ -213,7 +244,8 @@ const year = new Date().getFullYear()
   }
 
   .footerMeta {
-    margin-top: 2em;
+    margin-top: 1.5em;
+    padding-top: 1em;
     line-height: 1.6;
     overflow-wrap: anywhere;
   }
