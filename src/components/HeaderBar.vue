@@ -9,8 +9,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Icon } from '@iconify/vue'
 import { BACKEND_ENABLED } from '@/config/features'
-import GxuTechLogo from '@/components/brand/GxuTechLogo.vue'
-import { LOGO_MOTION } from '@/components/brand/logoMotion'
+import GxuXCPCLogo from '@/components/brand/GxuXCPCLogo.vue'
+import { GXU_XCPC_MOTION } from '../../public/previews/gxuxcpc/motion.js'
 
 const { dialogVisibleLogin } = useDialog()
 const { dialogVisibleFeedback } = useDialog()
@@ -23,10 +23,10 @@ const activeIndex = ref(route.path)
 const isMobileMenuOpen = ref(false)
 const isHeaderCompact = ref(false)
 const headerMotionStyle = {
-  '--brand-header-scale': LOGO_MOTION.headerScale,
-  '--brand-header-duration': `${LOGO_MOTION.headerDuration}s`,
-  '--brand-header-delay': `${LOGO_MOTION.mergeEnd}s`,
-  '--brand-header-ease': `cubic-bezier(${LOGO_MOTION.easing.join(',')})`,
+  '--brand-header-scale': 0.94,
+  '--brand-header-duration': `${GXU_XCPC_MOTION.headerDuration / 1000}s`,
+  '--brand-header-delay': `${GXU_XCPC_MOTION.headerDelay / 1000}s`,
+  '--brand-header-ease': `cubic-bezier(${GXU_XCPC_MOTION.easing.join(',')})`,
 }
 
 watch(
@@ -120,7 +120,7 @@ const expressionFeedback = () => {
 // const noticeVisible = ref(false)
 // const notices = ref<Notice[]>([])
 // const loading = ref(false)
-// 
+//
 // const openNoticeDialog = () => {
 //   if (!userStore.isLoggedIn) {
 //     ElMessage.warning('请先登录！')
@@ -129,7 +129,7 @@ const expressionFeedback = () => {
 //   noticeVisible.value = true
 //   getAllNotices()
 // }
-// 
+//
 // const getAllNotices = async () => {
 //   loading.value = true
 //   try {
@@ -141,7 +141,7 @@ const expressionFeedback = () => {
 //     loading.value = false
 //   }
 // }
-// 
+//
 // const formatDate = (isoString: string) => {
 //   if (!isoString) return ''
 //   const date = new Date(isoString)
@@ -167,7 +167,7 @@ const expressionFeedback = () => {
         </svg>
       </div>
 
-      <GxuTechLogo
+      <GxuXCPCLogo
         class="brand"
         state="expanded"
         trigger="scroll"
@@ -523,6 +523,7 @@ const expressionFeedback = () => {
 
   .headerBar {
     padding: 0 15px; /* 手机端两边边距缩短，留出更多空间 */
+    justify-content: flex-start;
     gap: 0.75em;
   }
 

@@ -2,7 +2,7 @@
 
 开发预览：`http://localhost:5173/logo-demo.html`。这是独立的 Vite HTML 入口，生产构建也会输出 `dist/logo-demo.html`，不占用站点路由。
 
-HeaderBar 已接入：顶端展开字标；向下滚动超过 60px 后收起为 Core Icon，回到 52px 以内展开（8px 回差避免边界抖动）。Header 使用 sticky 保持在视口顶部，并保留原有文档占位。全局横向裁剪使用 overflow-x: clip，避免 body 成为阻断 sticky 的额外滚动容器。收起后，桌面悬停/聚焦可临时展开。移动端点击短暂展开，菜单打开时保持展开；平板的默认展开状态为 G + T。
+`GxuTechLogo` 保留独立演示与组件接口。HeaderBar 现使用 `GxuXCPCLogo`：顶部展开 GxuXCPC，滚动超过 64px 后收起为 Core Icon，回到 32px 以内展开。Header 使用 sticky 保持在视口顶部，并保留原有文档占位。全局横向裁剪使用 overflow-x: clip，避免 body 成为阻断 sticky 的额外滚动容器。收起后，桌面悬停/聚焦可临时展开；移动端沿用同一滚动规则，菜单打开时保持完整字标；平板默认 G + X。
 
 ## 使用
 
@@ -54,6 +54,8 @@ import GxuTechLogo from '@/components/brand/GxuTechLogo.vue'
 - `LogoDemo.vue`：任意进度拖动、20/40/60/80% 停帧、0.25× / 0.5× / 1× 播放、暂停与双向播放、悬停、首次 reveal、滚动容器和明暗主题。
 
 GxuXCPC 的独立预览位于 `public/previews/gxuxcpc/index.html`，可通过 `/previews/gxuxcpc/index.html` 打开。`segments.js` 将原蓝图切为 **37 个片段**：两个 C 各由 top / upper cut / left / lower cut / bottom 五段组成；P 依次组装 stem、top、right、middle，并保留已加宽的 132 单位宽度。`motion.js` 的 `GXU_XCPC_MOTION` 设置 760ms 时长、30ms 字符错相、22ms 笔画错相、28ms Blade 错相及 25ms Dual-X 相位差。G→Gxu 与 X→XCPC 并行构建。预览控制台提供 `window.gxuxcpcPreview.assembly`，可检查每条笔画的来源和时间窗。
+
+`GxuXCPCLogo.vue` 直接复用这套 37 段几何、时间轴及减少动态效果逻辑，使 Header 与独立预览拥有相同的展开、收起和反向组装路径。
 
 `prefers-reduced-motion: reduce` 下，自动/交互形变直接切换终态；运行期间更改系统偏好也立即生效。键盘聚焦展开，Enter/Space 可临时切换，Escape 恢复自动状态。
 
