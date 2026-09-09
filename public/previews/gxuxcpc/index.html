@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f2ec" />
+    <title>GxuXCPC — Motion Study</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="preview" data-theme="light">
+      <header class="masthead">
+        <a class="brand-label" href="#top">GxuXCPC <span>— Motion Study</span></a>
+        <span class="masthead-note">COMPUTE × CREATE × POSSIBILITIES</span>
+        <button
+          id="theme"
+          class="theme-toggle"
+          type="button"
+          aria-label="切换为深色主题"
+          aria-pressed="false">
+          <span aria-hidden="true">◐</span><span id="theme-label">深色</span>
+        </button>
+      </header>
+
+      <main id="top">
+        <section class="intro">
+          <p class="eyebrow">MOTION IDENTITY / 02</p>
+          <div class="intro-line">
+            <h1>展开名字，<br />折叠可能。</h1>
+            <p>
+              结构先行，字形随后。<br />两组并行解锁，笔画延展、拼接，<br />最终锁定为 GxuXCPC。
+            </p>
+          </div>
+        </section>
+
+        <section class="workbench" aria-label="GxuXCPC 动画检查">
+          <div class="bench-heading">
+            <span class="eyebrow">01 / TRANSFORMATION</span
+            ><span id="stage" class="eyebrow">READABLE</span>
+          </div>
+          <div class="main-stage"><div id="primary" class="mark main-mark"></div></div>
+          <div class="stage-caption">
+            <span id="from-label">GxuXCPC</span
+            ><span class="caption-center">G ⇄ Gxu <span aria-hidden="true">·</span> X ⇄ XCPC</span
+            ><span>GX Core</span>
+          </div>
+          <div class="transport">
+            <div class="transport-buttons">
+              <button id="expand" type="button"><span aria-hidden="true">↖</span> 展开</button>
+              <button id="play" type="button" class="solid">Ⅱ 暂停</button>
+              <button id="collapse" type="button">收起 <span aria-hidden="true">↘</span></button>
+            </div>
+            <div class="transport-options">
+              <span class="motion-duration">760 MS</span
+              ><label class="speed-label"
+                >速度
+                <select id="speed" aria-label="播放速度">
+                  <option value="1">1×</option>
+                  <option value="0.5">0.5×</option>
+                  <option value="0.25">0.25×</option>
+                </select></label
+              >
+            </div>
+          </div>
+          <div class="scrubber-row">
+            <label class="scrubber-label" for="progress">形变进度</label
+            ><input id="progress" type="range" min="0" max="1" step="0.001" value="0" /><output
+              id="progress-value"
+              for="progress"
+              >000%</output
+            >
+          </div>
+          <div class="phase-ruler" aria-hidden="true">
+            <span>COMPRESS</span><span>FOLD TOGETHER</span><span>G + X</span><span>MERGE</span
+            ><span>LOCK</span>
+          </div>
+          <p id="motion-notice" class="motion-notice" hidden>
+            已遵循系统的“减少动态效果”偏好：播放直接切换状态；仍可拖动检查静态形状。
+          </p>
+          <p id="transport-status" class="sr-only" role="status" aria-live="polite"></p>
+        </section>
+
+        <section class="filmstrip-section" aria-label="六个关键停帧">
+          <div class="section-heading">
+            <span class="eyebrow">PAUSE ANYWHERE</span>
+            <p>每一个中间态，都应当成立。点击查看。</p>
+          </div>
+          <div id="filmstrip" class="filmstrip"></div>
+        </section>
+
+        <section class="interaction-grid" aria-label="交互示例">
+          <article class="interaction-card">
+            <div class="card-label"><span>02 / HOVER</span><span>↔</span></div>
+            <div class="interaction-stage">
+              <button
+                id="hover"
+                class="mark mark-button"
+                type="button"
+                aria-label="GxuXCPC，展开或收起品牌"
+                aria-expanded="false"></button>
+            </div>
+            <h2>停留，解码。</h2>
+            <p>悬停或聚焦展开，移开反向收起。<br />途中离开，也会沿当前进度平滑返回。</p>
+          </article>
+          <article class="interaction-card">
+            <div class="card-label">
+              <span>03 / REVEAL</span
+              ><button id="replay" class="text-button" type="button">重播 ↗</button>
+            </div>
+            <div class="interaction-stage"><div id="reveal" class="mark"></div></div>
+            <h2>从核，生长。</h2>
+            <p>等待 150ms，G 与 X 同时解锁。<br />几何笔画并行拼装，汇成字标后静止。</p>
+          </article>
+          <article class="interaction-card">
+            <div class="card-label"><span>04 / CORE RESPONSE</span><span>380 MS</span></div>
+            <div class="interaction-stage">
+              <button
+                id="alive"
+                class="mark mark-button"
+                type="button"
+                aria-label="GxuXCPC Core，播放一次微交互"></button>
+            </div>
+            <h2>细微，回应。</h2>
+            <p>轻触或悬停：核心先动，骨架回应。<br />没有循环，只保留一次克制的锁定。</p>
+          </article>
+        </section>
+
+        <section class="scroll-section" aria-label="悬浮导航示例">
+          <div class="section-heading">
+            <span class="eyebrow">05 / SCROLL CONTEXT</span>
+            <p id="scroll-state">EXPANDED</p>
+          </div>
+          <div
+            id="scroll-window"
+            class="scroll-window"
+            tabindex="0"
+            aria-label="在此窗口滚动，64px 后收起 Logo，回到 32px 以内展开">
+            <header class="scroll-header">
+              <div class="header-surface" aria-hidden="true"></div>
+              <div class="header-content">
+                <button
+                  id="header-logo"
+                  class="mark mark-button"
+                  type="button"
+                  aria-label="GxuXCPC，展开或收起品牌"
+                  aria-expanded="true"></button>
+                <nav class="sample-nav" aria-label="预览导航">
+                  <span>Compute</span><span>Community</span><span>Docs ↗</span>
+                </nav>
+                <button
+                  id="menu"
+                  class="menu-button"
+                  type="button"
+                  aria-label="展开预览菜单"
+                  aria-expanded="false"
+                  aria-controls="sample-menu">
+                  <span></span><span></span>
+                </button>
+              </div>
+              <div id="sample-menu" class="sample-menu" hidden>
+                <span>Compute</span><span>Community</span><span>Docs</span>
+              </div>
+            </header>
+            <div class="scroll-body">
+              <span class="eyebrow">BUILD A MORE OPEN COMPUTING FUTURE</span>
+              <h2>连接计算，<br />拓展可能。</h2>
+              <p>在这个窗口里向下滚动。<br />字标收起为核心，导航随后轻轻收紧。</p>
+              <div class="scroll-bottom">
+                <span>THE STRUCTURE REMAINS.</span><span>↑ 回到顶部，重新展开</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <details class="source-panel">
+          <summary><span>SVG 与动画参数</span><span>查看 / 下载 ↗</span></summary>
+          <div class="source-content">
+            <div>
+              <p>同一组矢量笔画，贯穿全部形态。</p>
+              <div class="download-row">
+                <select id="export-state" aria-label="要导出的 SVG 状态">
+                  <option value="full">GxuXCPC</option>
+                  <option value="branches">Gxu / XCPC 同步折叠</option>
+                  <option value="folded">G + X</option>
+                  <option value="merged">Merged Core</option>
+                  <option value="core">Core Icon</option></select
+                ><button id="download" type="button">下载 SVG ↓</button>
+              </div>
+              <div class="source-links">
+                <a href="./geometry.js" target="_blank" rel="noopener">几何源文件 ↗</a
+                ><a href="./segments.js" target="_blank" rel="noopener">笔画分段 ↗</a
+                ><a href="./motion.js" target="_blank" rel="noopener">动画配置 ↗</a>
+              </div>
+            </div>
+            <pre id="config"></pre>
+          </div>
+        </details>
+        <footer class="colophon">
+          <span>GxuXCPC — INDEPENDENT MOTION STUDY</span><span>PRECISION OVER SPECTACLE.</span>
+        </footer>
+      </main>
+    </div>
+    <script type="module" src="./preview.js"></script>
+  </body>
+</html>

@@ -9,6 +9,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Icon } from '@iconify/vue'
 import { BACKEND_ENABLED } from '@/config/features'
+import GxuTechLogo from '@/components/brand/GxuTechLogo.vue'
+import { LOGO_MOTION } from '@/components/brand/logoMotion'
 
 const { dialogVisibleLogin } = useDialog()
 const { dialogVisibleFeedback } = useDialog()
@@ -19,6 +21,13 @@ const route = useRoute()
 const activeIndex = ref(route.path)
 
 const isMobileMenuOpen = ref(false)
+const isHeaderCompact = ref(false)
+const headerMotionStyle = {
+  '--brand-header-scale': LOGO_MOTION.headerScale,
+  '--brand-header-duration': `${LOGO_MOTION.headerDuration}s`,
+  '--brand-header-delay': `${LOGO_MOTION.mergeEnd}s`,
+  '--brand-header-ease': `cubic-bezier(${LOGO_MOTION.easing.join(',')})`,
+}
 
 watch(
   () => route.path,
@@ -148,7 +157,7 @@ const expressionFeedback = () => {
 </script>
 
 <template>
-  <div class="headerBarContainer">
+  <div class="headerBarContainer" :class="{ 'headerBarContainer--compact': isHeaderCompact }" :style="headerMotionStyle">
     <div class="headerBar">
       <div class="mobile-menu-btn" @click="isMobileMenuOpen = !isMobileMenuOpen">
         <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
@@ -158,7 +167,14 @@ const expressionFeedback = () => {
         </svg>
       </div>
 
-      <router-link to="/" class="brand">广西大学 ICPC 集训队</router-link>
+      <GxuTechLogo
+        class="brand"
+        state="expanded"
+        trigger="scroll"
+        theme="dark"
+        :mobile-expanded="isMobileMenuOpen"
+        @scroll-change="isHeaderCompact = $event"
+      />
 
       <!-- 桌面端导航：纯文字链接 + hover 下拉 -->
       <nav class="desktopNav">
@@ -263,11 +279,31 @@ const expressionFeedback = () => {
   top: 0;
   width: 100%;
   z-index: $z-header;
+  isolation: isolate;
+  animation: headerSlideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+}
+
+/* Sticky keeps the navigation visible while preserving its 64px document slot.
+   Only the surface and logo change size, so the page does not shift. */
+.headerBarContainer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(17, 17, 17, 0.85);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  animation: headerSlideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
+  transform-origin: top;
+  transition: transform var(--brand-header-duration) var(--brand-header-ease);
+}
+.headerBarContainer--compact::before {
+  transform: scaleY(var(--brand-header-scale));
+  transition-delay: var(--brand-header-delay);
+}
+.headerBarContainer--compact .headerBar {
+  transform: translateY(calc(var(--header-h) * (var(--brand-header-scale) - 1) / 2));
+  transition-delay: var(--brand-header-delay);
 }
 
 @keyframes headerSlideIn {
@@ -289,20 +325,12 @@ const expressionFeedback = () => {
   justify-content: space-between;
   align-items: center;
   gap: 1em;
+  transition: transform var(--brand-header-duration) var(--brand-header-ease);
 }
 
 /* 品牌字标 */
 .brand {
-  color: #fff;
-  text-decoration: none;
-  font-weight: 800;
-  font-size: 1.05em;
-  letter-spacing: 1px;
-  white-space: nowrap;
-  transition: opacity var(--duration-short) ease;
-}
-.brand:hover {
-  opacity: 0.75;
+  --logo-width: 228px;
 }
 
 /* ===== 桌面端导航 ===== */
@@ -490,8 +518,7 @@ const expressionFeedback = () => {
 
   /* 品牌名保留缩小版，顶栏仍有站点标识 */
   .brand {
-    font-size: 0.85em;
-    letter-spacing: 0;
+    --logo-width: 196px;
   }
 
   .headerBar {
@@ -500,7 +527,7 @@ const expressionFeedback = () => {
   }
 
   /* 低端机降档背景模糊，滚动更顺 */
-  .headerBarContainer {
+  .headerBarContainer::before {
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }

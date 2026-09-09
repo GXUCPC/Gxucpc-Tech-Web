@@ -3,10 +3,11 @@
    全局类的响应式基线集中在文件末尾；组件私有类的响应式写在各组件 scoped 内
    ============================================================ */
 
-/* 禁止横向滚动条：100vw 等可能导致页面略宽于视口 */
+/* 裁掉横向溢出，但不创建额外滚动容器；hidden 会让 body 的 overflow-y
+   计算为 auto，导致 Header 的 sticky 绑定到不实际滚动的 body。 */
 html,
 body {
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ===== 运行时 Design Token =====

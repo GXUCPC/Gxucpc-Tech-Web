@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 164 144" role="img" aria-labelledby="title">
+  <title id="title">GxuTech — Core Icon</title>
+  <style>svg{color:#171717}@media(prefers-color-scheme:dark){svg{color:#f2f2f0}}</style>
+  <g fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="bevel">
+    <path id="g-shell--top" d="M100 12L42 12L50 30L82 30Z" />
+    <path id="g-shell--upper-cut" d="M42 12L10 44L28 52L50 30Z" />
+    <path id="g-shell--left" d="M10 44L10 90L28 60L28 52Z" />
+    <path id="g-shell--lower-cut" d="M10 90L34 114L28 86L28 60Z" />
+    <path id="g-shell--bottom" d="M34 114L42 114L40 98L28 86Z" />
+    <path id="g-shell--return" d="M42 114L58 98L44 98L40 98Z" />
+    <path id="g-crossbar--bar" d="M84 88L102 88L84 120L84 110L84 102L84 98Z" />
+    <path id="g-crossbar--elbow" d="M102 88L102 128L84 134L84 120Z" />
+    <path id="u-channel--left" d="M70.571 16L74.779 16L69.717 22.129L65.484 23.419Z" />
+    <path id="u-channel--right" d="M77.097 23.419L75.297 22.129L81.792 16L86 16Z" />
+    <path id="u-channel--lower-left" d="M65.484 23.419L69.717 22.129L69.988 23.097L66.208 26Z" />
+    <path id="u-channel--lower-right" d="M71.506 26L73.201 23.097L75.297 22.129L77.097 23.419Z" />
+    <path id="u-channel--bridge" d="M66.208 26L69.988 23.097L73.201 23.097L71.506 26Z" />
+    <path id="e-crown--left" d="M68 22L67.667 21.333L71.564 22.222L71.978 23.333Z" />
+    <path id="e-crown--upper-cut" d="M67.667 21.333L70.832 19.111L73.147 21.111L71.564 22.222Z" />
+    <path id="e-crown--top" d="M70.832 19.111L75.964 19.111L75.543 21.111L73.147 21.111Z" />
+    <path id="e-crown--right-cut" d="M75.964 19.111L80.346 21.333L77.283 22L75.543 21.111Z" />
+    <path id="e-crown--right" d="M80.346 21.333L80.44 23.333L77.497 23.333L77.283 22Z" />
+    <path id="e-foot--left" d="M68 22L71.481 22L71.895 23.111L68.889 23.778Z" />
+    <path id="e-foot--lower-cut" d="M68.889 23.778L71.895 23.111L74.086 24.222L73.302 26Z" />
+    <path id="e-foot--bottom" d="M73.302 26L74.086 24.222L80.482 24.222L80.566 26Z" />
+    <path id="e-bar--middle" d="M71.094 22L78.637 22L78.785 23.333L71.61 23.333Z" />
+    <path id="c-shell--top" d="M95.21 19.111L87.084 19.111L88.375 20.889L94.413 20.889Z" />
+    <path id="c-shell--upper-cut" d="M87.084 19.111L82.723 21.333L86.179 22L88.375 20.889Z" />
+    <path id="c-shell--left" d="M82.723 21.333L82.631 23.778L86.032 22.889L86.179 22Z" />
+    <path id="c-shell--lower-cut" d="M82.631 23.778L85.849 26L87.642 24L86.032 22.889Z" />
+    <path id="c-shell--bottom" d="M85.849 26L92.123 26L93.019 24L87.642 24Z" />
+    <path id="h-stem--left" d="M99.434 16L103.679 16L97.075 26L94.104 26Z" />
+    <path id="h-shoulder--left-cut" d="M101.331 19.556L102.908 19.111L101.901 21.111L99.717 22Z" />
+    <path id="h-shoulder--top" d="M102.908 19.111L108.04 19.111L104.697 21.111L101.901 21.111Z" />
+    <path id="h-shoulder--right-cut" d="M108.04 19.111L109.889 21.111L105.519 22L104.697 21.111Z" />
+    <path id="h-shoulder--right" d="M109.889 21.111L105 26L102.028 26L105.519 22Z" />
+    <path id="x-diagonal--blade-a" d="M50 16L55.61 16L62.468 26L58.727 26Z" />
+    <path id="x-lower--blade-b-lower" d="M50 26L53.74 26L59.049 21.806L57.42 19.548Z" />
+    <path id="x-upper--blade-b-upper" d="M63.091 16L68.701 16L61.261 20.194L61.261 20.194L59.622 17.935L59.622 17.935Z" />
+    <path id="t-blade--top" d="M42 12L140 12L122 30L60 30Z" />
+    <path id="t-stem--stem" d="M84 30L102 30L102 52L92 62L84 54Z" />
+    <path id="g-core-x-diagonal--core-plate" d="M44 52L68 52L102 86L84 100Z" />
+    <path id="g-core-x-lower--core-plate" d="M44 118L68 118L92 94L80 80Z" />
+    <path id="g-core-x-upper--core-plate" d="M128 44L154 44L122 76L154 114L130 114L98 76Z" />
+  </g>
+</svg>
