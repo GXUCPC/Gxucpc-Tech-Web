@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { computed, defineEmits, nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch } from 'vue'
 import { useBreakpoint } from '@/composables/useBreakpoint'
 
 const props = withDefaults(
@@ -15,6 +15,11 @@ const props = withDefaults(
     interval?: number
     /** 到达末页后是否回到第一页 */
     loop?: boolean
+    /**
+     * 固定每页展示的卡片数。未传入时保留原有响应式规则：桌面三张、
+     * 平板两张、手机一张；传入 1 可用于主视觉式的单卡展示。
+     */
+    itemsPerPage?: number
   }>(),
   {
     ariaLabel: '卡片轮播',
@@ -24,6 +29,11 @@ const props = withDefaults(
   },
 )
 
+const emit = defineEmits<{
+  /** 当前页变化（包括滑动、点击页标和自动翻页） */
+  pageChange: [page: number]
+}>()
+
 const { isMobile, isTouch, reduceMotion } = useBreakpoint()
 const viewport = useTemplateRef<HTMLDivElement>('viewport')
 const track = useTemplateRef<HTMLDivElement>('track')
@@ -31,6 +41,8 @@ const currentPage = ref(0)
 
 /** 桌面三张、平板两张、手机一张；手机优先判断，避免 isTouch 覆盖它。 */
 const pageSize = computed(() => {
+  const fixedSize = Math.floor(props.itemsPerPage ?? 0)
+  if (fixedSize > 0) return fixedSize
   if (isMobile.value) return 1
   if (isTouch.value) return 2
   return 3
@@ -190,6 +202,7 @@ async function syncAfterLayout() {
 }
 
 watch([pageSize, () => props.itemCount], syncAfterLayout)
+watch(currentPage, (page) => emit('pageChange', page))
 watch(reduceMotion, () => {
   if (reduceMotion.value) clearAutoPlayTimer()
   else startAutoPlay()
@@ -222,6 +235,7 @@ onBeforeUnmount(() => {
 <template>
   <section
     class="cardCarousel"
+    :class="{ 'cardCarousel--single': pageSize === 1 }"
     role="region"
     aria-roledescription="carousel"
     :aria-label="props.ariaLabel">
@@ -244,56 +258,74 @@ onBeforeUnmount(() => {
       </div>
     </div>
 
+    <!-- 供主视觉类轮播在内容两侧放置翻页控件，仍复用本组件的翻页逻辑。 -->
+    <slot
+      v-if="pageCount > 1 && $slots.overlay"
+      name="overlay"
+      :go-to-page="goToPage"
+      :scroll-page="scrollPage" />
+
     <div
       v-if="pageCount > 1"
       class="cardCarouselControls"
       :class="{ 'cardCarouselControls--indicatorOnly': isTouch }">
-      <button
-        v-if="!isTouch"
-        type="button"
-        class="cardCarouselButton"
-        aria-label="上一页"
-        @click="scrollPage(-1)">
-        <Icon icon="mdi:arrow-left" aria-hidden="true" />
-      </button>
-      <div
-        class="cardCarouselDots"
-        :role="isTouch ? 'status' : 'tablist'"
-        :aria-label="isTouch ? `第 ${currentPage + 1} / ${pageCount} 页` : `${props.ariaLabel}页码`">
-        <template v-if="isTouch">
-          <span
+      <!-- 自定义页标仍复用同一套翻页、自动播放与滚动吸附逻辑。 -->
+      <slot
+        v-if="$slots.controls"
+        name="controls"
+        :current-page="currentPage"
+        :page-count="pageCount"
+        :go-to-page="goToPage"
+        :scroll-page="scrollPage" />
+      <template v-else>
+        <button
+          v-if="!isTouch"
+          type="button"
+          class="cardCarouselButton"
+          aria-label="上一页"
+          @click="scrollPage(-1)">
+          <Icon icon="mdi:arrow-left" aria-hidden="true" />
+        </button>
+        <div
+          class="cardCarouselDots"
+          :role="isTouch ? 'status' : 'tablist'"
+          :aria-label="isTouch ? `第 ${currentPage + 1} / ${pageCount} 页` : `${props.ariaLabel}页码`">
+          <template v-if="isTouch">
+            <span
+              v-for="page in pageCount"
+              :key="page"
+              class="cardCarouselDot"
+              :class="{ active: currentPage === page - 1 }"
+              aria-hidden="true"></span>
+          </template>
+          <button
+            v-else
             v-for="page in pageCount"
             :key="page"
+            type="button"
             class="cardCarouselDot"
+            role="tab"
+            :aria-label="`第 ${page} 页`"
+            :aria-selected="currentPage === page - 1"
             :class="{ active: currentPage === page - 1 }"
-            aria-hidden="true"></span>
-        </template>
+            @click="goToPage(page - 1)"></button>
+        </div>
         <button
-          v-else
-          v-for="page in pageCount"
-          :key="page"
+          v-if="!isTouch"
           type="button"
-          class="cardCarouselDot"
-          role="tab"
-          :aria-label="`第 ${page} 页`"
-          :aria-selected="currentPage === page - 1"
-          :class="{ active: currentPage === page - 1 }"
-          @click="goToPage(page - 1)"></button>
-      </div>
-      <button
-        v-if="!isTouch"
-        type="button"
-        class="cardCarouselButton"
-        aria-label="下一页"
-        @click="scrollPage(1)">
-        <Icon icon="mdi:arrow-right" aria-hidden="true" />
-      </button>
+          class="cardCarouselButton"
+          aria-label="下一页"
+          @click="scrollPage(1)">
+          <Icon icon="mdi:arrow-right" aria-hidden="true" />
+        </button>
+      </template>
     </div>
   </section>
 </template>
 
 <style scoped lang="scss">
 .cardCarousel {
+  position: relative;
   width: 100%;
   min-width: 0;
 }
@@ -423,5 +455,10 @@ onBeforeUnmount(() => {
   .cardCarouselControls {
     margin-top: 1.25rem;
   }
+}
+
+/* 主视觉式轮播在任意断点均保持一页一张。 */
+.cardCarousel--single .cardCarouselTrack > :deep(*) {
+  flex-basis: 100%;
 }
 </style>

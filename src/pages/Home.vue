@@ -172,6 +172,52 @@ onMounted(() => {
 
 // 优秀队伍：仿 JetBrains「Customer Stories」卡片布局，年级沿用原版艺术字水印
 const teamStories: StoryItem[] = [
+  //     {
+  //   name: '流星一条',
+  //   watermark: '22级',
+  //   infoSuffix: '队员：付家锐、石新阳、韦祖豪',
+  //   quoteItems: [
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'silver',
+  //       text: '第48届 ICPC 亚洲区域赛（西安）银奖',
+  //     },
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'chocolate',
+  //       text: '第 9 届 CCPC（深圳）铜奖',
+  //     },
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'white',
+  //       text: 'ICPC（西部）三等奖',
+  //     },
+  //   ],
+  //   footer: '写不下力……',
+  // },
+  //   {
+  //   name: '流星一条',
+  //   watermark: '22级',
+  //   infoSuffix: '队员：付家锐、石新阳、韦祖豪',
+  //   quoteItems: [
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'silver',
+  //       text: '第48届 ICPC 亚洲区域赛（西安）银奖',
+  //     },
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'chocolate',
+  //       text: '第 9 届 CCPC（深圳）铜奖',
+  //     },
+  //     {
+  //       icon: 'mdi:achievement-variant',
+  //       color: 'white',
+  //       text: 'ICPC（西部）三等奖',
+  //     },
+  //   ],
+  //   footer: '写不下力……',
+  // },
   {
     name: '流星一条',
     watermark: '22级',
@@ -236,22 +282,81 @@ const teamStories: StoryItem[] = [
     ],
     footer: '在蒸了，在蒸了……',
   },
+  {
+    name: '',
+    watermark: '25级',
+    infoSuffix: '队员：',
+    quoteItems: [],
+    footer: '',
+  }
 ]
 
-// 优秀队员（升学 & 就业）：一组翻页展示，一页三张
+// 优秀队员（升学 & 就业）：奖项独立维护，由主视觉卡片展示。
+// 暂未收录的人员保留空数组，后续补充时只需追加 { icon, color, text }。
 const memberStories: StoryItem[] = [
-  { avatar: '/img/avatar/lzx.jpg', name: '李周详', info: '保研天津大学', quote: '大爱详哥' },
-  { avatar: '/img/avatar/sxy.jpg', name: '石新阳', info: '保研东南大学', quote:'' },
-  { avatar: '/img/avatar/lyf.jpg', name: '李韵锋', info: '保研至中国科学院大学', quote:'' },
-  { avatar: '/img/avatar/lzy.jpg', name: '龙泽宇', info: '保研电子科技大学', quote:'' },
-  { avatar: '/img/avatar/jmr.jpg', name: '金珉瑞', info: '哔哩哔哩推搜中台', quote: 'B推搜熟人' },
-  { avatar: '/img/avatar/sct.jpg', name: '孙城涛', info: '小马智行Offer', quote:'' },
-  { avatar: '/img/avatar/wzh.jpg', name: '韦祖豪', info: '',quote: '韦老师' },
-  { avatar: '/img/avatar/wlm.jpg', name: '王利明', info: '字节飞书中台Offer', quote: '「电话告警」' },
-  { avatar: '/img/avatar/cjl.jpg', name: '陈佳林', info: '拼多多Offer', quote:'' },
+  { avatar: '/img/avatar/lzx.jpg', 
+    name: '李周详', 
+    info: '保研天津大学',  
+    quote: '大爱详哥', 
+    awards: [] },
+  {
+    avatar: '/img/avatar/sxy.jpg',
+    name: '石新阳',
+    info: '保研东南大学',
+    quote: '测试测试',
+    awards: [
+      { icon: 'mdi:achievement-variant', color: 'silver', text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' },
+      { icon: 'mdi:achievement-variant', color: 'chocolate', text: '第 9 届 CCPC（深圳）铜奖' },
+    ]
+  },
+  { 
+    avatar: '/img/avatar/lyf.jpg', 
+    name: '李韵锋',
+    info: '保研至中国科学院大学', 
+    awards: [] 
+  },
+  { 
+    avatar: '/img/avatar/lzy.jpg', 
+    name: '龙泽宇', 
+    info: '保研电子科技大学', 
+    awards: [] 
+  },
+  {
+    avatar: '/img/avatar/jmr.jpg',
+    name: '金珉瑞',
+    info: '哔哩哔哩推搜中台',
+    quote: 'B推搜熟人',
+    awards: [],
+  },
+  { 
+    avatar: '/img/avatar/sct.jpg', 
+    name: '孙城涛', 
+    info: '小马智行Offer', 
+    awards: [] 
+  },
+  {
+    avatar: '/img/avatar/wzh.jpg',
+    name: '韦祖豪',
+    quote: '韦老师',
+    awards: [
+      { icon: 'mdi:achievement-variant', color: 'silver', text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' },
+      { icon: 'mdi:achievement-variant', color: 'chocolate', text: '第 9 届 CCPC（深圳）铜奖' },
+    ],
+  },
+  { 
+    avatar: '/img/avatar/wlm.jpg', 
+    name: '王利明', 
+    info: '字节飞书中台Offer', 
+    quote: '「电话告警」', 
+    awards: [] 
+  },
+  { 
+    avatar: '/img/avatar/cjl.jpg', 
+    name: '陈佳林', 
+    info: '拼多多Offer', 
+    awards: [] 
+  }
 ]
-
-
 
 // 技术组代表项目列表
 const techProjectList = [
@@ -520,10 +625,10 @@ HERO_PANELS.forEach((panel, i) => {
       </div>
     </CardCarousel>
   </ani-ele>
-  <h2 class="subtitle">优秀队员</h2>
-  <!-- 优秀队伍 & 优秀队员：仿 JetBrains「Customer Stories」卡片布局，一页三张翻页展示 -->
+  <h2 class="subtitle">优秀队伍 & 队员</h2>
+  <!-- 队伍保留故事卡片；队员使用头像页标的主视觉轮播。 -->
   <story-cards :items="teamStories" aria-label="优秀队伍" />
-  <story-cards :items="memberStories" aria-label="优秀队员" />
+  <story-cards :items="memberStories" aria-label="优秀队员" variant="member-showcase" />
 
 
   <h1 class="title" id="techGroupTarget">技术组概要</h1>
