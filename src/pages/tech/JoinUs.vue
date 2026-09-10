@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { onMounted, onUnmounted, ref } from 'vue'
 
-const globalLoading = useGlobalLoading()
 
 // ==========================================
 // 1. 滚动动画指令：v-slide-show
@@ -150,8 +148,8 @@ const scrollToSection = (id: string) => {
         如果你对技术组感兴趣，欢迎通过以下方式联系我们投递实习简历：
       </p>
       <ul class="value-list" style="margin-bottom: 50px;" v-slide-show>
-        <li><strong>GitHub:</strong> ? (填写链接)</li>
-        <li><strong>Email:</strong> ? (填写邮箱)</li>
+        <li><strong>GitHub: <a href="https://github.com/E1aina2007/Gxutech-Recruitment" target="_blank" style="color: white;">https://github.com/E1aina2007/Gxutech-Recruitment</a></strong> </li>
+        <li><strong>QQ群:</strong> 977870023</li>
       </ul>
 
       <div style="height: 30vh"></div>
@@ -363,12 +361,30 @@ const scrollToSection = (id: string) => {
   }
 }
 
-@media (max-width: 1100px) {
+/* 响应式处理：屏幕变窄时隐藏目录（统一断点 ≤1024） */
+@include touch {
   .sidebar-container {
     display: none;
   }
   .page-layout {
     gap: 0;
+  }
+}
+
+/* 手机端：标题/正文字号收敛，避免 2.5em 标题折行局促 */
+@include mobile {
+  .page-layout {
+    padding: 24px var(--page-padding-x);
+  }
+
+  .subtitle {
+    font-size: 1.8em;
+  }
+
+  .paragraph,
+  .tech-matrix td,
+  .value-list li {
+    font-size: 16px;
   }
 }
 </style>

@@ -1,176 +1,209 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
-import { gsap } from 'gsap'
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useDialog } from '@/store/globalLoading.ts'
-import { useUserStore } from '@/store/user'
-import { logoutAPI } from '@/api/user-login'
-import http from '@/api/http'
-import { ElMessage } from 'element-plus'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { useUserStore } from '@/store/user'
+// import { logoutAPI } from '@/api/user-login'
+// import http from '@/api/http'
+import { Icon } from '@iconify/vue'
+import GxuXCPCLogo from '@/components/brand/GxuXCPCLogo.vue'
+import { GXU_XCPC_MOTION } from '../../public/previews/gxuxcpc/motion.js'
 
-const { dialogVisibleLogin } = useDialog()
-const { dialogVisibleFeedback } = useDialog()
-
-const globalLoading = useGlobalLoading()
 const router = useRouter()
 const route = useRoute()
 
 const activeIndex = ref(route.path)
 
+const isMobileMenuOpen = ref(false)
+const isHeaderCompact = ref(false)
+const headerMotionStyle = {
+  '--brand-header-scale': 0.94,
+  '--brand-header-duration': `${GXU_XCPC_MOTION.headerDuration / 1000}s`,
+  '--brand-header-delay': `${GXU_XCPC_MOTION.headerDelay / 1000}s`,
+  '--brand-header-ease': `cubic-bezier(${GXU_XCPC_MOTION.easing.join(',')})`,
+}
+
 watch(
   () => route.path,
   (newPath) => {
     activeIndex.value = newPath
+    isMobileMenuOpen.value = false
   }
 )
 
-const userStore = useUserStore()
+// const userStore = useUserStore()
 
-const isMobileMenuOpen = ref(false)
+// 顶部导航结构：带 children 的项 hover 展开下拉（桌面端）
+interface NavChild {
+  label: string
+  path: string
+}
+interface NavItem {
+  label: string
+  path: string
+  children?: NavChild[]
+}
+const NAV_ITEMS: NavItem[] = [
+  { label: '首页', path: '/' },
+  {
+    label: '集训队',
+    path: '/xcpc',
+    children: [
+      { label: '集训队简介', path: '/xcpc' },
+      { label: 'XCPC 是什么？', path: '/xcpc/introdution' },
+      { label: '加入我们', path: '/xcpc/join-us' },
+      // 纯前端模式：赛事报名页挂载即请求后端，恢复后再添加入口。
+    ],
+  },
+  {
+    label: '技术组',
+    path: '/tech',
+    children: [
+      { label: '技术组简介', path: '/tech/introduction' },
+      { label: '加入我们', path: '/tech/contuctUs' },
+      // { label: '招新面试申请', path: '/tech/interview' },
+    ],
+  },
+  // 纯前端模式：文章列表数据来自后端，恢复后再添加入口。
+]
 
-const expression = () => {
-    dialogVisibleLogin.value = true;
-}
-const expressionFeedback = () => {
-    dialogVisibleFeedback.value = true;
-}
-const handleLogout = async () => {
-    if (confirm('确定要退出登录吗？')) {
-        await logoutAPI();
-        userStore.logout();
-        location.reload();
-    }
-}
-
-// 通用的路由跳转逻辑
-const handleSelect = (key: string, keyPath: string[]) => {
-  router.push(key)
-  if (key === '/') {
-    globalLoading.loading = true
-    globalLoading.progress = 0
-    const obj = { p: 0 }
-    gsap.timeline().to(obj, {
-      p: 99,
-      duration: 3,
-      ease: 'power1.inOut',
-      onUpdate: () => {
-        globalLoading.progress = obj.p.toFixed()
-      },
-      onComplete: () => {
-        globalLoading.loading = false
-      },
-    })
-  }
-}
-
-// --- 新增：手机端专属的点击事件，点完菜单后自动收起下拉框 ---
-const handleMobileSelect = (key: string, keyPath: string[]) => {
-  isMobileMenuOpen.value = false; // 关闭下拉菜单
-  handleSelect(key, keyPath);     // 执行原本的跳转逻辑
-}
-// 通知功能
-enum NoticeStatus {
-  DRAFT = 'draft',
-  PUBLISHED = 'published',
-}
-interface Notice {
-  id?: number
-  title: string
-  content: string
-  status: NoticeStatus
-  username: string
-  created_at: string
-}
-const noticeVisible = ref(false)
-const notices = ref<Notice[]>([])
-const loading = ref(false)
-
-const openNoticeDialog = () => {
-  if (!userStore.isLoggedIn) {
-    ElMessage.warning('请先登录！')
-    return
-  }
-  noticeVisible.value = true
-  getAllNotices()
+function isActive(item: NavItem) {
+  if (item.path === '/') return activeIndex.value === '/'
+  return activeIndex.value === item.path || activeIndex.value.startsWith(item.path + '/')
 }
 
-const getAllNotices = async () => {
-  loading.value = true
-  try {
-    const res = await http.get('/notice/published', { params: { page: 1, size: 100 } })
-    if (res.code === 200) notices.value = res.data.list
-  } catch (err) {
-    ElMessage.error('获取通知失败')
-  } finally {
-    loading.value = false
-  }
+const go = (path: string) => {
+  router.push(path)
+  isMobileMenuOpen.value = false
 }
 
-const formatDate = (isoString: string) => {
-  if (!isoString) return ''
-  const date = new Date(isoString)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-  }).replace(/\//g, '-')
+// el-menu（移动端下拉）选中回调
+const handleSelect = (key: string) => {
+  go(key)
 }
+
+// const handleLogout = async () => {
+//     if (confirm('确定要退出登录吗？')) {
+//         await logoutAPI();
+//         userStore.logout();
+//         location.reload();
+//     }
+// }
+
+// // 通知功能
+// enum NoticeStatus {
+//   DRAFT = 'draft',
+//   PUBLISHED = 'published',
+// }
+// interface Notice {
+//   id?: number
+//   title: string
+//   content: string
+//   status: NoticeStatus
+//   username: string
+//   created_at: string
+// }
+// const noticeVisible = ref(false)
+// const notices = ref<Notice[]>([])
+// const loading = ref(false)
+//
+// const openNoticeDialog = () => {
+//   if (!userStore.isLoggedIn) {
+//     ElMessage.warning('请先登录！')
+//     return
+//   }
+//   noticeVisible.value = true
+//   getAllNotices()
+// }
+//
+// const getAllNotices = async () => {
+//   loading.value = true
+//   try {
+//     const res = await http.get('/notice/published', { params: { page: 1, size: 100 } })
+//     if (res.code === 200) notices.value = res.data.list
+//   } catch (err) {
+//     ElMessage.error('获取通知失败')
+//   } finally {
+//     loading.value = false
+//   }
+// }
+//
+// const formatDate = (isoString: string) => {
+//   if (!isoString) return ''
+//   const date = new Date(isoString)
+//   return date.toLocaleString('zh-CN', {
+//     year: 'numeric',
+//     month: '2-digit',
+//     day: '2-digit',
+//     hour: '2-digit',
+//     minute: '2-digit',
+//     hour12: false,
+//   }).replace(/\//g, '-')
+// }
 </script>
 
 <template>
-  <div class="headerBarContainer">
+  <div class="headerBarContainer" :class="{ 'headerBarContainer--compact': isHeaderCompact }" :style="headerMotionStyle">
     <div class="headerBar">
-
       <div class="mobile-menu-btn" @click="isMobileMenuOpen = !isMobileMenuOpen">
-        <svg viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="2" fill="none">
+        <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
           <line x1="3" y1="12" x2="21" y2="12"></line>
           <line x1="3" y1="6" x2="21" y2="6"></line>
           <line x1="3" y1="18" x2="21" y2="18"></line>
         </svg>
       </div>
 
-      <div class="show-on-desktop">
-        <h2>广西大学icpc集训队</h2>
-      </div>
+      <GxuXCPCLogo
+        class="brand"
+        state="expanded"
+        trigger="scroll"
+        theme="dark"
+        :mobile-expanded="isMobileMenuOpen"
+        @scroll-change="isHeaderCompact = $event"
+      />
 
-      <el-menu
-        :default-active="activeIndex"
-        class="centerMenu desktop-menu"
-        mode="horizontal"
-        :ellipsis="false"
-        @select="handleSelect"
-      >
-        <el-menu-item index="/">首页</el-menu-item>
-        <el-sub-menu index="/xcpc">
-          <template #title>集训队</template>
-          <el-menu-item index="/xcpc">集训队主页</el-menu-item>
-          <el-menu-item index="/xcpc/introdution">xcpc是什么？</el-menu-item>
-          <el-menu-item index="/xcpc/join-us">加入我们</el-menu-item>
-          <el-menu-item index="/xcpc/competitionSignUp">赛事报名</el-menu-item>
-        </el-sub-menu>
-        <el-sub-menu index="/tech">
-          <template #title>技术组</template>
-          <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
-          <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
-          <el-menu-item index="/tech/interview">招新面试申请</el-menu-item>
-        </el-sub-menu>
-        <el-menu-item index="/articles">文章</el-menu-item>
-      </el-menu>
+      <!-- 桌面端导航：纯文字链接 + hover 下拉 -->
+      <nav class="desktopNav">
+        <template v-for="item in NAV_ITEMS" :key="item.label">
+          <div v-if="item.children" class="navItem">
+            <router-link :to="item.path" class="navLink" :class="{ active: isActive(item) }">
+              {{ item.label }}
+              <Icon icon="mdi:chevron-down" :inline="true" class="chevron" />
+            </router-link>
+            <div class="dropdownPanel">
+              <router-link
+                v-for="child in item.children"
+                :key="child.path"
+                :to="child.path"
+                class="dropdownLink"
+                :class="{ active: activeIndex === child.path }">
+                {{ child.label }}
+              </router-link>
+            </div>
+          </div>
+          <router-link
+            v-else
+            :to="item.path"
+            class="navLink navItem"
+            :class="{ active: isActive(item) }">
+            {{ item.label }}
+          </router-link>
+        </template>
+      </nav>
 
-      <div class="headerRight">
-        <el-button size="large" @click="openNoticeDialog" text>通知</el-button>
-        <el-button size="large" @click.prevent="expressionFeedback" text>意见反馈</el-button>
-        <el-button v-if="!userStore.isLoggedIn" size="large" @click.prevent="expression" text>登录</el-button>
+      <!-- 纯前端模式：通知/意见反馈/登录/退出均依赖后端，整块暂时注释（恢复时取消注释并还原 script 中对应方法） -->
+      <!--
+      <div class="headerActions" v-if="BACKEND_ENABLED">
+        <button class="textLink" type="button" @click="openNoticeDialog">通知</button>
+        <button class="textLink" type="button" @click="expressionFeedback">意见反馈</button>
+        <button v-if="!userStore.isLoggedIn" type="button" class="pillBtn" @click="expression">登录</button>
         <div v-else class="userInfo">
-          <span class="userName">欢迎，{{ userStore.userInfo?.nickname || userStore.userInfo?.username }}</span>
           <el-tag v-if="userStore.userInfo?.is_admin" size="small" type="danger" effect="light">管理员</el-tag>
-          <el-button size="small" type="info" @click="handleLogout" text>退出</el-button>
+          <span class="userName">{{ userStore.userInfo?.nickname || userStore.userInfo?.username }}</span>
+          <button class="textLink" type="button" @click="handleLogout">退出</button>
         </div>
       </div>
+      -->
     </div>
 
     <el-collapse-transition>
@@ -179,105 +212,272 @@ const formatDate = (isoString: string) => {
           :default-active="activeIndex"
           mode="vertical"
           class="mobile-el-menu"
-          @select="handleMobileSelect"
+          @select="handleSelect"
         >
           <el-menu-item index="/">首页</el-menu-item>
           <el-sub-menu index="/xcpc">
             <template #title>集训队</template>
-            <el-menu-item index="/xcpc">> 集训队主页</el-menu-item>
-            <el-menu-item index="/xcpc/introdution">> xcpc是什么？</el-menu-item>
-            <el-menu-item index="/xcpc/join-us">> 加入我们</el-menu-item>
-            <el-menu-item index="/xcpc/competitionSignUp">> 赛事报名</el-menu-item>
+            <el-menu-item index="/xcpc">集训队简介</el-menu-item>
+            <el-menu-item index="/xcpc/introdution">XCPC 是什么？</el-menu-item>
+            <el-menu-item index="/xcpc/join-us">加入我们</el-menu-item>
+            <!-- 纯前端模式：赛事报名页会请求后端，恢复后再显示入口。 -->
+            <!-- <el-menu-item index="/xcpc/competitionSignUp">赛事报名</el-menu-item> -->
           </el-sub-menu>
           <el-sub-menu index="/tech">
             <template #title>技术组</template>
-            <el-menu-item index="/tech/introduction">> 技术组简介</el-menu-item>
-            <el-menu-item index="/tech/contuctUs">> 加入我们</el-menu-item>
-            <el-menu-item index="/tech/interview">> 招新面试申请</el-menu-item>
+            <el-menu-item index="/tech/introduction">技术组简介</el-menu-item>
+            <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
+            <!-- <el-menu-item index="/tech/interview">招新面试申请</el-menu-item> -->
           </el-sub-menu>
-          <el-menu-item index="/articles">> 文章</el-menu-item>
+          <!-- 纯前端模式：文章列表依赖后端，恢复后再显示入口。 -->
+          <!-- <el-menu-item index="/articles">文章</el-menu-item> -->
         </el-menu>
       </div>
     </el-collapse-transition>
-    
-    <Teleport to="body">
-      <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
-        <div class="notice-modal">
-          <div class="modal-header">
-            <h3>系统通知</h3>
-            <button class="close-btn" @click="noticeVisible = false">×</button>
-          </div>
-          <div class="modal-body">
-            <div class="notice-list">
-              <div v-if="loading" class="loading-tip">加载中...</div>
-              <div v-else-if="notices.length === 0" class="empty-tip">暂无通知</div>
-              <div v-else class="notice-item" v-for="item in notices" :key="item.id">
-                <div class="notice-title">{{ item.title }}</div>
-                <div class="notice-content">{{ item.content }}</div>
-                <div class="notice-time">{{ formatDate(item.created_at) }}</div>
+
+    <!--
+      系统通知依赖 /notice/published，纯前端模式不渲染。
+      后端恢复后，与脚本中的通知状态和请求函数一并恢复。
+      <Teleport to="body">
+        <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
+          <div class="notice-modal">
+            <div class="modal-header">
+              <h3>系统通知</h3>
+              <button class="close-btn" @click="noticeVisible = false">×</button>
+            </div>
+            <div class="modal-body">
+              <div class="notice-list">
+                <div v-if="loading" class="loading-tip">加载中...</div>
+                <div v-else-if="notices.length === 0" class="empty-tip">暂无通知</div>
+                <div v-else class="notice-item" v-for="item in notices" :key="item.id">
+                  <div class="notice-title">{{ item.title }}</div>
+                  <div class="notice-content">{{ item.content }}</div>
+                  <div class="notice-time">{{ formatDate(item.created_at) }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
+    -->
   </div>
 </template>
 
-<style scoped>
-/* 1. 拔掉父容器身上的毛玻璃属性，打破结界 */
+<style scoped lang="scss">
+/* ===== 顶栏：参考 anthropic.com —— 简洁文字导航 + 描边胶囊按钮 =====
+   载入时从视口上方划入 */
 .headerBarContainer {
   position: sticky;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid #424242;
-  z-index: 99;
+  z-index: $z-header;
+  isolation: isolate;
+  animation: headerSlideIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
 }
 
-/* 2. 新增一个替身（伪元素），专门负责顶栏那 60px 的毛玻璃 */
+/* Sticky keeps the navigation visible while preserving its 64px document slot.
+   Only the surface and logo change size, so the page does not shift. */
 .headerBarContainer::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backdrop-filter: blur(5px);
-  z-index: -1; /* 垫在最底层，不影响文字和按钮点击 */
-  transition: 0.25s ease-in-out;
+  inset: 0;
+  z-index: -1;
+  background: rgba(17, 17, 17, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transform-origin: top;
+  transition: transform var(--brand-header-duration) var(--brand-header-ease);
+}
+.headerBarContainer--compact::before {
+  transform: scaleY(var(--brand-header-scale));
+  transition-delay: var(--brand-header-delay);
+}
+.headerBarContainer--compact .headerBar {
+  transform: translateY(calc(var(--header-h) * (var(--brand-header-scale) - 1) / 2));
+  transition-delay: var(--brand-header-delay);
 }
 
-/* 3. 只有在支持真实鼠标悬停的设备上，才触发加深效果 */
-@media (hover: hover) {
-  .headerBarContainer:hover::before {
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
+@keyframes headerSlideIn {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
   }
 }
+
 .headerBar {
-  padding: 0 3em;
-  width: min(100%, 1920px);
-  height: 60px;
+  padding: 0 2.5em;
+  width: min(100%, var(--content-max));
+  height: var(--header-h);
   position: relative;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1em;
+  transition: transform var(--brand-header-duration) var(--brand-header-ease);
 }
-.centerMenu {
-  border-bottom: 0;
+
+/* 品牌字标 */
+.brand {
+  --logo-width: 228px;
+}
+
+/* ===== 桌面端导航 ===== */
+.desktopNav {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-}
-.headerRight {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.25em;
+  height: 100%;
+}
+
+.navItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.45em 0.9em;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.95em;
+  white-space: nowrap;
+  transition: color var(--duration-short) ease, background-color var(--duration-short) ease;
+}
+.navLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+.navLink.active {
+  color: #fff;
+}
+
+.chevron {
+  transition: transform var(--duration-short) ease;
+}
+.navItem:hover .chevron {
+  transform: rotate(180deg);
+}
+
+/* 下拉面板 */
+.dropdownPanel {
+  position: absolute;
+  top: calc(100% - 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  min-width: 200px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  background: rgba(24, 24, 24, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--duration-short) ease, transform var(--duration-short) ease,
+    visibility var(--duration-short);
+  z-index: $z-header-dropdown;
+}
+
+@media (hover: hover) {
+  .navItem:hover .dropdownPanel,
+  .navItem:focus-within .dropdownPanel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.dropdownLink {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.9em;
+  white-space: nowrap;
+  transition: color var(--duration-short) ease, background-color var(--duration-short) ease;
+}
+.dropdownLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.dropdownLink.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ===== 右侧操作区 ===== */
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
   margin-left: auto;
 }
 
-/* --- 新增：移动端专属样式的基础设置 --- */
+.textLink {
+  appearance: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.45em 0.8em;
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95em;
+  font-family: inherit;
+  transition: color var(--duration-short) ease, background-color var(--duration-short) ease;
+}
+.textLink:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+
+/* 登录：描边胶囊按钮 */
+.pillBtn {
+  appearance: none;
+  cursor: pointer;
+  padding: 0.45em 1.4em;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: #fff;
+  font-size: 0.95em;
+  font-family: inherit;
+  transition: background-color var(--duration-short) ease, color var(--duration-short) ease,
+    border-color var(--duration-short) ease;
+}
+.pillBtn:hover {
+  background: #f5f4ef;
+  border-color: #f5f4ef;
+  color: #111;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.userName {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9em;
+  max-width: 12em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 移动端 ===== */
 .mobile-menu-btn {
   display: none; /* 电脑端默认隐藏汉堡按钮 */
   cursor: pointer;
@@ -285,40 +485,52 @@ const formatDate = (isoString: string) => {
 }
 .mobile-dropdown {
   position: absolute;
-  top: 60px;
+  top: var(--header-h);
   left: 0;
   width: 100%;
-  /* 关键修改：背景设为半透明 */
-  /* background-color: rgba(20, 20, 20, 0.8) !important; */
-  /* 关键新增：毛玻璃效果 */
+  background: rgba(17, 17, 17, 0.95);
   backdrop-filter: blur(8px);
-  border-bottom: 1px solid #424242;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   z-index: 98;
 }
 .mobile-el-menu {
   border-right: none; /* 去掉 Element 竖向菜单自带的右侧边框线 */
+  background: transparent;
 }
 
-/* --- 响应式断点：当屏幕小于 768px 时 --- */
-@media (max-width: 768px) {
-  .show-on-desktop { display: none; }
-  .desktop-menu { display: none !important; } /* 隐藏电脑端横向菜单 */
+/* --- 响应式断点：手机（≤768px） --- */
+@include mobile {
+  .desktopNav { display: none; } /* 隐藏电脑端导航 */
 
   .mobile-menu-btn {
     display: flex;
     align-items: center;
   } /* 显示汉堡按钮 */
 
+  /* 品牌名保留缩小版，顶栏仍有站点标识 */
+  .brand {
+    --logo-width: 196px;
+  }
+
   .headerBar {
     padding: 0 15px; /* 手机端两边边距缩短，留出更多空间 */
+    justify-content: flex-start;
+    gap: 0.75em;
+  }
+
+  /* 低端机降档背景模糊，滚动更顺 */
+  .headerBarContainer::before {
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 }
 
 /* 大屏对齐：与正文内容列同宽，避免导航与内容错位 */
-@media (min-width: 1921px) {
+@include wide {
   .headerBar { width: min(92vw, 2560px); }
 }
+
 /* 通知弹窗 */
 .notice-overlay {
   position: fixed;

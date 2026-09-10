@@ -2,116 +2,54 @@
 import AniEle from '@/components/AniEle.vue'
 import ArticleCard from '@/components/ArticleCard.vue'
 import type { ArticleMeta } from '@/types/article'
-import { ArticleAPI } from '@/api/article'
-import PeopleList, { type PeopleData } from '@/components/home/PeopleList.vue'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { ArticleAPI } from '@/api/article'
+import CardCarousel from '@/components/home/CardCarousel.vue'
+import StoryCards, { type StoryItem } from '@/components/home/StoryCards.vue'
 import {
   DELAY_INITIAL,
-  DELAY_SHORT,
   DURATION_EXTRA_LONG,
-  DURATION_INSTANT,
   DURATION_LONG,
   DURATION_MEDIAN,
   DURATION_SHORT,
   STAGGER_CHAR,
-  STAGGER_LONG,
   STAGGER_MEDIAN,
   STAGGER_SHORT,
 } from '@/constants/animation'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import { HERO_BG_ALGO, HERO_BG_DEV } from '@/config/heroBg'
 import { HERO_BG_BLUR, HERO_PANEL_BACKDROP_BLUR } from '@/constants/hero'
-import { h, onMounted, useTemplateRef, ref, type Ref, type VNode } from 'vue'
+import { BACKEND_ENABLED } from '@/config/features'
+import { useBreakpoint } from '@/composables/useBreakpoint'
+import { h, onMounted, useTemplateRef, ref, type Ref } from 'vue'
+
+const { isTouch, reduceMotion } = useBreakpoint()
 
 const heroBgBlur = `${HERO_BG_BLUR}px`
 const heroPanelBackdropBlur = `${HERO_PANEL_BACKDROP_BLUR}px`
 
-function getEleNth(child: HTMLElement) {
+function getEleNth(child: Node) {
   let i = 0
-  while ((child = child.previousSibling) != null) i++
+  let current: Node | null = child
+  while ((current = current.previousSibling) != null) i++
   return i
 }
 
-function infoSectionAni(ele: HTMLDivElement | null) {
-  const tl = gsap.timeline()
-  if (!ele) return tl
-  //竖线
-  tl.fromTo(
-    ele.querySelector('.line > div'),
-    {
-      height: '0%',
-    },
-    {
-      height: '100%',
-      ease: 'sine.out',
-      duration: DURATION_EXTRA_LONG,
-    },
-  )
-  tl.from(
-    ele.querySelector('.el-image'),
-    {
-      autoAlpha: 0,
-      duration: DURATION_LONG,
-    },
-    '<',
-  )
-
-  //简介文字动画
-  tl.from(
-    ele.querySelector('.text1'),
-    {
-      duration: DURATION_LONG,
-      autoAlpha: 0,
-      stagger: STAGGER_CHAR,
-    },
-    '<',
-  )
-  SplitText.create(ele.querySelector('.text2'), {
-    type: 'chars,words',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.words,
-        {
-          duration: DURATION_LONG,
-          autoAlpha: 0,
-          stagger: 0.05,
-        },
-        '<',
-      )
-    },
-  })
-  SplitText.create(ele.querySelector('.text3'), {
-    type: 'lines',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.lines,
-        {
-          y: '2em',
-          duration: DURATION_LONG,
-          autoAlpha: 0,
-          stagger: STAGGER_SHORT,
-        },
-        '<',
-      )
-    },
-  })
-
-  return tl
-}
-
 const headTextRef = useTemplateRef('headText')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
 onMounted(() => {
-  gsap.registerPlugin(SplitText, ScrollTrigger, ScrollSmoother)
+  gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
   if (!headTextEle) return
+
+  // 系统开启「减少动态效果」：跳过全部入场动画，直接呈现终态
+  if (reduceMotion.value) {
+    document.querySelectorAll('.title, .subtitle').forEach((ele) => ele.classList.add('show'))
+    return
+  }
+
   const tl = gsap.timeline()
   // 初始动画：Hero 手风琴淡入
   const heroAccordion = headTextEle.querySelector('.heroAccordion')
@@ -125,10 +63,6 @@ onMounted(() => {
       ease: 'power2.out',
     })
   }
-  ScrollTrigger.create({
-    trigger: icpcTechInfoRef.value,
-    animation: infoSectionAni(icpcTechInfoRef.value),
-  })
   document.querySelectorAll('.title').forEach((ele) => {
     const tl = gsap.timeline()
     tl.from(ele, {
@@ -153,108 +87,325 @@ onMounted(() => {
       onEnter: (self) => ele.classList.add('show'),
     })
   })
-  ArticleAPI.getLatestArticles(4).then((list) => {
-    latestArticles.value = list
-  })
+//   if (BACKEND_ENABLED) {
+//     // 纯前端模式下不请求后端，「最新文章」区块一并隐藏
+//     ArticleAPI.getLatestArticles(4).then((list) => {
+//       latestArticles.value = list
+//     })
+//   }
 })
 
-const mainTeamList: {
-  teammates: string[]
-  teamName: string
-  grade: string
-  mainMedal: (string | VNode)[]
-}[] = [
-  {
-    grade: '22级',
-    teamName: '流星一条',
-    mainMedal: [
-      h('span', { style: 'color: silver' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
-        '第48届ICPC国际大学生程序设计竞赛亚洲区域赛（西安）银奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第九届中国⼤学⽣程序设计竞赛（深圳）铜奖',
-      ]),
-      h('span', {}, [
-        h(Icon, { inline: true, icon: 'mdi:prize' }),
-        'ICPC西部大学生程序设计竞赛三等奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['写不下力……']),
+// 优秀队伍：仿 JetBrains「Customer Stories」卡片布局，年级沿用原版艺术字水印
+const teamStories: StoryItem[] = [
+    {
+    name: '这一发，贯穿星辰',
+    watermark: '22级',
+    infoSuffix: '队员：梅松、李晨冉、王辰昊',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届 ICPC 亚洲区域赛（合肥）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第48届 ICPC 亚洲区域赛（南京）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 9 届 CCPC（深圳）铜奖',
+      },
     ],
-    teammates: ['付家锐', '石新阳', '韦祖豪'],
+    footer: '',
   },
   {
-    grade: '23级',
-    teamName: '远航者的幻想乡',
-    mainMedal: [
-      h('span', { style: 'color: gold' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'gold' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛邀请赛（西安）金奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛（西安）铜奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 11 届 CCPC 中国大学生程序设计竞赛（郑州）铜奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['真的只打最后一把……']),
+    name: '与星尘的握手',
+    watermark: '22级',
+    infoSuffix: '队员：付家锐、石新阳、韦祖豪',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届 ICPC 亚洲区域赛（西安）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第49届 ICPC 亚洲区域赛（杭州）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第49届 ICPC 亚洲区域赛（上海）铜奖',
+      },
     ],
-    teammates: ['张健明', '陶康', '孙怿翔'],
+    footer: '写不下力……',
   },
   {
-    grade: '24级',
-    teamName: '队名WA2了',
-    mainMedal: [
-      h('span', { style: 'color: silver' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'silver' }),
-        '第 50 届 ICPC 国际大学生程序设计竞赛区域赛（沈阳）银奖',
-      ]),
-      h('span', { style: 'color: chocolate' }, [
-        h(Icon, { inline: true, icon: 'mdi:achievement-variant', color: 'chocolate' }),
-        '第 11 届 CCPC 中国大学生程序设计竞赛（重庆）铜奖',
-      ]),
-      h('span', { style: 'font-style: italic; opacity: .5' }, ['在蒸了，在蒸了……']),
+    name: '远航者的幻想乡',
+    watermark: '23级',
+    infoSuffix: '队员：张健明、陶康、孙怿翔',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第50届 ICPC 邀请赛（西安）金奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第50届 ICPC（西安）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 11 届 CCPC（郑州）铜奖',
+      },
     ],
-    teammates: ['郑毅', '陈君屹', '杜永坤'],
+    footer: '真的只打最后一把……',
   },
+  {
+    name: '队名WA2了',
+    watermark: '24级',
+    infoSuffix: '队员：郑毅、陈君屹、杜永坤',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第 50 届 ICPC 区域赛（沈阳）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 11 届 CCPC（重庆）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第 9 届 GXCPC 冠军',
+      },
+    ],
+    footer: '在蒸了，在蒸了……',
+  },
+  {
+    name: '你是我的梦幻之AC',
+    watermark: '25级',
+    infoSuffix: '队员：杨富杰、李丹琳、张天诺',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第 9 届 GXCPC 金奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 CCPC（南昌）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 CCPC 邀请赛（贵州）铜奖',
+      }
+    ],
+    footer: '',
+  },
+  {
+    name: '王从天降',
+    watermark: '25级',
+    infoSuffix: '队员：魏嘉俊、梁德乐、李孝强',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第 9 届 GXCPC 银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 ICPC 邀请赛（南昌）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 ICPC 邀请赛（沈阳）铜奖',
+      }
+    ],
+    footer: '',
+  }
 ]
 
-// 命名抛弃大脑
-const studentList: PeopleData[] = [
-  {
-    avatar: '/img/avatar/lzx.jpg',
-    comment: '大爱详哥',
-    info: '保研天津大学',
-    name: '李周详',
+// 优秀队员（升学 & 就业）：奖项独立维护，由主视觉卡片展示。
+// 暂未收录的人员保留空数组，后续补充时只需追加 { icon, color, text }。
+const memberStories: StoryItem[] = [
+  { 
+    avatar: '/img/avatar/lyf.jpg', 
+    name: '李韵锋',
+    info: '信安17级 | 保研中科院信工所 | 腾讯Offer', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 45 届 ICPC 亚洲区域赛（上海）铜奖' 
+      },
+    ] 
   },
-  { avatar: '/img/avatar/sxy.jpg', info: '保研东南大学', name: '石新阳' },
-  { info: '考研浙江大学', name: '陈松盛' },
-  { info: '前往中国工程物理研究院', name: '武成志' },
-  { info: '保研至中国科学院大学', name: '李韵锋' },
-  { info: '保研电子科技大学', name: '龙泽宇' },
-]
-const workerList: PeopleData[] = [
+  { 
+    avatar: '/img/avatar/wlm.jpg', 
+    name: '王利明', 
+    info: '计科19级 | 保研南京大学 | 字节飞书中台Offer', 
+    quote: '「电话告警」', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 46 届 ICPC 亚洲区域赛（昆明）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 7 届 CCPC（桂林）铜奖' 
+      },
+    ] 
+  },
   {
     avatar: '/img/avatar/jmr.jpg',
-    comment: 'B推搜熟人',
-    info: '哔哩哔哩Offer',
     name: '金珉瑞',
+    info: '信安20级 | B站推搜引擎Offer',
+    quote: 'B推搜熟人',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 46 届 ICPC 亚洲区域赛（昆明）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 7 届 CCPC（广州）铜奖' 
+      },
+    ],
   },
-  { avatar: '/img/avatar/sct.jpg', info: '小马智行Offer', name: '孙城涛' },
-  { avatar: '/img/avatar/wzh.jpg', info: '腾讯实习优秀个人、腾讯质量效应部门Offer', comment: '韦老师', name: '韦祖豪' },
-  { avatar: '/img/avatar/wlm.jpg', info: '字节运维Offer', comment: '「电话告警」', name: '王利明' },
-  { avatar: '/img/avatar/cjl.jpg', info: 'Offer', name: '陈佳林' },
+  { 
+    avatar: '/img/avatar/lzx.jpg', 
+    name: '李周详', 
+    info: '计科22级 | 保研天津大学',  
+    quote: '大爱详哥', 
+    awards: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届 ICPC 亚洲区域赛（杭州）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第50届 ICPC 亚洲区域赛（武汉）铜奖',
+      },
+    ] 
+  },
+  {
+    avatar: '/img/avatar/sxy.jpg',
+    name: '石新阳',
+    info: '计科22级 | 保研东南大学',
+    quote: '',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver',
+        text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 9 届 CCPC（深圳）铜奖' 
+      },
+    ]
+  },
+  {
+    avatar: '/img/avatar/wzh.jpg',
+    name: '韦祖豪',
+    info: '计科22级 | 腾讯 CSIG 后端开发Offer',
+    quote: '韦老师',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 9 届 CCPC（深圳）铜奖' 
+      },
+    ],
+  },
+  { 
+    avatar: '/img/avatar/cjl.jpg', 
+    name: '陈佳林', 
+    info: '通信22级 | 拼多多 分布式存储Offer', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（济南）铜奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（合肥）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/lcr.jpg', 
+    name: '李晨冉', 
+    info: '计科22级 | 腾讯后端开发 | 快手infra', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 48 届 ICPC 亚洲区域赛（合肥）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（南京）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/hct.jpg', 
+    name: '黄翠婷', 
+    info: '计科23级 | 拼多多 搜推引擎实习', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 49 届 ICPC 亚洲区域赛（成都）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/gjn.jpg', 
+    name: '高健宁', 
+    info: '计科23级 | 字节跳动 广告后端实习', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 10 届 CCPC（哈尔滨）铜奖' 
+      },
+    ] 
+  }
 ]
-
-
 
 // 技术组代表项目列表
 const techProjectList = [
   {
-    grade: 'Active',
+    grade: 'QingLuan',
     teamName: '青鸾管理系统',
     mainMedal: [
       h('span', {}, [
@@ -269,12 +420,12 @@ const techProjectList = [
     teammates: ['Vue 3', 'Spring Boot', 'TypeScript'], // 借用 teammates 字段展示技术栈
   },
   {
-    grade: 'Core',
+    grade: 'Online Judge',
     teamName: 'GXU-OJ 评测平台',
     mainMedal: [
       h('span', { style: 'color: #b388ff' }, [ // 选用紫色系，代表硬核与极客
         h(Icon, { inline: true, icon: 'mdi:code-braces', color: '#b388ff' }),
-        '毫秒级沙箱隔离评测，保障代码安全执行',
+        '毫秒级沙箱隔离评测，保障代码执行',
       ]),
       h('span', {}, [
         h(Icon, { inline: true, icon: 'mdi:chart-bar' }),
@@ -284,7 +435,7 @@ const techProjectList = [
     teammates: ['Go', 'Docker', 'Vue 3', 'Redis'], // OJ 常见的核心技术栈
   },
   {
-    grade: 'v2.0',
+    grade: 'NoneBot',
     teamName: '谛听 Bot',
     mainMedal: [
       h('span', { style: 'color: #67c23a' }, [
@@ -299,8 +450,8 @@ const techProjectList = [
     teammates: ['Python', 'NoneBot', 'LLM API'],
   },
   {
-    grade: 'Hot',
-    teamName: '西大教务工具箱 & 插件',
+    grade: 'GXU-Tools',
+    teamName: '西大教务工具箱',
     mainMedal: [
       h('span', { style: 'color: #e6a23c' }, [
         h(Icon, { inline: true, icon: 'mdi:tools', color: '#e6a23c' }),
@@ -308,7 +459,7 @@ const techProjectList = [
       ]),
       h('span', {}, [
         h(Icon, { inline: true, icon: 'mdi:fire' }),
-        '候补抢课神器，广受同学们好评',
+        '一键教评神器，广受同学们好评',
       ]),
     ],
     teammates: ['JavaScript', 'Browser Extension'],
@@ -330,26 +481,32 @@ function getHeroBgIndex(i: number) {
   return heroBgIndex[i]?.value ?? 0
 }
 const getHeroAccordionStyle = (index: number) => {
+  // 窄屏（≤1024）为上下堆叠布局，完全交给 CSS 控制，不输出内联 left/width，
+  // 这样样式表也无需再用 !important 去对抗内联样式
+  if (isTouch.value) return {}
   const expanded = heroActiveIndex.value === index
   const width = expanded ? HERO_EXPANDED_PERCENT : HERO_COLLAPSED_PERCENT
   const left = index === 0 ? 0 : heroActiveIndex.value === 0 ? HERO_EXPANDED_PERCENT : HERO_COLLAPSED_PERCENT
   return { left: `${left}%`, width: `${width}%` }
 }
 
+// 平滑滚动到目标锚点（原生能力即可，替代旧版「每次点击新建 ScrollSmoother」的做法）
+function scrollToSection(id: string) {
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
 // 加入集训队 / 技术组 收益卡片（仿 Microsoft 内容卡片布局）
 const TRAINING_BENEFITS = [
-  { icon: 'mdi:trophy-variant', title: '竞赛奖项', desc: 'ICPC/CCPC 等高水平赛事获奖经历，丰富简历、提升竞争力' },
-  { icon: 'mdi:school', title: '保研升学', desc: '竞赛经历为保研加分，多名队员成功进入双一流院校深造' },
-  { icon: 'mdi:briefcase', title: '就业优势', desc: '算法能力受到大厂青睐，往届队员就业情况优异' },
-  { icon: 'mdi:account-group', title: '师长辅导', desc: '学长学姐一对一答疑，从算法到职业规划全面支持' },
-  { icon: 'mdi:certificate', title: '学分综测', desc: '参赛获奖可纳入综合素质评定，助力评优评先' },
+  { icon: 'mdi:trophy-variant', title: '竞赛奖项', desc: 'ICPC/CCPC 等高水平赛事获奖经历' },
+  { icon: 'mdi:school', title: '保研升学', desc: '竞赛经历为保研加分，帮助进入名校深造' },
+  { icon: 'mdi:briefcase', title: '就业优势', desc: '算法能力受大厂青睐，往届就业情况优异' },
+  { icon: 'mdi:account-group', title: '师长辅导', desc: '前辈一对一答疑，算法/职业规划全面支持' },
 ]
 const TECH_BENEFITS = [
-  { icon: 'mdi:code-tags', title: '项目实战', desc: '参与 OJ、教务系统等真实项目，告别玩具代码' },
-  { icon: 'mdi:layers', title: '技术栈', desc: '前后端、DevOps 全栈开发，掌握工业级技术体系' },
-  { icon: 'mdi:git', title: '工程规范', desc: '团队协作与代码规范，提前适应企业开发流程' },
-  { icon: 'mdi:chart-line', title: '求职竞争力', desc: '算法 + 工程双修，互联网大厂 offer 敲门砖' },
-  { icon: 'mdi:account-tie', title: '面试指导', desc: '大厂在职学长亲授技术与面试技巧，少走弯路' },
+  { icon: 'mdi:layers', title: '技术栈', desc: '开发与运维，掌握真实的工程技术体系' },
+  { icon: 'mdi:git', title: '工程规范', desc: '团队协作与代码规范，提前适应真实工程' },
+  { icon: 'mdi:chart-line', title: '求职竞争力', desc: '算法/工程双修，互联网大厂 offer 敲门砖' },
+  { icon: 'mdi:account-tie', title: '面试指导', desc: '大厂在职学长亲授就业技巧，少走弯路' },
 ]
 
 // 各组背景图轮播
@@ -364,41 +521,6 @@ HERO_PANELS.forEach((panel, i) => {
   }
 })
 
-// 代表队伍：横向滚动 + 拖拽（使用 RAF 提升流畅度）
-const teamScrollRef = useTemplateRef<HTMLDivElement>('teamScroll')
-const teamDragState = ref({ isDragging: false, startX: 0, startScrollLeft: 0 })
-let teamDragRafId = 0
-let teamDragLastX = 0
-
-function scrollTeams(direction: number) {
-  const el = teamScrollRef.value
-  if (!el) return
-  el.scrollBy({ left: direction * 400, behavior: 'smooth' })
-}
-function startTeamDrag(e: MouseEvent) {
-  if (e.button !== 0) return
-  const el = teamScrollRef.value
-  if (!el) return
-  teamDragLastX = e.pageX
-  teamDragState.value = { isDragging: true, startX: e.pageX, startScrollLeft: el.scrollLeft }
-}
-function onTeamDrag(e: MouseEvent) {
-  if (!teamDragState.value.isDragging) return
-  teamDragLastX = e.pageX
-  if (teamDragRafId) return
-  teamDragRafId = requestAnimationFrame(() => {
-    teamDragRafId = 0
-    const el = teamScrollRef.value
-    if (!el) return
-    const { startX, startScrollLeft } = teamDragState.value
-    el.scrollLeft = startScrollLeft - (teamDragLastX - startX)
-  })
-}
-function endTeamDrag() {
-  if (teamDragRafId) cancelAnimationFrame(teamDragRafId)
-  teamDragRafId = 0
-  teamDragState.value.isDragging = false
-}
 
 </script>
 <!-- 请注意，该组件为了便于动画绑定和布局设定，使用了较多不规范写法，可读性较差 -->
@@ -414,6 +536,7 @@ function endTeamDrag() {
         :class="{ collapsed: heroActiveIndex !== i }"
         :style="getHeroAccordionStyle(i)"
         @mouseover="heroActiveIndex = i"
+        @click="heroActiveIndex = i"
       >
         <!-- 固定尺寸容器 + 面板裁剪：图片不随面板缩放 -->
         <div class="heroPanelBgClip">
@@ -447,17 +570,7 @@ function endTeamDrag() {
           </p>
           <button
             class="learnMoreBtn heroLearnBtn"
-            @click="
-              () => {
-                const targetId = i === 0 ? 'learnMoreTarget' : 'techGroupTarget'
-                const smoother = ScrollSmoother.create({ effects: false, smooth: false })
-                gsap.to(smoother, {
-                  scrollTop: smoother.offset(`#${targetId}`, 'top 100px'),
-                  ease: 'power2.out',
-                  duration: DURATION_LONG,
-                })
-              }
-            ">
+            @click="scrollToSection(i === 0 ? 'learnMoreTarget' : 'techGroupTarget')">
             了解更多
             <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
           </button>
@@ -466,39 +579,6 @@ function endTeamDrag() {
     </div>
   </section>
 
-  <h2 class="subtitle">代表项目展示</h2>
-  <ani-ele
-    class="benefitsCardGrid projectCardGrid"
-    :scroll-in-ani="
-      (ele) => {
-        const tl = gsap.timeline()
-        tl.from(ele.querySelectorAll('.projectCard'), {
-          duration: DURATION_LONG,
-          ease: 'power2.out',
-          y: 40,
-          autoAlpha: 0,
-          stagger: STAGGER_SHORT,
-          clearProps: 'transform,opacity',
-        })
-        return tl
-      }
-    ">
-    <div
-      v-for="(project, i) in techProjectList"
-      :key="i"
-      class="projectCard">
-      <div class="projectCardBadge">{{ project.grade }}</div>
-      <div class="projectCardTitle">{{ project.teamName }}</div>
-      <div class="projectCardTech">
-        <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
-      </div>
-      <div class="projectCardHighlights">
-        <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
-          <component :is="medal" />
-        </div>
-      </div>
-    </div>
-  </ani-ele>
 
   <h1 class="title heroNextSection" id="learnMoreTarget">集训队概要</h1>
   <ani-ele
@@ -534,7 +614,9 @@ function endTeamDrag() {
               onUpdate: function () {
                 spans[3]!.innerText = Math.round(this.progress() * 50) + ''
               },
-              onComplete: () => (spans[3]!.innerText = 'N'),
+              onComplete: () => {
+                spans[3]!.innerText = 'N'
+              },
             },
             `${getEleNth(spans[3]) * charStagger}`,
           )
@@ -561,7 +643,7 @@ function endTeamDrag() {
   </ani-ele>
   <h2 class="subtitle">加入集训队会获得什么？</h2>
   <ani-ele
-    class="benefitsCardGrid"
+    class="cardCarouselSection benefitsSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -576,91 +658,24 @@ function endTeamDrag() {
         return tl
       }
     ">
-    <div
-      v-for="(item, i) in TRAINING_BENEFITS"
-      :key="i"
-      class="benefitsCard">
-      <div class="benefitsCardIcon">
-        <Icon :icon="item.icon" />
-      </div>
-      <div class="benefitsCardTitle">{{ item.title }}</div>
-      <div class="benefitsCardDesc">{{ item.desc }}</div>
-    </div>
-  </ani-ele>
-  <h2 class="subtitle">优秀队员</h2>
-  <div class="teamCardsSection">
-    <button
-      type="button"
-      class="teamScrollBtn teamScrollBtnLeft"
-      aria-label="向左滚动"
-      @click="scrollTeams(-1)">
-      <Icon icon="mdi:chevron-left" />
-    </button>
-    <div
-      ref="teamScroll"
-      class="teamCardsScrollWrapper"
-      :class="{ grabbing: teamDragState.isDragging }"
-      @mousedown="startTeamDrag"
-      @mousemove="onTeamDrag"
-      @mouseup="endTeamDrag"
-      @mouseleave="endTeamDrag">
-      <ani-ele
-        class="teamCardContainer"
-    :scroll-in-ani="
-      (ele) => {
-        const tl = gsap.timeline()
-        const cardStagger = STAGGER_SHORT // 与「加入技术组会获得什么？」同节奏
-        ele.childNodes.forEach((cardEle, index) => {
-          const t = index * cardStagger
-          tl.from(
-            cardEle,
-            {
-              scale: 0,
-              autoAlpha: 0,
-              duration: DURATION_LONG,
-              ease: 'power2.out',
-            },
-            t,
-          ).from(
-            SplitText.create(cardEle.childNodes, { type: 'lines', mask: 'lines' }).lines,
-            {
-              y: 24,
-              autoAlpha: 0,
-              duration: DURATION_SHORT,
-              ease: 'sine.out',
-              stagger: STAGGER_CHAR,
-            },
-            t,
-          )
-        })
-        return tl
-      }
-    ">
-    <div class="teamCard" v-for="(team, i) in mainTeamList" :key="i">
-      <div class="gradeText">{{ team.grade }}</div>
-      <div style="font-weight: bold; font-size: 2em; line-height: 2em">{{ team.teamName }}</div>
-      <div>
-        <b><Icon icon="mdi:account" :inline="true" />队员：</b>{{ team.teammates.join('、') }}
-      </div>
-      <div>
-        <b><Icon icon="mdi:achievement" :inline="true" />主要奖项：</b>
-      </div>
-      <div v-for="(medal, i) in team.mainMedal" :key="i" style="text-indent: 2em">
-        <component :is="medal" />
+    <div class="benefitsGrid" role="list" aria-label="加入集训队会获得什么">
+      <div
+        v-for="(item, i) in TRAINING_BENEFITS"
+        :key="i"
+        class="benefitsCard"
+        role="listitem">
+        <div class="benefitsCardIcon">
+          <Icon :icon="item.icon" />
+        </div>
+        <div class="benefitsCardTitle">{{ item.title }}</div>
+        <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
     </div>
   </ani-ele>
-    </div>
-    <button
-      type="button"
-      class="teamScrollBtn teamScrollBtnRight"
-      aria-label="向右滚动"
-      @click="scrollTeams(1)">
-      <Icon icon="mdi:chevron-right" />
-    </button>
-  </div>
-  <people-list :list="studentList" />
-  <people-list :list="workerList" />
+  <h2 class="subtitle">优秀队伍 & 队员</h2>
+  <!-- 队伍保留故事卡片；队员使用头像页标的主视觉轮播。 -->
+  <story-cards :items="teamStories" aria-label="优秀队伍" />
+  <story-cards :items="memberStories" aria-label="优秀队员" variant="member-showcase" />
 
 
   <h1 class="title" id="techGroupTarget">技术组概要</h1>
@@ -721,7 +736,7 @@ function endTeamDrag() {
 
   <h2 class="subtitle">加入技术组会获得什么？</h2>
   <ani-ele
-    class="benefitsCardGrid"
+    class="cardCarouselSection benefitsSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -736,20 +751,61 @@ function endTeamDrag() {
         return tl
       }
     ">
-    <div
-      v-for="(item, i) in TECH_BENEFITS"
-      :key="i"
-      class="benefitsCard benefitsCardTech">
-      <div class="benefitsCardIcon">
-        <Icon :icon="item.icon" />
+    <div class="benefitsGrid" role="list" aria-label="加入技术组会获得什么">
+      <div
+        v-for="(item, i) in TECH_BENEFITS"
+        :key="i"
+        class="benefitsCard benefitsCardTech"
+        role="listitem">
+        <div class="benefitsCardIcon">
+          <Icon :icon="item.icon" />
+        </div>
+        <div class="benefitsCardTitle">{{ item.title }}</div>
+        <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
-      <div class="benefitsCardTitle">{{ item.title }}</div>
-      <div class="benefitsCardDesc">{{ item.desc }}</div>
     </div>
   </ani-ele>
 
-  <h2 class="subtitle">最新文章</h2>
+  <h2 class="subtitle">代表项目展示</h2>
   <ani-ele
+    class="cardCarouselSection projectCardGrid"
+    :scroll-in-ani="
+      (ele) => {
+        const tl = gsap.timeline()
+        tl.from(ele.querySelectorAll('.projectCard'), {
+          duration: DURATION_LONG,
+          ease: 'power2.out',
+          y: 40,
+          autoAlpha: 0,
+          stagger: STAGGER_SHORT,
+          clearProps: 'transform,opacity',
+        })
+        return tl
+      }
+    ">
+    <CardCarousel :item-count="techProjectList.length" aria-label="代表项目展示">
+      <div
+        v-for="(project, i) in techProjectList"
+        :key="i"
+        class="projectCard">
+        <div class="projectCardBadge">{{ project.grade }}</div>
+        <div class="projectCardTitle">{{ project.teamName }}</div>
+        <div class="projectCardTech">
+          <span v-for="(tech, tIndex) in project.teammates" :key="tIndex" class="projectTechTag">{{ tech }}</span>
+        </div>
+        <div class="projectCardHighlights">
+          <div v-for="(medal, index) in project.mainMedal" :key="index" class="projectHighlightItem">
+            <component :is="medal" />
+          </div>
+        </div>
+      </div>
+    </CardCarousel>
+  </ani-ele>
+
+  <!-- 最新文章依赖后端接口，纯前端模式下隐藏 -->
+  <h2 v-if="BACKEND_ENABLED" class="subtitle">最新文章</h2>
+  <ani-ele
+    v-if="BACKEND_ENABLED"
     class="articleListGridHome"
     :scroll-in-ani="
       (ele) => {
@@ -772,7 +828,7 @@ function endTeamDrag() {
     />
   </ani-ele>
 
-  <div class="articleMoreLink" v-if="latestArticles.length">
+  <div class="articleMoreLink" v-if="BACKEND_ENABLED && latestArticles.length">
     <router-link to="/articles" class="learnMoreBtn">
       查看更多
       <Icon icon="material-symbols:arrow-right-alt-rounded" :inline="true" style="color: inherit" />
@@ -1045,60 +1101,7 @@ function endTeamDrag() {
   margin-top: 4em;
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
-
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: var(--el-color-primary);
-  }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
-
-    .text2 * {
-      color: gray;
-    }
-  }
-}
-
-// 标题样式
-.title {
-  margin: 3em auto;
-  padding: 0.5em 1em;
-  font-size: 2.5em;
-  width: fit-content;
-  position: relative;
-
-  &::before,
-  &::after {
-    content: '';
-    height: 5px;
-    width: 0%;
-    background-color: var(--el-color-primary);
-    position: absolute;
-    border-radius: 5px;
-    transition: var(--duration-long) ease-in-out;
-  }
-  &.show::before,
-  &.show::after {
-    width: 100%;
-  }
-
-  &::before {
-    top: 0;
-    left: 0;
-  }
-
-  &::after {
-    bottom: 0;
-    right: 0;
-  }
-}
+/* .infoContainer / .title 全局类样式由 styles/global.scss 提供，此处不再重复 */
 
 // 副标题样式
 .subtitle {
@@ -1134,24 +1137,31 @@ function endTeamDrag() {
   font-size: 2em;
   line-height: 1.5em;
   margin: 1em 0;
+  padding: 0 var(--page-padding-x);
 }
 
-/* 收益卡片网格：全宽铺平，仿 Microsoft 内容卡片布局 */
-.benefitsCardGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+/* 轮播区共用的全宽外层间距。卡片布局由 CardCarousel 统一管理。 */
+.cardCarouselSection {
   width: 100%;
   max-width: 100%;
   margin: 2em 0 4em;
-  padding: 0 2em;
+  padding: 0 var(--page-padding-x);
   box-sizing: border-box;
+}
+
+/* 收益卡片直接完整展示，不使用自动翻页或轮播控件。 */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  grid-auto-rows: 1fr;
+  gap: 1.5rem;
 }
 
 .benefitsCard {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  box-sizing: border-box;
   padding: 1.5rem 1.25rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -1188,138 +1198,17 @@ function endTeamDrag() {
   color: rgba(255, 255, 255, 0.75);
 }
 
-/* 代表队伍：横向滚动容器，防止页面溢出 */
-.teamCardsSection {
-  position: relative;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden; /* 仅禁止横向溢出，纵向允许完整显示 */
-  margin-bottom: 2em;
-}
-
-.teamCardsScrollWrapper {
-  overflow-x: auto;
-  overflow-y: visible; /* 允许年级、角标等溢出显示 */
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
-  cursor: grab;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
-  /* 为年级水印(5em)、角标预留上下空间，避免截断 */
-  padding: 5em 0 2.5em;
-
-  &.grabbing {
-    cursor: grabbing;
-    user-select: none;
-  }
-
-  &::-webkit-scrollbar {
-    height: 8px;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 4px;
-  }
-}
-
-.teamScrollBtn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-  width: 44px;
-  height: 44px;
-  border: none;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.2s, opacity 0.2s;
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.25);
-  }
-  &:active {
-    background: rgba(255, 255, 255, 0.35);
-  }
-
-  &.teamScrollBtnLeft {
-    left: 0;
-  }
-  &.teamScrollBtnRight {
-    right: 0;
-  }
-}
-
-.teamCardContainer {
-  display: grid;
-  justify-content: flex-start;
-  grid-auto-flow: column;
-  column-gap: 2em;
-  grid-template-columns: repeat(3, 35em);
-  grid-row: 1;
-  width: max-content;
-  padding: 0 50px; /* 为左右按钮留出空间 */
-  align-items: start; /* 避免 grid 拉伸导致高度异常 */
-}
-
-// 小队卡片
-.teamCard {
-  background-color: rgba(255, 255, 255, 0.1);
-  transform-origin: left top;
-  padding: 1em 1.5em;
-  position: relative;
-  border-radius: 5px;
-
-  .gradeText {
-    position: absolute;
-    right: 0.2em;
-    top: -0.7em;
-    font-style: italic;
-    font-size: 5em;
-    font-weight: 900;
-    color: var(--el-color-primary);
-    opacity: 0.3;
-  }
-
-  &::before,
-  &::after {
-    transform: scale(1);
-    $size: 25px;
-    position: absolute;
-    content: '';
-    width: $size;
-    height: $size;
-    border: var(--el-color-primary) solid;
-  }
-
-  $offset: -5px;
-  &::before {
-    top: $offset;
-    left: $offset;
-    border-width: 1px 0 0 1px;
-  }
-  &::after {
-    bottom: $offset;
-    right: $offset;
-    border-width: 0 1px 1px 0;
-  }
-}
+/* 代表队伍 / 优秀队员卡片样式已迁移至 components/home/StoryCards.vue */
 
 .articleListGridHome {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-auto-rows: 1fr;
   gap: 1.5rem;
   width: 100%;
   max-width: 100%;
   margin: 2em 0 2em;
-  padding: 0 2em;
+  padding: 0 var(--page-padding-x);
   box-sizing: border-box;
 }
 
@@ -1330,21 +1219,20 @@ function endTeamDrag() {
 }
 
 /* ====================================
-   代表项目展示：与「加入技术组会获得什么」同风格卡片网格
+   代表项目展示：沿用统一卡片轮播，仅补充项目区专属间距
    ==================================== */
 .projectCardGrid {
   margin-bottom: 6em;
-  /* 自适应列：宽屏 4 列，平板 2~3 列，手机 1 列，自动降级 */
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .projectCard {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  box-sizing: border-box;
   padding:16px 20px;
-  /* 固定展示高度，避免随视口高度在 2K/4K 上膨胀 */
-  min-height: clamp(340px, 24vw, 420px);
+  /* 降低项目卡片的整体高度，同时保留内容过长时自然撑开的空间。 */
+  min-height: clamp(300px, 20vw, 360px);
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
@@ -1410,20 +1298,68 @@ function endTeamDrag() {
 }
 
 /* ====================================
-   全站移动端（手机直屏）终极适配方案
+   首页平板/手机适配（≤1024）：Hero 手风琴
+   由「左右 70/30」改为「上下 60/40」纵向堆叠，
+   避免窄屏下展开面板文字被挤压截断（内容占满全宽）。
+   窄屏下 getHeroAccordionStyle 不输出内联 left/width，CSS 直接接管布局
    ==================================== */
-@media (max-width: 768px) {
-  /* 1. 全局基础排版缩放 */
-  body, html {
-    overflow-x: hidden; /* 🔑 绝对禁止横向滚动条出现 */
+@include touch {
+  .heroSection {
+    height: 90vh;
+    height: 90svh;
   }
 
-  .title {
-    font-size: 1.8em; /* 缩小主标题 */
-    margin: 1.5em auto;
-    text-align: center;
+  .heroAccordionItem {
+    left: 0;
+    width: 100%;
+    transition: top var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1),
+      height var(--duration-median) cubic-bezier(0.25, 1, 0.5, 1);
   }
 
+  .heroAccordionItem:not(.collapsed) {
+    top: 0;
+    height: 60%;
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
+  }
+
+  .heroAccordionItem.collapsed {
+    top: auto;
+    bottom: 0;
+    height: 40%;
+  }
+
+  /* 背景图层取消水平位移补偿：选择器与桌面 nth-child 位移规则同优先级，靠源顺序覆盖 */
+  .heroAccordionItem:nth-child(1).collapsed .heroPanelBgFixed.isLeft,
+  .heroAccordionItem:nth-child(1):not(.collapsed) .heroPanelBgFixed.isLeft,
+  .heroAccordionItem:nth-child(2).collapsed .heroPanelBgFixed.isRight,
+  .heroAccordionItem:nth-child(2):not(.collapsed) .heroPanelBgFixed.isRight {
+    left: 0;
+    right: auto;
+    transform: none;
+  }
+
+  /* 展开面板锚顶、折叠面板锚底 */
+  .heroAccordionItem.collapsed .heroPanelBgFixed {
+    top: auto;
+    bottom: 0;
+  }
+
+  /* 折叠条变为宽而矮：文字改为水平摆放 */
+  .heroCollapsedCover {
+    gap: 0.4em;
+
+    span {
+      transform: none;
+      font-size: 1.1em;
+      letter-spacing: 4px;
+    }
+  }
+}
+
+/* ====================================
+   首页手机端适配（≤768，全局类的响应式见 styles/global.scss）
+   ==================================== */
+@include mobile {
   .subtitle {
     font-size: 1.5em; /* 缩小副标题 */
     margin: 1.5em auto;
@@ -1432,48 +1368,39 @@ function endTeamDrag() {
 
   .textCenter {
     font-size: 1.1em; /* 缩小中间的统计数据文字 */
-    padding: 0 15px;
+    padding: 0 var(--page-padding-x);
     line-height: 1.8em;
   }
 
-  /* 2. 顶部首屏 (Hero Section) 抢救 */
   .heroExpandedContent {
     padding: 20px;
   }
 
+  .heroWatermark {
+    font-size: 2.2em;
+    top: 12px;
+    right: 20px;
+  }
+
   .heroTitle {
     font-size: 1.5em;
+    margin-bottom: 0.6em;
   }
 
   .heroDesc {
     font-size: 0.9em;
     margin-bottom: 1em;
-  }
-
-  /* 3. 简介区域 (ICPC & 技术组 Info) 抢救 */
-  .infoContainer {
-    flex-direction: column; /* 🔑 横排改竖排 */
     max-width: 100%;
-    margin-left: 15px !important;
-    margin-right: 15px !important;
-    font-size: 1.1em;
-
-    // 技术组原本是右对齐，手机端强制全部左对齐
-    &.icpc-tech { text-align: left !important; }
-    &.icpc-tech .infoBrief { flex-direction: row !important; }
-
-    .text3 {
-      font-size: 0.9em;
-      margin-left: 0 !important;
-      text-align: justify !important; /* 两端对齐，阅读更舒适 */
-    }
   }
 
-  /* 4. 收益卡片网格 (加入集训队/技术组获得什么) 移动端 */
-  .benefitsCardGrid {
-    grid-template-columns: 1fr;
-    padding: 0 15px;
+  /* 4. 收益卡片（加入集训队/技术组获得什么）移动端 */
+  .cardCarouselSection {
+    padding: 0 var(--page-padding-x);
     margin: 1.5em 0 3em;
+  }
+
+  .benefitsGrid {
+    gap: 1rem;
   }
 
   .benefitsCard {
@@ -1488,50 +1415,15 @@ function endTeamDrag() {
     font-size: 0.9em;
   }
 
-  /* 5. 队伍卡片 (代表队伍) 抢救 */
-  .teamCardsSection {
-    padding: 0 15px;
-  }
+  /* 5. 优秀队员卡片 (StoryCards) 响应式规则在组件内部处理 */
 
-  .teamScrollBtn {
-    display: none !important; /* 窄屏纵向排列时隐藏，用触摸滑动即可 */
-  }
-
-  .teamCardsScrollWrapper {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    padding: 3em 0 1.5em; /* 移动端缩小预留空间 */
-  }
-
-  .teamCardContainer {
-    grid-auto-flow: row; /* 🔑 从横向排布改为纵向瀑布流 */
-    grid-template-columns: 1fr; /* 🔑 强行变成单列 */
-    padding: 0;
-    row-gap: 2em; /* 卡片上下间距 */
-    width: 100%;
-  }
-
-  .teamCard {
-    width: 100%; /* 卡片占满手机屏幕宽度 */
-    box-sizing: border-box;
-    padding: 1.5em;
-
-    .gradeText {
-      font-size: 3.5em; /* 缩小背后的年级水印 */
-      top: -0.2em;
-    }
-  }
-
-  /* 6. 代表项目展示 (卡片网格) 移动端 */
+  /* 6. 代表项目展示（卡片轮播）移动端 */
   .projectCardGrid {
     margin-bottom: 4em;
-    grid-template-columns: 1fr; /* 窄屏单列 */
   }
 
   .projectCard {
     padding: 1.25rem 1rem;
-    min-height: auto; /* 移动端取消固定高度 */
   }
 
   .projectCardBadge {
@@ -1554,7 +1446,7 @@ function endTeamDrag() {
 
   .articleListGridHome {
     grid-template-columns: 1fr;
-    padding: 0 15px;
+    padding: 0 var(--page-padding-x);
     margin: 1.5em 0 2em;
   }
 

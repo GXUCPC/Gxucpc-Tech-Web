@@ -252,7 +252,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -429,7 +429,7 @@ html, body {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 8px;
-  width: 500px;
+  width: min(500px, calc(100vw - 32px));
   margin: 0 auto;
 }
 :deep(.interview-page-container .el-dialog__header) {
@@ -450,5 +450,26 @@ html, body {
   padding: 20px 0 0 0;
   border-top: none;
   text-align: center;
+}
+
+/* ===== 手机端适配 ===== */
+@include mobile {
+  .interview-page-container .recruitment-overview-container {
+    padding: 20px 16px;
+  }
+
+  .interview-page-container .recruitment-overview-container .header .title {
+    font-size: 22px;
+  }
+
+  .interview-page-container .recruitment-overview-container .section .section-title {
+    font-size: 22px;
+    border-left-width: 3px;
+    padding-left: 10px;
+  }
+
+  .interview-page-container .recruitment-overview-container .section .apply-form .form-item .form-label {
+    font-size: 16px;
+  }
 }
 </style>

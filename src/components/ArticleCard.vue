@@ -39,6 +39,8 @@ defineProps<{
 .articleCard {
   display: flex;
   flex-direction: column;
+  height: 100%;
+  box-sizing: border-box;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;

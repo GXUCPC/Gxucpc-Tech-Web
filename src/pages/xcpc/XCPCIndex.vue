@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { Icon } from '@iconify/vue'
+import AcmIcpcMark from '@/components/brand/AcmIcpcMark.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
@@ -16,9 +16,8 @@ const goToNextPage = () => {
   router.push('xcpc/introdution')
 }
 
-const globalLoading = useGlobalLoading()
 
-function infoSectionAni(ele: HTMLDivElement | null) {
+function infoSectionAni(ele: HTMLElement | null) {
   const tl = gsap.timeline()
   if (!ele) return tl
   //竖线
@@ -34,7 +33,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
     },
   )
   tl.from(
-    ele.querySelector('.el-image'),
+    ele.querySelector('.infoIcon'),
     {
       autoAlpha: 0,
       duration: 1,
@@ -75,30 +74,24 @@ function infoSectionAni(ele: HTMLDivElement | null) {
       )
     },
   })
-  SplitText.create(ele.querySelector('.text3'), {
-    type: 'lines',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.lines,
-        {
-          y: '2em',
-          duration: 1,
-          autoAlpha: 0,
-          stagger: 0.2,
-        },
-        '<0.5',
-      )
+  // autoSplit 在字体加载或窗口尺寸改变时会重新拆分文本；若主时间线已结束，
+  // 新生成的行会停留在动画初始的隐藏状态。正文改为整体淡入，避免内容被隐藏。
+  tl.from(
+    ele.querySelector('.text3'),
+    {
+      y: '2em',
+      duration: 1,
+      autoAlpha: 0,
     },
-  })
+    '<0.5',
+  )
 
   return tl
 }
 
-const headTextRef = useTemplateRef('headText')
-const icpcInfoRef = useTemplateRef('icpcInfo')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
+const headTextRef = useTemplateRef<HTMLElement>('headText')
+const icpcInfoRef = useTemplateRef<HTMLElement>('icpcInfo')
+const icpcTechInfoRef = useTemplateRef<HTMLElement>('icpcTechInfo')
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
@@ -160,7 +153,7 @@ onMounted(() => {
 
   <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
 
-      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+      <div class="item2 headTitle">
          <Icon
           icon="solar:cup-star-bold"
           style="
@@ -196,7 +189,7 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <AcmIcpcMark class="item1 infoIcon" />
         <div style="display: flex; flex-direction: column; gap: 5px">
           <div class="text1">
             广西大学ICPC集训队
@@ -224,7 +217,7 @@ onMounted(() => {
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <Icon icon="material-symbols:help-center-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
           <div class="text1">
             常见问题
@@ -267,47 +260,33 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/store/mixins.scss' as *;
+/* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
+   此处仅保留页面私有差异 */
 
-.headText {
-  min-height: 50vh;
-  font-size: 2em;
-  text-align: right;
-  word-spacing: 1em;
-  padding: 10%;
-  user-select: none;
+/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
+.infoContainer .line > div {
+  background-color: white;
+}
 
-  .item1 {
-    height: 5em;
-  }
-  .item2 {
-    height: 2em;
-  }
+.infoIcon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  color: var(--el-color-primary);
+}
 
+.headTitle {
+  position: relative;
+  width: min(100%, 1000px);
+  min-height: 60px;
+  font-size: 50px;
 
-  .keyword {
-    font-size: 3em;
+  @include mobile {
+    min-height: auto;
+    font-size: clamp(1.5rem, 8vw, 3.125rem);
   }
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
-
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: white;
-  }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
-
-
-  }
-}
 // 了解更多按钮
 .learnMoreBtn {
   /* 1. 字体调大 */
@@ -331,8 +310,11 @@ onMounted(() => {
     //border-color: #93c5fd;
     transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
-}
 
-/* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
-@include inject-mobile-styles;
+  /* 手机端按钮居中，不再依赖桌面端的右推布局 */
+  @include mobile {
+    margin-right: auto;
+    justify-content: center;
+  }
+}
 </style>

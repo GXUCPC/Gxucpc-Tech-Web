@@ -1,49 +1,257 @@
 <script setup lang="ts">
-import Giscus from '@giscus/vue';
+// ===== 纯前端模式：留言区（Giscus，第三方 GitHub Discussions）暂时不对外展示 =====
+// import Giscus from '@giscus/vue'
+import { Icon } from '@iconify/vue'
 
+// 站内导航：仅包含当前开放的板块（文章/赛事报名入口依赖后端，暂不展示）
+const quickLinks = [
+  { label: '首页', path: '/' },
+  { label: '集训队', path: '/xcpc' },
+  { label: '技术组', path: '/tech' },
+]
+
+const year = new Date().getFullYear()
 </script>
 
 <template>
-  <div class="footerContentContainer">
-    <div class="footerContent">
-      <el-text>This is Footer</el-text>
-    </div>
-  </div>
-  <div class="comment-container">
-      <h3 class="comment-title"> 留言区</h3>
+  <footer class="footerBar">
+    <div class="footerInner">
+      <div class="footerBrand">
+        <div class="footerLogo">广西大学 ICPC 集训队</div>
+        <p class="footerDesc">
+          以算法竞赛锤炼思维，以真实项目积累经验——集训队与技术组共同构成西大的算法竞赛与校园技术开发社区。
+        </p>
+      </div>
 
-      <Giscus
-        id="comments"
-        repo="susitata/Gxu-Tch-Web-discussion"
-        repoId="R_kgDOQuwzKA"
-        category="General"
-        categoryId="DIC_kwDOQuwzKM4C0O3T"
-        mapping="pathname"
-        strict="0"
-        reactionsEnabled="1"
-        emitMetadata="0"
-        inputPosition="top"
-        theme="transparent_dark" lang="zh-CN"
-        loading="lazy"
-      />
+      <div class="footerLinks">
+        <div class="footerCol footerNavigation">
+          <div class="footerColTitle">站内导航</div>
+          <router-link v-for="link in quickLinks" :key="link.path" :to="link.path" class="footerLink">
+            {{ link.label }}
+          </router-link>
+        </div>
+
+        <div class="footerJoin">
+          <div class="footerColTitle">加入我们</div>
+          <span class="footerText footerQq">
+            <Icon icon="mdi:account-group-outline" :inline="true" />
+            <span>招新 QQ 群：977870023</span>
+          </span>
+        </div>
+        <span class="footerText footerEvents">
+          <Icon icon="mdi:trophy-outline" :inline="true" />
+          <span>ICPC / CCPC / 天梯赛 / 蓝桥杯</span>
+        </span>
+      </div>
     </div>
+
+    <div class="footerMeta">© {{ year }} 广西大学 ICPC 集训队技术组 · 网站由技术组开发维护</div>
+  </footer>
+
+  <!-- 纯前端模式：留言区暂时不对外展示（恢复时取消注释并还原 Giscus 导入） -->
+  <!--
+  <div class="comment-container">
+    <h3 class="comment-title">留言区</h3>
+
+    <Giscus
+      id="comments"
+      repo="susitata/Gxu-Tch-Web-discussion"
+      repoId="R_kgDOQuwzKA"
+      category="General"
+      categoryId="DIC_kwDOQuwzKM4C0O3T"
+      mapping="pathname"
+      strict="0"
+      reactionsEnabled="1"
+      emitMetadata="0"
+      inputPosition="top"
+      theme="transparent_dark" lang="zh-CN"
+    />
+  </div>
+  -->
 </template>
 
-<style scoped>
-.footerContentContainer {
+<style scoped lang="scss">
+.footerBar {
   width: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  margin-top: 4em;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(20px);
-  padding: 50px;
+  padding: 3em 2.5em 2em;
+  box-sizing: border-box;
+
+  @include mobile {
+    padding: 2em var(--page-padding-x) 1.5em;
+  }
 }
-.footerContent {
+
+.footerInner {
   width: min(100%, 1092px);
   margin: 0 auto;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
+  gap: 3em 6em;
+
+  @include mobile {
+    gap: 2em 1.5em;
+  }
 }
 
-/* --- 下面是新增的评论区样式 --- */
+.footerBrand {
+  max-width: 24em;
+}
+
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, max-content));
+  grid-template-areas:
+    'navigation join'
+    'navigation events';
+  column-gap: 6em;
+  row-gap: 0.4em;
+  align-items: start;
+}
+
+.footerNavigation {
+  grid-area: navigation;
+}
+
+.footerJoin {
+  grid-area: join;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+  min-width: 0;
+}
+
+.footerEvents {
+  grid-area: events;
+}
+
+.footerLogo {
+  font-weight: 800;
+  font-size: 1.05em;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.footerDesc {
+  margin-top: 0.8em;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9em;
+  line-height: 1.7;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7em;
+}
+
+.footerColTitle {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.85em;
+  letter-spacing: 2px;
+  margin-bottom: 0.3em;
+}
+
+.footerLink {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.72);
+  text-decoration: none;
+  font-size: 0.92em;
+  transition: color var(--duration-short) ease;
+}
+
+.footerLink:hover {
+  color: #fff;
+}
+
+.footerText {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.92em;
+
+  > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.footerMeta {
+  width: min(100%, 1092px);
+  margin: 2.5em auto 0;
+  padding-top: 1.5em;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8em;
+}
+
+/* 触屏端两栏并排；QQ 紧跟右侧标题，较长的赛事信息横跨下一行。 */
+@include touch {
+  .footerBar {
+    /* 避开移动端浏览器安全区以及开发环境右下方的浮动工具按钮。 */
+    padding-bottom: calc(4em + env(safe-area-inset-bottom, 0px));
+    overflow: visible;
+  }
+
+  .footerInner {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 1.5em;
+  }
+
+  .footerBrand,
+  .footerLinks {
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+  }
+
+  .footerLinks {
+    grid-template-columns: max-content minmax(0, 1fr);
+    grid-template-areas:
+      'navigation join'
+      'events events';
+    column-gap: 1.5em;
+    row-gap: 0.75em;
+  }
+
+  .footerCol,
+  .footerJoin {
+    min-width: 0;
+    gap: 0.5em;
+  }
+
+  .footerText {
+    width: 100%;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: flex-start;
+    line-height: 1.55;
+    white-space: normal;
+    overflow: visible;
+
+    > span {
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .footerMeta {
+    margin-top: 1.5em;
+    padding-top: 1em;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* --- 评论区样式 --- */
 
 .comment-container {
   width: 90%;

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, nextTick } from 'vue' // 必须引入 these hooks
 import { useDialog } from '@/store/globalLoading.ts'
-import { CommentAPI } from '@/api/submit-comment.js'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { CommentAPI } from '@/api/submit-comment.js'
 import { Icon } from '@iconify/vue' // 引入 Icon 组件
 import { gsap } from 'gsap'         // 引入 GSAP
 
@@ -62,35 +63,35 @@ const handleClose = () => {
   })
   .to(overlayRef.value, { opacity: 0, duration: 0.3 }, "<")
 }
-// 提交反馈
-async function submitFeedback() {
-  const commentText = feedbackData.value.text
-  const title = feedbackData.value.username
-
-  if (!commentText || commentText.trim() === '') {
-    alert('评论内容不能为空！')
-    return
-  }
-
-  const requestBody = {
-    content: commentText,
-    title: title && title.trim() !== '' ? title : '用户反馈',
-  }
-
-  try {
-    const response = await CommentAPI.submitComment(requestBody)
-    if (response.code === 200 || response.success) {
-      alert('反馈提交成功！')
-      feedbackData.value.text = '' // 清空输入
-      handleClose() // 关闭弹窗
-    } else {
-      alert(response.msg || '提交失败')
-    }
-  } catch (error) {
-    console.error('提交反馈错误:', error)
-    alert('发生意外错误，请稍后再试。')
-  }
-}
+// // 提交反馈
+// async function submitFeedback() {
+//   const commentText = feedbackData.value.text
+//   const title = feedbackData.value.username
+// 
+//   if (!commentText || commentText.trim() === '') {
+//     alert('评论内容不能为空！')
+//     return
+//   }
+// 
+//   const requestBody = {
+//     content: commentText,
+//     title: title && title.trim() !== '' ? title : '用户反馈',
+//   }
+// 
+//   try {
+//     const response = await CommentAPI.submitComment(requestBody)
+//     if (response.code === 200 || response.success) {
+//       alert('反馈提交成功！')
+//       feedbackData.value.text = '' // 清空输入
+//       handleClose() // 关闭弹窗
+//     } else {
+//       alert(response.msg || '提交失败')
+//     }
+//   } catch (error) {
+//     console.error('提交反馈错误:', error)
+//     alert('发生意外错误，请稍后再试。')
+//   }
+// }
 </script>
 
 <template>
@@ -146,8 +147,7 @@ async function submitFeedback() {
 
 .feedback-overlay {
   position: fixed;
-  top: 0; left: 0;
-  width: 100vw; height: 100vh;
+  inset: 0;
   z-index: 9999; /* 保证最顶层 */
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);       /* 背景模糊 */
@@ -159,8 +159,7 @@ async function submitFeedback() {
 
 /* 2. 弹窗主体 (磨砂玻璃) */
 .feedback-modal {
-  width: 450px;
-  max-width: 90%;
+  width: min(450px, calc(100vw - 32px));
 
   background: rgba(20, 20, 20, 0.75);
   backdrop-filter: blur(20px);

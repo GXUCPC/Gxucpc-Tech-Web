@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { ArticleAPI } from '@/api/article'
+// ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
+// import { ArticleAPI } from '@/api/article'
 import type { ArticleDetail } from '@/types/article'
 import { Icon } from '@iconify/vue'
 
@@ -27,21 +28,21 @@ function formatDate(iso: string) {
   }).replace(/\//g, '-')
 }
 
-async function loadArticle(id: number) {
-  loading.value = true
-  article.value = null
-  tocList.value = []
-  try {
-    const result = await ArticleAPI.getArticleDetail(id)
-    article.value = result
-  } catch (e) {
-    console.error('Failed to load article:', e)
-    article.value = null
-  } finally {
-    loading.value = false
-  }
-}
-
+// async function loadArticle(id: number) {
+//   loading.value = true
+//   article.value = null
+//   tocList.value = []
+//   try {
+//     const result = await ArticleAPI.getArticleDetail(id)
+//     article.value = result
+//   } catch (e) {
+//     console.error('Failed to load article:', e)
+//     article.value = null
+//   } finally {
+//     loading.value = false
+//   }
+// }
+// 
 function buildToc() {
   const headings = document.querySelectorAll('.article-body h2, .article-body h3')
   tocList.value = []
@@ -78,16 +79,20 @@ function scrollToSection(id: string) {
   }
 }
 
-watch(
-  () => route.params.id,
-  async (id) => {
-    if (id) await loadArticle(Number(id))
-  },
-)
-
-onMounted(async () => {
-  if (route.params.id) await loadArticle(Number(route.params.id))
-})
+// watch(
+//   () => route.params.id,
+//   async (id) => {
+//     if (id) await loadArticle(Number(id))
+//   },
+// )
+// 
+// onMounted(async () => {
+//   if (route.params.id) await loadArticle(Number(route.params.id))
+// })
+// 
+// onMounted(() => {
+//   loading.value = false // 纯前端模式：无后端数据，直接结束加载态
+// })
 
 onUnmounted(() => {
   if (tocObserver) tocObserver.disconnect()
@@ -352,13 +357,14 @@ watch(article, () => {
   a { color: var(--el-color-primary); }
 }
 
-@media (max-width: 1100px) {
+/* 屏幕变窄时隐藏目录（统一断点 ≤1024） */
+@include touch {
   .sidebar-container { display: none; }
   .page-layout { gap: 0; }
 }
 
-@media (max-width: 768px) {
-  .articleDetailPage { padding: 1.5em 15px 3em; }
+@include mobile {
+  .articleDetailPage { padding: 1.5em var(--page-padding-x) 3em; }
   .articleTitle { font-size: 1.6em; }
   .article-body { font-size: 0.95em; }
 }

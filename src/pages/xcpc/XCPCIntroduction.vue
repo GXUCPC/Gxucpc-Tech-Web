@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
+import acmIcpcBrand from '@/assets/brand/acm-icpc-brand.png'
 import { onMounted, onUnmounted, ref } from 'vue'
 
-const globalLoading = useGlobalLoading()
 
 // ==========================================
 // 1. 滚动动画指令：v-slide-show
@@ -74,13 +73,22 @@ const scrollToSection = (id: string) => {
     <main class="article-container">
       <h2 id="intro" class="subtitle" v-slide-show>XCPC是什么？</h2>
 
-      <h1 class="main-title">ACM（XCPC）系列赛事</h1>
-
-      <p class="paragraph">
-        XCPC是以 ICPC (国际大学生程序设计竞赛) 、CCPC (中国大学生程序设计竞赛) 为代表的大学生程
-        序设计竞赛统称，是全球高校最具含金量、最具影响力的算法竞技舞台。在这里，来自全国乃
-        至全球的高校精英同台竞技，在 5 个小时的极限高压下，挑战 10 到 13 道极具深度的复杂算法难题。
-      </p>
+      <section class="intro-overview" v-slide-show>
+        <div class="intro-overview-copy">
+          <h1 class="main-title">ACM（XCPC）系列赛事</h1>
+          <p class="paragraph">
+            XCPC是以 ICPC (国际大学生程序设计竞赛) 、CCPC (中国大学生程序设计竞赛) 为代表的大学生程
+            序设计竞赛统称，是全球高校最具含金量、最具影响力的算法竞技舞台。在这里，来自全国乃
+            至全球的高校精英同台竞技，在 5 个小时的极限高压下，挑战 10 到 13 道极具深度的复杂算法难题。
+          </p>
+        </div>
+        <figure class="icpc-brand-mark">
+          <img
+            :src="acmIcpcBrand"
+            alt="ACM International Collegiate Programming Contest 品牌标志：思考气泡、灯泡与气球"
+          />
+        </figure>
+      </section>
 
       <div class="divider" v-slide-show></div>
 
@@ -174,7 +182,7 @@ const scrollToSection = (id: string) => {
         <strong>编译器的选择：</strong>
         对于 XCPC 入门者而言，选择开发工具的原则是“轻量、稳定、易调试”。如果你追求开箱即用，小熊猫 C++ (Red Panda C++)
          是当下的最优选，它延续了 Dev-C++ 的极简风格，同时针对算法竞赛强化了代码补全、静态分析和一键调试功能。
-        其他IED如 VS Code, CLion 等配置过程较为复杂，可以作为日后的进阶选择，但对 XCPC 入门来说，小熊猫 C++
+        其他IDE如 VS Code, CLion 等配置过程较为复杂，可以作为日后的进阶选择，但对 XCPC 入门来说，小熊猫 C++
         绝对是完全够用的了。      </p>
 
 
@@ -275,6 +283,49 @@ const scrollToSection = (id: string) => {
   margin-bottom: 16px;
 }
 
+.intro-overview {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 220px);
+  gap: clamp(24px, 5vw, 64px);
+  align-items: center;
+  margin-bottom: 40px;
+
+  > * {
+    opacity: 0;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .intro-overview-copy {
+    transform: translateY(14px);
+  }
+
+  .icpc-brand-mark {
+    transform: translateX(18px);
+    transition-delay: 0.12s;
+  }
+
+  &.show > * {
+    opacity: 1;
+    transform: translate(0);
+  }
+}
+
+.icpc-brand-mark {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.24);
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+}
+
 .text-link {
   color: #60a5fa;
   text-decoration: underline;
@@ -352,13 +403,41 @@ const scrollToSection = (id: string) => {
   }
 }
 
-/* 响应式处理：屏幕变窄时隐藏目录 */
-@media (max-width: 1100px) {
+/* 响应式处理：屏幕变窄时隐藏目录（统一断点 ≤1024） */
+@include touch {
   .sidebar-container {
     display: none;
   }
   .page-layout {
     gap: 0;
+  }
+}
+
+/* 手机端：标题/正文字号收敛，避免 2.5em 标题折行局促 */
+@include mobile {
+  .page-layout {
+    padding: 24px var(--page-padding-x);
+  }
+
+  .subtitle {
+    font-size: 1.8em;
+  }
+
+  .paragraph,
+  .tech-matrix td,
+  .value-list li {
+    font-size: 16px;
+  }
+
+  .intro-overview {
+    grid-template-columns: 1fr;
+    gap: 24px;
+
+    .icpc-brand-mark {
+      width: min(220px, 100%);
+      justify-self: center;
+      transform: translateY(14px);
+    }
   }
 }
 </style>

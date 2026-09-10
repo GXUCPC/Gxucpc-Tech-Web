@@ -28,6 +28,9 @@ coverage
 
 .eslintcache
 
+# Local scratch files, screenshots and inspection reports
+/temp/
+
 # Cypress
 /cypress/videos/
 /cypress/screenshots/

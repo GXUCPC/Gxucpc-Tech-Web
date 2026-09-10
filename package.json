@@ -12,6 +12,8 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
+    "logo:export": "node scripts/export-logo.mjs",
+    "logo:test": "node --test scripts/logo.test.mjs",
     "lint": "eslint . --fix --cache",
     "format": "prettier --write src/"
   },

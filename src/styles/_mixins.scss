@@ -1,0 +1,53 @@
+/* ============================================================
+   响应式 mixin（经 vite.config.ts additionalData 全局注入，
+   任何 .vue / .scss 编译单元内可直接使用，禁止再手动 @use 本文件，
+   否则会报同名全局成员重复加载）
+   断点取值见 _tokens.scss；业务代码只用下方语义别名
+   ============================================================ */
+@use './tokens' as *;
+/* 向下游转发 token（@use 不会自动转发成员），使业务代码可直接使用 $bp-* / $z-* 变量 */
+@forward './tokens';
+
+/* 通用区间 */
+@mixin below($bp) {
+  @media (max-width: $bp) {
+    @content;
+  }
+}
+@mixin above($bp) {
+  @media (min-width: $bp + 1px) {
+    @content;
+  }
+}
+@mixin between($lo, $hi) {
+  @media (min-width: $lo + 1px) and (max-width: $hi) {
+    @content;
+  }
+}
+
+/* 语义别名 */
+@mixin mobile {
+  @include below($bp-sm) {
+    @content;
+  }
+} /* ≤768 手机 */
+@mixin tablet {
+  @include between($bp-sm, $bp-md) {
+    @content;
+  }
+} /* 769–1024 平板 */
+@mixin touch {
+  @include below($bp-md) {
+    @content;
+  }
+} /* ≤1024 手机+平板共用 */
+@mixin desktop {
+  @include above($bp-md) {
+    @content;
+  }
+} /* ≥1025 桌面 */
+@mixin wide {
+  @include above($bp-xl) {
+    @content;
+  }
+} /* >1920 大屏 */

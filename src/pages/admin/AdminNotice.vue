@@ -256,7 +256,7 @@ onMounted(() => fetchNotices())
 .page-info { color: #4b5563; }
 
 .modal-mask { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 999; }
-.modal-box { width: 600px; background: #ffffff; border-radius: 8px; overflow: hidden; }
+.modal-box { width: min(600px, calc(100vw - 32px)); background: #ffffff; border-radius: 8px; overflow: hidden; }
 .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; background: #f9fafb; border-bottom: 1px solid #e5e7eb; }
 .modal-header h3 { margin: 0; color: #111827; }
 .close-btn { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; }
@@ -271,7 +271,7 @@ onMounted(() => fetchNotices())
 .confirm-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .danger-btn { background: #ef4444; }
 
-.confirm-box { background: #ffffff; padding: 32px; border-radius: 8px; text-align: center; width: 400px; }
+.confirm-box { background: #ffffff; padding: 32px; border-radius: 8px; text-align: center; width: min(400px, calc(100vw - 32px)); }
 .confirm-box p { margin: 0 0 24px; font-size: 16px; color: #111827; }
 .confirm-btns { display: flex; justify-content: center; gap: 16px; }
 </style>

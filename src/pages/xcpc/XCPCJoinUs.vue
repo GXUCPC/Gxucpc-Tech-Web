@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 
-const globalLoading = useGlobalLoading()
 </script>
 
 <template>
@@ -12,7 +10,7 @@ const globalLoading = useGlobalLoading()
       <h1 class="main-title">广西大学 ICPC 集训队招新</h1>
 
       <p class="paragraph">
-        集训队每年招新只在 9 月初，可搜索加入 QQ 群（1040465549）了解更多。
+        集训队每年招新只在 9 月初，可搜索加入 QQ 群（977870023）了解更多。
       </p>
 
       <div class="divider"></div>
@@ -89,5 +87,16 @@ const globalLoading = useGlobalLoading()
   border: none;
   border-top: 1px solid #374151;
   margin: 40px 0;
+}
+
+/* 手机端适配 */
+@include mobile {
+  .page-layout {
+    padding: 24px var(--page-padding-x);
+  }
+
+  .subtitle {
+    font-size: 2em;
+  }
 }
 </style>

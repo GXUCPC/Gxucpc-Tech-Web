@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { useGlobalLoading } from '@/store/globalLoading.ts'
 import { Icon } from '@iconify/vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -15,9 +14,8 @@ const goToNextPage = () => {
   router.push('/tech/contuctUs')
 }
 
-const globalLoading = useGlobalLoading()
 
-function infoSectionAni(ele: HTMLDivElement | null) {
+function infoSectionAni(ele: HTMLElement | null) {
   const tl = gsap.timeline()
   if (!ele) return tl
   //竖线
@@ -33,7 +31,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
     },
   )
   tl.from(
-    ele.querySelector('.el-image'),
+    ele.querySelector('.infoIcon'),
     {
       autoAlpha: 0,
       duration: 1,
@@ -95,10 +93,10 @@ function infoSectionAni(ele: HTMLDivElement | null) {
   return tl
 }
 
-const headTextRef = useTemplateRef('headText')
-const icpcInfoRef = useTemplateRef('icpcInfo')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
-const icpcTiemInfoRef = useTemplateRef('icpcTiemInfo') // 👈 补上这句
+const headTextRef = useTemplateRef<HTMLElement>('headText')
+const icpcInfoRef = useTemplateRef<HTMLElement>('icpcInfo')
+const icpcTechInfoRef = useTemplateRef<HTMLElement>('icpcTechInfo')
+const icpcTiemInfoRef = useTemplateRef<HTMLElement>('icpcTiemInfo')
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
@@ -112,7 +110,7 @@ onMounted(() => {
     autoAlpha: 0,
     stagger: 1,
   })
-    .from(headTextEle.querySelector('.item2'), {
+    .from(headTextEle.querySelector('.introTitle'), {
       duration: 0.5,
       yPercent: 100,
       autoAlpha: 0,
@@ -163,32 +161,18 @@ onMounted(() => {
 
 <template>
 
-  <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
+  <section class="headText introHead" ref="headText">
 
-      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+      <div class="introTitle">
          <Icon
           icon="pajamas:api"
-          style="
-            color: rgba(227, 47, 47, 0.5);
-            position: absolute;
-            transform: scale(4);
-            left: 0%;
-            bottom: 60%;
-            z-index: -1;
-          "
+          class="introIcon introIconRed"
         />
          <Icon
           icon="material-symbols:code-blocks-rounded"
-          style="
-            color: rgba(47, 174, 227, 0.5);
-            position: absolute;
-            transform: scale(3) rotate(35deg);
-            left: 55%;
-            top: 50%;
-            z-index: -1;
-          "
+          class="introIcon introIconBlue"
         />
-        <p style="margin-bottom: 1px; ">广西大学ICPC集训队技术组</p>
+        <p>广西大学ICPC集训队技术组</p>
       </div>
 
   </section>
@@ -201,9 +185,8 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <Icon icon="material-symbols:groups-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-
           <div class="text1">广西大学ICPC集训队技术组</div>
           <div class="text2"> ICPC Technology Team of China, Guangxi University</div>
         </div>
@@ -229,11 +212,9 @@ onMounted(() => {
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <Icon icon="material-symbols:help-center-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">
-            常见问题
-          </div>
+          <div class="text1">常见问题</div>
           <div class="text2">FAQ</div>
         </div>
       </div>
@@ -260,7 +241,7 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <Icon icon="material-symbols:terminal-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
 
           <div class="text1">广西大学ICPC集训队技术组</div>
@@ -271,9 +252,8 @@ onMounted(() => {
       <div class="text3" style="margin-top: 2em; display: flex; flex-direction: column; gap: 0.5em">
         <p style="margin-bottom: 20px;">项目组致力于用技术解决实际问题，基于真实的需求，我们开发了：</p>
         <li style="margin-left: 30px;">QQ机器人：自动统计ICPC集训队内刷题情况，激发训练热情。</li>
-        <li style="margin-left: 30px;">浏览器插件 & 教务工具箱：简化繁琐的教务流程。</li>
-        <li style="margin-left: 30px;">候补抢课工具：（你懂的）为同学们的选课之路保驾护航，广受好评。</li>
-        <li style="margin-left: 30px;">QQ机器人：自动统计集训队内刷题情况，激发训练热情。</li>
+        <li style="margin-left: 30px;">高并发爬虫：实时爬取集训队训练数据，做到管理可视化，自动化。</li>
+        <li style="margin-left: 30px;">教务工具箱：简化繁琐的教务流程。</li>
         <p style="margin-top: 20px;">目前，组内还有gxu课群bot，青鸾管理系统，谛听bot等项目正在同步开发。欢迎所有想要积累项目开发经验，学习技术的同学加入我们。</p>
 
             <button
@@ -292,47 +272,57 @@ onMounted(() => {
 </template>
 
 <style scoped lang="scss">
-@use '@/store/mixins.scss' as *;
+/* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
+   此处仅保留页面私有差异 */
 
-.headText {
-  min-height: 50vh;
-  font-size: 2em;
-  text-align: right;
-  word-spacing: 1em;
-  padding: 10%;
-  user-select: none;
+/* 页面标题块（原为内联 width:1000px，手机端必然溢出，改流式 min()） */
+.introHead {
+  text-align: left;
+  min-height: 20vh;
+  margin-left: 20px;
+  padding: 8%;
+}
 
-  .item1 {
-    height: 5em;
-  }
-  .item2 {
-    height: 2em;
-  }
+.introTitle {
+  position: relative;
+  width: min(1000px, 100%);
+  min-height: 60px;
+  font-size: 50px;
 
-
-  .keyword {
-    font-size: 3em;
+  p {
+    margin-bottom: 1px;
   }
 }
 
-.infoContainer {
-  display: flex;
-  gap: 20px;
-  max-width: 60vw;
-  font-size: 1.4em;
-
-  .line > div {
-    width: 5px;
-    border-radius: 2.5px;
-    background-color: white;
-  }
-  .infoBrief {
-    display: flex;
-    gap: 20px;
-
-
-  }
+.introIcon {
+  position: absolute;
+  z-index: -1;
 }
+.introIconRed {
+  color: rgba(227, 47, 47, 0.5);
+  transform: scale(4);
+  left: 0;
+  bottom: 60%;
+}
+.introIconBlue {
+  color: rgba(47, 174, 227, 0.5);
+  transform: scale(3) rotate(35deg);
+  left: 55%;
+  top: 50%;
+}
+
+/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
+.infoContainer .line > div {
+  background-color: white;
+}
+
+.infoIcon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  color: var(--el-color-primary);
+}
+
 // 加入我们按钮
 .learnMoreBtn {
   /* 1. 字体调大 */
@@ -357,8 +347,33 @@ onMounted(() => {
     //border-color: #93c5fd;
     transform: translateX(5px); /* 悬浮时向右小幅位移，暗示“前往下一页” */
   }
+
+  /* 手机端按钮居中，不再依赖桌面端的右推布局 */
+  @include mobile {
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+  }
 }
 
-/* 2. 一键调用封装好的移动端代码！这行代码会自动把上面的所有适配规则注入进来 */
-@include inject-mobile-styles;
+/* ===== 手机端适配 ===== */
+@include mobile {
+  .introHead {
+    padding: 10% 5%;
+    margin-left: 0;
+  }
+
+  .introTitle {
+    font-size: 28px;
+  }
+
+  .introIconRed {
+    transform: scale(2.5);
+  }
+
+  .introIconBlue {
+    transform: scale(2) rotate(35deg);
+    left: 70%;
+  }
+}
 </style>
