@@ -1,4 +1,5 @@
 import { mkdir, writeFile } from 'node:fs/promises'
+import { svgSource as gxuxcpcSvgSource } from '../public/previews/gxuxcpc/motion.js'
 import { loadLogoSource } from './logo-source.mjs'
 
 const {
@@ -31,4 +32,9 @@ ${paths}
 `
   await writeFile(new URL(`gxutech-${name}.svg`, directory), svg)
 }
-console.log('Exported Wordmark, G + T and Core Icon to public/brand (gxt URL retained as alias).')
+const gxuxcpcCore = gxuxcpcSvgSource(1, { tight: true }).replace(
+  '<g ',
+  '<style>svg{color:#171717}@media(prefers-color-scheme:dark){svg{color:#f2f2f0}}</style><g ',
+)
+await writeFile(new URL('gxuxcpc-core.svg', directory), gxuxcpcCore)
+console.log('Exported GxuTech assets and the GxuXCPC Core Icon to public/brand (gxt URL retained as alias).')
