@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+import AcmIcpcMark from '@/components/brand/AcmIcpcMark.vue'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrollSmoother } from 'gsap/ScrollSmoother'
@@ -32,7 +33,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
     },
   )
   tl.from(
-    ele.querySelector('.el-image'),
+    ele.querySelector('.infoIcon'),
     {
       autoAlpha: 0,
       duration: 1,
@@ -194,7 +195,7 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <AcmIcpcMark class="item1 infoIcon" />
         <div style="display: flex; flex-direction: column; gap: 5px">
           <div class="text1">
             广西大学ICPC集训队
@@ -222,7 +223,7 @@ onMounted(() => {
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
-        <el-image class="item1" style="width: 60px; height: 60px" />
+        <Icon icon="material-symbols:help-center-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
           <div class="text1">
             常见问题
@@ -267,6 +268,12 @@ onMounted(() => {
 <style scoped lang="scss">
 /* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
    此处仅保留页面私有差异 */
+.infoIcon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  color: var(--el-color-primary);
+}
 
 /* 页面私有差异：简介竖线为白色（全局为品牌黄） */
 .infoContainer .line > div {
