@@ -31,7 +31,7 @@ function infoSectionAni(ele: HTMLDivElement | null) {
     },
   )
   tl.from(
-    ele.querySelector('.el-image'),
+    ele.querySelector('.infoIcon'),
     {
       autoAlpha: 0,
       duration: 1,
@@ -185,8 +185,8 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
+        <Icon icon="material-symbols:groups-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-
           <div class="text1">广西大学ICPC集训队技术组</div>
           <div class="text2"> ICPC Technology Team of China, Guangxi University</div>
         </div>
@@ -212,10 +212,9 @@ onMounted(() => {
   >
     <div class="info">
       <div class="infoBrief" style="flex-direction: row-reverse">
+        <Icon icon="material-symbols:help-center-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
-          <div class="text1">
-            常见问题
-          </div>
+          <div class="text1">常见问题</div>
           <div class="text2">FAQ</div>
         </div>
       </div>
@@ -242,6 +241,7 @@ onMounted(() => {
     </div>
     <div class="info">
       <div class="infoBrief">
+        <Icon icon="material-symbols:terminal-rounded" class="item1 infoIcon" aria-hidden="true" />
         <div style="display: flex; flex-direction: column; gap: 5px">
 
           <div class="text1">广西大学ICPC集训队技术组</div>
@@ -314,6 +314,13 @@ onMounted(() => {
 /* 页面私有差异：简介竖线为白色（全局为品牌黄） */
 .infoContainer .line > div {
   background-color: white;
+}
+
+.infoIcon {
+  width: 60px;
+  height: 60px;
+  flex: 0 0 60px;
+  color: var(--el-color-primary);
 }
 
 // 加入我们按钮
