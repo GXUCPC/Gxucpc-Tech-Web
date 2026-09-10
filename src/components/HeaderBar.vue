@@ -1,19 +1,13 @@
 <script setup lang="ts">
-import { useDialog } from '@/store/globalLoading.ts'
 import { ref, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 // ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
 // import { useUserStore } from '@/store/user'
 // import { logoutAPI } from '@/api/user-login'
 // import http from '@/api/http'
-import { ElMessage } from 'element-plus'
 import { Icon } from '@iconify/vue'
-import { BACKEND_ENABLED } from '@/config/features'
 import GxuXCPCLogo from '@/components/brand/GxuXCPCLogo.vue'
 import { GXU_XCPC_MOTION } from '../../public/previews/gxuxcpc/motion.js'
-
-const { dialogVisibleLogin } = useDialog()
-const { dialogVisibleFeedback } = useDialog()
 
 const router = useRouter()
 const route = useRoute()
@@ -58,8 +52,7 @@ const NAV_ITEMS: NavItem[] = [
       { label: '集训队简介', path: '/xcpc' },
       { label: 'XCPC 是什么？', path: '/xcpc/introdution' },
       { label: '加入我们', path: '/xcpc/join-us' },
-      // 赛事报名页挂载即请求后端，纯前端模式下隐藏入口
-      ...(BACKEND_ENABLED ? [{ label: '赛事报名', path: '/xcpc/competitionSignUp' }] : []),
+      // 纯前端模式：赛事报名页挂载即请求后端，恢复后再添加入口。
     ],
   },
   {
@@ -71,8 +64,7 @@ const NAV_ITEMS: NavItem[] = [
       // { label: '招新面试申请', path: '/tech/interview' },
     ],
   },
-  // 文章列表页数据全部来自后端，纯前端模式下隐藏入口
-  ...(BACKEND_ENABLED ? [{ label: '文章', path: '/articles' }] : []),
+  // 纯前端模式：文章列表数据来自后端，恢复后再添加入口。
 ]
 
 function isActive(item: NavItem) {
@@ -90,12 +82,6 @@ const handleSelect = (key: string) => {
   go(key)
 }
 
-const expression = () => {
-    dialogVisibleLogin.value = true;
-}
-const expressionFeedback = () => {
-    dialogVisibleFeedback.value = true;
-}
 // const handleLogout = async () => {
 //     if (confirm('确定要退出登录吗？')) {
 //         await logoutAPI();
@@ -234,7 +220,8 @@ const expressionFeedback = () => {
             <el-menu-item index="/xcpc">集训队简介</el-menu-item>
             <el-menu-item index="/xcpc/introdution">XCPC 是什么？</el-menu-item>
             <el-menu-item index="/xcpc/join-us">加入我们</el-menu-item>
-            <el-menu-item v-if="BACKEND_ENABLED" index="/xcpc/competitionSignUp">赛事报名</el-menu-item>
+            <!-- 纯前端模式：赛事报名页会请求后端，恢复后再显示入口。 -->
+            <!-- <el-menu-item index="/xcpc/competitionSignUp">赛事报名</el-menu-item> -->
           </el-sub-menu>
           <el-sub-menu index="/tech">
             <template #title>技术组</template>
@@ -242,32 +229,37 @@ const expressionFeedback = () => {
             <el-menu-item index="/tech/contuctUs">加入我们</el-menu-item>
             <!-- <el-menu-item index="/tech/interview">招新面试申请</el-menu-item> -->
           </el-sub-menu>
-          <el-menu-item v-if="BACKEND_ENABLED" index="/articles">文章</el-menu-item>
+          <!-- 纯前端模式：文章列表依赖后端，恢复后再显示入口。 -->
+          <!-- <el-menu-item index="/articles">文章</el-menu-item> -->
         </el-menu>
       </div>
     </el-collapse-transition>
 
-    <Teleport to="body">
-      <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
-        <div class="notice-modal">
-          <div class="modal-header">
-            <h3>系统通知</h3>
-            <button class="close-btn" @click="noticeVisible = false">×</button>
-          </div>
-          <div class="modal-body">
-            <div class="notice-list">
-              <div v-if="loading" class="loading-tip">加载中...</div>
-              <div v-else-if="notices.length === 0" class="empty-tip">暂无通知</div>
-              <div v-else class="notice-item" v-for="item in notices" :key="item.id">
-                <div class="notice-title">{{ item.title }}</div>
-                <div class="notice-content">{{ item.content }}</div>
-                <div class="notice-time">{{ formatDate(item.created_at) }}</div>
+    <!--
+      系统通知依赖 /notice/published，纯前端模式不渲染。
+      后端恢复后，与脚本中的通知状态和请求函数一并恢复。
+      <Teleport to="body">
+        <div v-if="noticeVisible" class="notice-overlay" @click.self="noticeVisible = false">
+          <div class="notice-modal">
+            <div class="modal-header">
+              <h3>系统通知</h3>
+              <button class="close-btn" @click="noticeVisible = false">×</button>
+            </div>
+            <div class="modal-body">
+              <div class="notice-list">
+                <div v-if="loading" class="loading-tip">加载中...</div>
+                <div v-else-if="notices.length === 0" class="empty-tip">暂无通知</div>
+                <div v-else class="notice-item" v-for="item in notices" :key="item.id">
+                  <div class="notice-title">{{ item.title }}</div>
+                  <div class="notice-content">{{ item.content }}</div>
+                  <div class="notice-time">{{ formatDate(item.created_at) }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </Teleport>
+      </Teleport>
+    -->
   </div>
 </template>
 

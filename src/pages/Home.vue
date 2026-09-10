@@ -31,85 +31,14 @@ const { isTouch, reduceMotion } = useBreakpoint()
 const heroBgBlur = `${HERO_BG_BLUR}px`
 const heroPanelBackdropBlur = `${HERO_PANEL_BACKDROP_BLUR}px`
 
-function getEleNth(child: HTMLElement) {
+function getEleNth(child: Node) {
   let i = 0
-  while ((child = child.previousSibling) != null) i++
+  let current: Node | null = child
+  while ((current = current.previousSibling) != null) i++
   return i
 }
 
-function infoSectionAni(ele: HTMLDivElement | null) {
-  const tl = gsap.timeline()
-  if (!ele) return tl
-  //竖线
-  tl.fromTo(
-    ele.querySelector('.line > div'),
-    {
-      height: '0%',
-    },
-    {
-      height: '100%',
-      ease: 'sine.out',
-      duration: DURATION_EXTRA_LONG,
-    },
-  )
-  tl.from(
-    ele.querySelector('.el-image'),
-    {
-      autoAlpha: 0,
-      duration: DURATION_LONG,
-    },
-    '<',
-  )
-
-  //简介文字动画
-  tl.from(
-    ele.querySelector('.text1'),
-    {
-      duration: DURATION_LONG,
-      autoAlpha: 0,
-      stagger: STAGGER_CHAR,
-    },
-    '<',
-  )
-  SplitText.create(ele.querySelector('.text2'), {
-    type: 'chars,words',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.words,
-        {
-          duration: DURATION_LONG,
-          autoAlpha: 0,
-          stagger: 0.05,
-        },
-        '<',
-      )
-    },
-  })
-  SplitText.create(ele.querySelector('.text3'), {
-    type: 'lines',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.lines,
-        {
-          y: '2em',
-          duration: DURATION_LONG,
-          autoAlpha: 0,
-          stagger: STAGGER_SHORT,
-        },
-        '<',
-      )
-    },
-  })
-
-  return tl
-}
-
 const headTextRef = useTemplateRef('headText')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
@@ -134,10 +63,6 @@ onMounted(() => {
       ease: 'power2.out',
     })
   }
-  ScrollTrigger.create({
-    trigger: icpcTechInfoRef.value,
-    animation: infoSectionAni(icpcTechInfoRef.value),
-  })
   document.querySelectorAll('.title').forEach((ele) => {
     const tl = gsap.timeline()
     tl.from(ele, {
@@ -689,7 +614,9 @@ HERO_PANELS.forEach((panel, i) => {
               onUpdate: function () {
                 spans[3]!.innerText = Math.round(this.progress() * 50) + ''
               },
-              onComplete: () => (spans[3]!.innerText = 'N'),
+              onComplete: () => {
+                spans[3]!.innerText = 'N'
+              },
             },
             `${getEleNth(spans[3]) * charStagger}`,
           )

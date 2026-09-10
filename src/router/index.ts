@@ -14,16 +14,17 @@ const router = createRouter({
           path: '',
           component: defineAsyncComponent(() => import('@/pages/Home.vue')),
         },
-        {
-          name: 'articleList',
-          path: 'articles',
-          component: defineAsyncComponent(() => import('@/pages/articles/ArticleList.vue')),
-        },
-        {
-          name: 'articleDetail',
-          path: 'articles/:id',
-          component: defineAsyncComponent(() => import('@/pages/articles/ArticleDetail.vue')),
-        },
+        // 纯前端模式：文章数据来自后端，禁止通过地址直接进入。
+        // {
+        //   name: 'articleList',
+        //   path: 'articles',
+        //   component: defineAsyncComponent(() => import('@/pages/articles/ArticleList.vue')),
+        // },
+        // {
+        //   name: 'articleDetail',
+        //   path: 'articles/:id',
+        //   component: defineAsyncComponent(() => import('@/pages/articles/ArticleDetail.vue')),
+        // },
         {
           name: 'tch_team2-1',
           path: 'tch_team2-1',
@@ -58,22 +59,24 @@ const router = createRouter({
               path: 'join-us',
               component: defineAsyncComponent(() => import('@/pages/xcpc/XCPCJoinUs.vue')),
             },
-            {
-              name: 'competitionSignUp',
-              path: 'competitionSignUp',
-              component: defineAsyncComponent(() => import('@/pages/xcpc/competitionSignUp.vue')),
-            },
+            // 纯前端模式：赛事报名页挂载后会请求后端，禁止通过地址直接进入。
+            // {
+            //   name: 'competitionSignUp',
+            //   path: 'competitionSignUp',
+            //   component: defineAsyncComponent(() => import('@/pages/xcpc/competitionSignUp.vue')),
+            // },
           ],
         },
         {
           name: 'tech',
           path: 'tech',
           children: [
-            {
-              name: 'techTeamInterview',
-              path: 'interview',
-              component: defineAsyncComponent(() => import('@/pages/tech/Interview.vue')),
-            },
+            // 纯前端模式：招新申请会向后端提交表单，禁止通过地址直接进入。
+            // {
+            //   name: 'techTeamInterview',
+            //   path: 'interview',
+            //   component: defineAsyncComponent(() => import('@/pages/tech/Interview.vue')),
+            // },
             {
               name: 'techHome',
               path: '',

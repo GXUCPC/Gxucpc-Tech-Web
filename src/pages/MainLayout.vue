@@ -1,21 +1,11 @@
 <script setup lang="ts">
 import FooterContent from '@/components/FotterBar.vue'
 import HeaderNav from '@/components/HeaderBar.vue'
-import { ref } from 'vue'
-import { useDialog } from '@/store/globalLoading.ts'
-import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/store/user'
-import { onMounted } from 'vue'
-import FeedbackModal from '@/components/FeedbackModal.vue' // 引入刚才写的文件
-import LoginWindow from '@/components/LoginWindow.vue' // 引入登录组件
+import { useRoute } from 'vue-router'
 // ===== 纯前端模式：后端相关代码暂时注释（恢复时取消注释）=====
 // import  { VisitAPI }  from '@/api/visit.js'
-import { BACKEND_ENABLED } from '@/config/features'
 
-const { dialogVisibleLogin } = useDialog()
-const router = useRouter()
 const route = useRoute()
-const userStore = useUserStore()
 
 // const registerVisible = ref(false)
 // 
@@ -145,9 +135,12 @@ const userStore = useUserStore()
 </script>
 
 <template>
-  <FeedbackModal /> <!-- 意见反馈模块 -->
-
-  <LoginWindow /> <!-- 登录，注册模块 -->
+  <!--
+    纯前端模式不挂载登录/注册及意见反馈弹窗：它们的提交操作依赖后端接口。
+    后端恢复后，再恢复组件导入与下面两个挂载点。
+    <FeedbackModal />
+    <LoginWindow />
+  -->
 
   <header-nav />
   <div class="contentContainer">

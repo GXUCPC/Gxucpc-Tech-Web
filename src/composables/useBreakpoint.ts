@@ -18,7 +18,7 @@ const QUERIES = {
 type BreakpointKey = keyof typeof QUERIES
 type BreakpointState = Readonly<Record<BreakpointKey, Ref<boolean>>>
 
-const state = {} as BreakpointState
+const state: Record<BreakpointKey, Ref<boolean>> = {} as Record<BreakpointKey, Ref<boolean>>
 
 for (const key of Object.keys(QUERIES) as BreakpointKey[]) {
   const mql = window.matchMedia(QUERIES[key])

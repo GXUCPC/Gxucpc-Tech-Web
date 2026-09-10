@@ -7,7 +7,7 @@ import { SplitText } from 'gsap/SplitText'
 import { onMounted, useTemplateRef } from 'vue'
 
 
-function infoSectionAni(ele: HTMLDivElement | null) {
+function infoSectionAni(ele: HTMLElement | null) {
   const tl = gsap.timeline()
   if (!ele) return tl
   //竖线
@@ -85,9 +85,8 @@ function infoSectionAni(ele: HTMLDivElement | null) {
   return tl
 }
 
-const headTextRef = useTemplateRef('headText')
-const icpcInfoRef = useTemplateRef('icpcInfo')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
+const headTextRef = useTemplateRef<HTMLElement>('headText')
+const icpcInfoRef = useTemplateRef<HTMLElement>('icpcInfo')
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value
@@ -119,10 +118,6 @@ onMounted(() => {
     // 默认显示第一个信息
     .add(infoSectionAni(icpcInfoRef.value))
 
-  ScrollTrigger.create({
-    trigger: icpcTechInfoRef.value,
-    animation: infoSectionAni(icpcTechInfoRef.value),
-  })
 })
 </script>
 

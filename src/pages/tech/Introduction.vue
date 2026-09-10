@@ -15,7 +15,7 @@ const goToNextPage = () => {
 }
 
 
-function infoSectionAni(ele: HTMLDivElement | null) {
+function infoSectionAni(ele: HTMLElement | null) {
   const tl = gsap.timeline()
   if (!ele) return tl
   //竖线
@@ -93,10 +93,10 @@ function infoSectionAni(ele: HTMLDivElement | null) {
   return tl
 }
 
-const headTextRef = useTemplateRef('headText')
-const icpcInfoRef = useTemplateRef('icpcInfo')
-const icpcTechInfoRef = useTemplateRef('icpcTechInfo')
-const icpcTiemInfoRef = useTemplateRef('icpcTiemInfo') // 👈 补上这句
+const headTextRef = useTemplateRef<HTMLElement>('headText')
+const icpcInfoRef = useTemplateRef<HTMLElement>('icpcInfo')
+const icpcTechInfoRef = useTemplateRef<HTMLElement>('icpcTechInfo')
+const icpcTiemInfoRef = useTemplateRef<HTMLElement>('icpcTiemInfo')
 onMounted(() => {
   gsap.registerPlugin(SplitText, ScrollTrigger)
   const headTextEle = headTextRef.value

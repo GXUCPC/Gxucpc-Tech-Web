@@ -11,24 +11,9 @@
 </template>
 
 <style>
-@font-face {
-  font-family: 'JetBrains Mono';
-  src:
-    local('JetBrains Mono'),
-    url('/font/JetBrains Mono/JetBrainsMono[wght].ttf') format('truetype');
-}
-
-@font-face {
-  font-family: 'JetBrains Mono';
-  src:
-    local('JetBrains Mono'),
-    url('/font/JetBrains Mono/JetBrainsMono-Italic[wght].ttf') format('truetype');
-  font-style: italic;
-}
-
 *:not(svg *) {
   box-sizing: border-box;
-  font-family: 'JetBrains Mono', 微软雅黑, serif;
+  font-family: 'Microsoft YaHei', 微软雅黑, sans-serif;
   padding: 0;
   margin: 0;
   color-scheme: light;
