@@ -74,23 +74,17 @@ function infoSectionAni(ele: HTMLDivElement | null) {
       )
     },
   })
-  SplitText.create(ele.querySelector('.text3'), {
-    type: 'lines',
-    autoSplit: true,
-    mask: 'chars',
-    onSplit: (self) => {
-      tl.from(
-        self.lines,
-        {
-          y: '2em',
-          duration: 1,
-          autoAlpha: 0,
-          stagger: 0.2,
-        },
-        '<0.5',
-      )
+  // autoSplit 在字体加载或窗口尺寸改变时会重新拆分文本；若主时间线已结束，
+  // 新生成的行会停留在动画初始的隐藏状态。正文改为整体淡入，避免内容被隐藏。
+  tl.from(
+    ele.querySelector('.text3'),
+    {
+      y: '2em',
+      duration: 1,
+      autoAlpha: 0,
     },
-  })
+    '<0.5',
+  )
 
   return tl
 }
@@ -159,7 +153,7 @@ onMounted(() => {
 
   <section class="headText" ref="headText" style="text-align: left;  min-height: 20vh; margin-left: 20px; padding: 8%;">
 
-      <div class="item2" style="position: relative; width: 1000px; min-height: 60px; font-size: 50px;">
+      <div class="item2 headTitle">
          <Icon
           icon="solar:cup-star-bold"
           style="
@@ -268,6 +262,12 @@ onMounted(() => {
 <style scoped lang="scss">
 /* .headText / .infoContainer 基础样式与响应式由全局 styles/global.scss 提供，
    此处仅保留页面私有差异 */
+
+/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
+.infoContainer .line > div {
+  background-color: white;
+}
+
 .infoIcon {
   width: 60px;
   height: 60px;
@@ -275,9 +275,16 @@ onMounted(() => {
   color: var(--el-color-primary);
 }
 
-/* 页面私有差异：简介竖线为白色（全局为品牌黄） */
-.infoContainer .line > div {
-  background-color: white;
+.headTitle {
+  position: relative;
+  width: min(100%, 1000px);
+  min-height: 60px;
+  font-size: 50px;
+
+  @include mobile {
+    min-height: auto;
+    font-size: clamp(1.5rem, 8vw, 3.125rem);
+  }
 }
 
 // 了解更多按钮
