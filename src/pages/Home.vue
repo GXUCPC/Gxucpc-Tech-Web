@@ -172,54 +172,31 @@ onMounted(() => {
 
 // 优秀队伍：仿 JetBrains「Customer Stories」卡片布局，年级沿用原版艺术字水印
 const teamStories: StoryItem[] = [
-  //     {
-  //   name: '流星一条',
-  //   watermark: '22级',
-  //   infoSuffix: '队员：付家锐、石新阳、韦祖豪',
-  //   quoteItems: [
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'silver',
-  //       text: '第48届 ICPC 亚洲区域赛（西安）银奖',
-  //     },
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'chocolate',
-  //       text: '第 9 届 CCPC（深圳）铜奖',
-  //     },
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'white',
-  //       text: 'ICPC（西部）三等奖',
-  //     },
-  //   ],
-  //   footer: '写不下力……',
-  // },
-  //   {
-  //   name: '流星一条',
-  //   watermark: '22级',
-  //   infoSuffix: '队员：付家锐、石新阳、韦祖豪',
-  //   quoteItems: [
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'silver',
-  //       text: '第48届 ICPC 亚洲区域赛（西安）银奖',
-  //     },
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'chocolate',
-  //       text: '第 9 届 CCPC（深圳）铜奖',
-  //     },
-  //     {
-  //       icon: 'mdi:achievement-variant',
-  //       color: 'white',
-  //       text: 'ICPC（西部）三等奖',
-  //     },
-  //   ],
-  //   footer: '写不下力……',
-  // },
+    {
+    name: '这一发，贯穿星辰',
+    watermark: '22级',
+    infoSuffix: '队员：梅松、李晨冉、王辰昊',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届 ICPC 亚洲区域赛（合肥）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第48届 ICPC 亚洲区域赛（南京）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第 9 届 CCPC（深圳）铜奖',
+      },
+    ],
+    footer: '',
+  },
   {
-    name: '流星一条',
+    name: '与星尘的握手',
     watermark: '22级',
     infoSuffix: '队员：付家锐、石新阳、韦祖豪',
     quoteItems: [
@@ -231,12 +208,12 @@ const teamStories: StoryItem[] = [
       {
         icon: 'mdi:achievement-variant',
         color: 'chocolate',
-        text: '第 9 届 CCPC（深圳）铜奖',
+        text: '第49届 ICPC 亚洲区域赛（杭州）铜奖',
       },
       {
         icon: 'mdi:achievement-variant',
-        color: 'white',
-        text: 'ICPC（西部）三等奖',
+        color: 'chocolate',
+        text: '第49届 ICPC 亚洲区域赛（上海）铜奖',
       },
     ],
     footer: '写不下力……',
@@ -249,12 +226,12 @@ const teamStories: StoryItem[] = [
       {
         icon: 'mdi:achievement-variant',
         color: 'gold',
-        text: '第 50 届 ICPC 邀请赛（西安）金奖',
+        text: '第50届 ICPC 邀请赛（西安）金奖',
       },
       {
         icon: 'mdi:achievement-variant',
         color: 'chocolate',
-        text: '第 50 届 ICPC（西安）铜奖',
+        text: '第50届 ICPC（西安）铜奖',
       },
       {
         icon: 'mdi:achievement-variant',
@@ -279,14 +256,58 @@ const teamStories: StoryItem[] = [
         color: 'chocolate',
         text: '第 11 届 CCPC（重庆）铜奖',
       },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第 9 届 GXCPC 冠军',
+      },
     ],
     footer: '在蒸了，在蒸了……',
   },
   {
-    name: '',
+    name: '你是我的梦幻之AC',
     watermark: '25级',
-    infoSuffix: '队员：',
-    quoteItems: [],
+    infoSuffix: '队员：杨富杰、李丹琳、张天诺',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'gold',
+        text: '第 9 届 GXCPC 金奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 CCPC（南昌）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 CCPC 邀请赛（贵州）铜奖',
+      }
+    ],
+    footer: '',
+  },
+  {
+    name: '王从天降',
+    watermark: '25级',
+    infoSuffix: '队员：魏嘉俊、梁德乐、李孝强',
+    quoteItems: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第 9 届 GXCPC 银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 ICPC 邀请赛（南昌）铜奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '2026 ICPC 邀请赛（沈阳）铜奖',
+      }
+    ],
     footer: '',
   }
 ]
@@ -294,67 +315,165 @@ const teamStories: StoryItem[] = [
 // 优秀队员（升学 & 就业）：奖项独立维护，由主视觉卡片展示。
 // 暂未收录的人员保留空数组，后续补充时只需追加 { icon, color, text }。
 const memberStories: StoryItem[] = [
-  { avatar: '/img/avatar/lzx.jpg', 
-    name: '李周详', 
-    info: '保研天津大学',  
-    quote: '大爱详哥', 
-    awards: [] },
-  {
-    avatar: '/img/avatar/sxy.jpg',
-    name: '石新阳',
-    info: '保研东南大学',
-    quote: '测试测试',
-    awards: [
-      { icon: 'mdi:achievement-variant', color: 'silver', text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' },
-      { icon: 'mdi:achievement-variant', color: 'chocolate', text: '第 9 届 CCPC（深圳）铜奖' },
-    ]
-  },
   { 
     avatar: '/img/avatar/lyf.jpg', 
     name: '李韵锋',
-    info: '保研至中国科学院大学', 
-    awards: [] 
-  },
-  { 
-    avatar: '/img/avatar/lzy.jpg', 
-    name: '龙泽宇', 
-    info: '保研电子科技大学', 
-    awards: [] 
-  },
-  {
-    avatar: '/img/avatar/jmr.jpg',
-    name: '金珉瑞',
-    info: '哔哩哔哩推搜中台',
-    quote: 'B推搜熟人',
-    awards: [],
-  },
-  { 
-    avatar: '/img/avatar/sct.jpg', 
-    name: '孙城涛', 
-    info: '小马智行Offer', 
-    awards: [] 
-  },
-  {
-    avatar: '/img/avatar/wzh.jpg',
-    name: '韦祖豪',
-    quote: '韦老师',
+    info: '信安17级 | 保研中科院信工所 | 腾讯Offer', 
     awards: [
-      { icon: 'mdi:achievement-variant', color: 'silver', text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' },
-      { icon: 'mdi:achievement-variant', color: 'chocolate', text: '第 9 届 CCPC（深圳）铜奖' },
-    ],
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 45 届 ICPC 亚洲区域赛（上海）铜奖' 
+      },
+    ] 
   },
   { 
     avatar: '/img/avatar/wlm.jpg', 
     name: '王利明', 
-    info: '字节飞书中台Offer', 
+    info: '计科19级 | 保研南京大学 | 字节飞书中台Offer', 
     quote: '「电话告警」', 
-    awards: [] 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 46 届 ICPC 亚洲区域赛（昆明）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 7 届 CCPC（桂林）铜奖' 
+      },
+    ] 
+  },
+  {
+    avatar: '/img/avatar/jmr.jpg',
+    name: '金珉瑞',
+    info: '信安20级 | B站推搜引擎Offer',
+    quote: 'B推搜熟人',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 46 届 ICPC 亚洲区域赛（昆明）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 7 届 CCPC（广州）铜奖' 
+      },
+    ],
+  },
+  { 
+    avatar: '/img/avatar/lzx.jpg', 
+    name: '李周详', 
+    info: '计科22级 | 保研天津大学',  
+    quote: '大爱详哥', 
+    awards: [
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'silver',
+        text: '第48届 ICPC 亚洲区域赛（杭州）银奖',
+      },
+      {
+        icon: 'mdi:achievement-variant',
+        color: 'chocolate',
+        text: '第50届 ICPC 亚洲区域赛（武汉）铜奖',
+      },
+    ] 
+  },
+  {
+    avatar: '/img/avatar/sxy.jpg',
+    name: '石新阳',
+    info: '计科22级 | 保研东南大学',
+    quote: '',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver',
+        text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 9 届 CCPC（深圳）铜奖' 
+      },
+    ]
+  },
+  {
+    avatar: '/img/avatar/wzh.jpg',
+    name: '韦祖豪',
+    info: '计科22级 | 腾讯 CSIG 后端开发Offer',
+    quote: '韦老师',
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 48 届 ICPC 亚洲区域赛（西安）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 9 届 CCPC（深圳）铜奖' 
+      },
+    ],
   },
   { 
     avatar: '/img/avatar/cjl.jpg', 
     name: '陈佳林', 
-    info: '拼多多Offer', 
-    awards: [] 
+    info: '通信22级 | 拼多多 分布式存储Offer', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（济南）铜奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（合肥）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/lcr.jpg', 
+    name: '李晨冉', 
+    info: '计科22级 | 腾讯后端开发 | 快手infra', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'silver', 
+        text: '第 48 届 ICPC 亚洲区域赛（合肥）银奖' 
+      },
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 48 届 ICPC 亚洲区域赛（南京）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/hct.jpg', 
+    name: '黄翠婷', 
+    info: '计科23级 | 拼多多 搜推引擎实习', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 49 届 ICPC 亚洲区域赛（成都）铜奖' 
+      },
+    ] 
+  },
+  { 
+    avatar: '/img/avatar/gjn.jpg', 
+    name: '高健宁', 
+    info: '计科23级 | 字节跳动 广告后端实习', 
+    awards: [
+      { 
+        icon: 'mdi:achievement-variant', 
+        color: 'chocolate', 
+        text: '第 10 届 CCPC（哈尔滨）铜奖' 
+      },
+    ] 
   }
 ]
 
@@ -597,7 +716,7 @@ HERO_PANELS.forEach((panel, i) => {
   </ani-ele>
   <h2 class="subtitle">加入集训队会获得什么？</h2>
   <ani-ele
-    class="cardCarouselSection"
+    class="cardCarouselSection benefitsSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -612,18 +731,19 @@ HERO_PANELS.forEach((panel, i) => {
         return tl
       }
     ">
-    <CardCarousel :item-count="TRAINING_BENEFITS.length" aria-label="加入集训队会获得什么">
+    <div class="benefitsGrid" role="list" aria-label="加入集训队会获得什么">
       <div
         v-for="(item, i) in TRAINING_BENEFITS"
         :key="i"
-        class="benefitsCard">
+        class="benefitsCard"
+        role="listitem">
         <div class="benefitsCardIcon">
           <Icon :icon="item.icon" />
         </div>
         <div class="benefitsCardTitle">{{ item.title }}</div>
         <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
-    </CardCarousel>
+    </div>
   </ani-ele>
   <h2 class="subtitle">优秀队伍 & 队员</h2>
   <!-- 队伍保留故事卡片；队员使用头像页标的主视觉轮播。 -->
@@ -689,7 +809,7 @@ HERO_PANELS.forEach((panel, i) => {
 
   <h2 class="subtitle">加入技术组会获得什么？</h2>
   <ani-ele
-    class="cardCarouselSection"
+    class="cardCarouselSection benefitsSection"
     :scroll-in-ani="
       (ele) => {
         const tl = gsap.timeline()
@@ -704,18 +824,19 @@ HERO_PANELS.forEach((panel, i) => {
         return tl
       }
     ">
-    <CardCarousel :item-count="TECH_BENEFITS.length" aria-label="加入技术组会获得什么">
+    <div class="benefitsGrid" role="list" aria-label="加入技术组会获得什么">
       <div
         v-for="(item, i) in TECH_BENEFITS"
         :key="i"
-        class="benefitsCard benefitsCardTech">
+        class="benefitsCard benefitsCardTech"
+        role="listitem">
         <div class="benefitsCardIcon">
           <Icon :icon="item.icon" />
         </div>
         <div class="benefitsCardTitle">{{ item.title }}</div>
         <div class="benefitsCardDesc">{{ item.desc }}</div>
       </div>
-    </CardCarousel>
+    </div>
   </ani-ele>
 
   <h2 class="subtitle">代表项目展示</h2>
@@ -1101,6 +1222,14 @@ HERO_PANELS.forEach((panel, i) => {
   box-sizing: border-box;
 }
 
+/* 收益卡片直接完整展示，不使用自动翻页或轮播控件。 */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  grid-auto-rows: 1fr;
+  gap: 1.5rem;
+}
+
 .benefitsCard {
   display: flex;
   flex-direction: column;
@@ -1243,14 +1372,14 @@ HERO_PANELS.forEach((panel, i) => {
 
 /* ====================================
    首页平板/手机适配（≤1024）：Hero 手风琴
-   由「左右 70/30」改为「上下 68/32」纵向堆叠，
+   由「左右 70/30」改为「上下 60/40」纵向堆叠，
    避免窄屏下展开面板文字被挤压截断（内容占满全宽）。
    窄屏下 getHeroAccordionStyle 不输出内联 left/width，CSS 直接接管布局
    ==================================== */
 @include touch {
   .heroSection {
-    height: 100vh;
-    height: 100svh; /* 移动端地址栏收起时不留黑边 */
+    height: 90vh;
+    height: 90svh;
   }
 
   .heroAccordionItem {
@@ -1262,14 +1391,14 @@ HERO_PANELS.forEach((panel, i) => {
 
   .heroAccordionItem:not(.collapsed) {
     top: 0;
-    height: 68%;
+    height: 60%;
     box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
   }
 
   .heroAccordionItem.collapsed {
     top: auto;
     bottom: 0;
-    height: 32%;
+    height: 40%;
   }
 
   /* 背景图层取消水平位移补偿：选择器与桌面 nth-child 位移规则同优先级，靠源顺序覆盖 */
@@ -1337,10 +1466,14 @@ HERO_PANELS.forEach((panel, i) => {
     max-width: 100%;
   }
 
-  /* 4. 收益卡片轮播 (加入集训队/技术组获得什么) 移动端 */
+  /* 4. 收益卡片（加入集训队/技术组获得什么）移动端 */
   .cardCarouselSection {
     padding: 0 var(--page-padding-x);
     margin: 1.5em 0 3em;
+  }
+
+  .benefitsGrid {
+    gap: 1rem;
   }
 
   .benefitsCard {

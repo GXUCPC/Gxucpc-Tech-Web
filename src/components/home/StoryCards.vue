@@ -120,7 +120,9 @@ function scrollInAni(ele: HTMLDivElement) {
             </div>
 
             <div class="memberStoryDetails">
-              <div class="memberStoryIdentity">
+              <div
+                class="memberStoryIdentity"
+                :class="{ 'memberStoryIdentity--without-quote': !item.quote && !item.footer }">
                 <h3 class="memberStoryName">{{ item.name }}</h3>
                 <p v-if="item.quote" class="memberStoryQuote">&ldquo;{{ item.quote }}&rdquo;</p>
                 <p v-else-if="item.footer" class="memberStoryQuote">{{ item.footer }}</p>
@@ -428,7 +430,7 @@ function scrollInAni(ele: HTMLDivElement) {
 
 .memberStoryName {
   margin: 0.45rem 0 0;
-  font-size: clamp(2rem, 3.2vw, 3.5rem);
+  font-size: clamp(1.8rem, 2.9vw, 3.2rem);
   line-height: 1.15;
   color: #fff;
 }
@@ -436,6 +438,15 @@ function scrollInAni(ele: HTMLDivElement) {
 .memberStoryIdentity,
 .memberStoryProfile {
   width: 100%;
+}
+
+.memberStoryIdentity {
+  transform: translateY(clamp(0.375rem, 1vw, 0.75rem));
+}
+
+/* 空 quote 仍预留卡片高度，姓名只向 quote 区域下移一部分，保留呼吸感。 */
+.memberStoryIdentity--without-quote .memberStoryName {
+  transform: translateY(calc(0.55em + 0.35rem));
 }
 
 .memberStoryProfile {
@@ -502,7 +513,7 @@ function scrollInAni(ele: HTMLDivElement) {
   margin: 0.7rem 0 0;
   padding: 0;
   font-style: italic;
-  font-size: 0.98rem;
+  font-size: clamp(1.15rem, 1.5vw, 1.3rem);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -741,12 +752,16 @@ function scrollInAni(ele: HTMLDivElement) {
 
   .memberStoryName {
     margin: 0;
-    font-size: 1.6rem;
+    font-size: 1.45rem;
   }
 
   .memberStoryQuote {
     margin-top: 0.3rem;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
+  }
+
+  .memberStoryIdentity--without-quote .memberStoryName {
+    transform: translateY(calc(0.55em + 0.15rem));
   }
 
   .memberStoryAwards {
